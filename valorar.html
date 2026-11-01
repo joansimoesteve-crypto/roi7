@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Valora — Avatar ROI</title>
+<meta name="robots" content="noindex"><meta name="theme-color" content="#3f5a3a">
+<link rel="icon" href="favicon.png" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#26331f;--moss:#3f5a3a;--sage:#e9efdc;--paper:#fbf7ec;--mut:#4d5c43;--line:#cfd6c2;--mood:#5fb760}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100dvh;font:17px/1.5 "Bricolage Grotesque",system-ui,sans-serif;color:var(--ink);background:radial-gradient(1200px 500px at 50% -10%,#e9efdc 0,#fbf7ec 60%)}
+.app{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:0 16px calc(28px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;justify-content:space-between;padding:calc(12px + env(safe-area-inset-top)) 0 8px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:600;font-size:22px;letter-spacing:-.03em}.brand b{font-weight:800}.brand img{width:40px;height:40px}
+.ic{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:20px;cursor:pointer}.ic[aria-pressed=false]{opacity:.55}
+button,a,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 24px;border-radius:99px;border:0;background:var(--moss);color:#fff;font-weight:600;text-decoration:none;cursor:pointer}.btn.g{background:#fff;color:var(--ink);border:2px solid var(--ink)}.btn.w{width:100%}
+main{flex:1;display:flex;flex-direction:column}
+/* pantalla de inicio */
+.start{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:12px 0 24px}
+.big{position:relative;width:168px;height:168px;border:0;background:none;padding:0;cursor:pointer;border-radius:50%}
+.big img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:6px solid #fff;box-shadow:0 18px 44px #3f5a3a55;animation:bob 3.6s ease-in-out infinite}
+.big::before,.big::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:3px solid var(--mood);opacity:0;animation:ring 2.4s ease-out infinite}.big::after{animation-delay:1.2s}
+@keyframes ring{0%{transform:scale(.92);opacity:.7}100%{transform:scale(1.35);opacity:0}}
+@keyframes bob{50%{transform:translateY(-6px)}}
+h1{font-size:clamp(30px,8vw,42px);line-height:1.05;letter-spacing:-.03em;margin:6px 0 0;font-weight:800;text-wrap:balance}
+.sub{color:var(--mut);margin:0;max-width:34ch}
+.chip{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:5px 14px;border-radius:99px;background:var(--sage);font-size:14px;font-weight:600;color:var(--moss);text-decoration:none}
+/* conversación */
+.stage{display:flex;align-items:center;gap:12px;padding:6px 0 10px;position:sticky;top:0;background:linear-gradient(var(--paper) 70%,transparent);z-index:2}
+.stage .av{position:relative;width:60px;height:60px;flex:none}.stage .av img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:4px solid var(--mood);transition:border-color .3s}
+.stage .av span{position:absolute;right:-6px;bottom:-4px;width:26px;height:26px;border-radius:50%;background:#fff;padding:2px;box-shadow:0 2px 6px #0003}.stage .av svg{display:block;width:100%}
+.stage b{font-size:20px}.stage small{display:block;color:var(--mut);line-height:1.2;max-width:34ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.log{display:flex;flex-direction:column;gap:4px;padding-bottom:12px}
+.b{max-width:90%;padding:11px 15px;border-radius:18px 18px 18px 4px;background:#fff;box-shadow:0 1px 0 #0000000d;animation:pop .25s both;word-break:break-word}
+.b.me{align-self:flex-end;background:var(--moss);color:#fff;border-radius:18px 18px 4px 18px}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}}
+.blk{margin:6px 0 12px;animation:pop .25s both}.lock{pointer-events:none;opacity:.45}
+.faces{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.faces button{border:0;background:none;padding:6px 2px;border-radius:18px;cursor:pointer;transition:transform .15s,background .15s}.faces button:active{transform:scale(.92)}.faces button:hover{background:#fff}.faces svg{display:block;width:100%;max-width:64px;margin:0 auto}
+.faces .on{background:#fff;transform:scale(1.12);box-shadow:0 8px 20px #3f5a3a30}.cap{text-align:center;font-weight:700;color:var(--moss);min-height:26px;margin-top:6px}
+.opts,.chips{display:flex;flex-wrap:wrap;gap:8px}.opts{flex-direction:column;align-items:stretch}
+.opts button,.chips button{min-height:48px;padding:10px 18px;border:1px solid var(--line);border-radius:99px;background:#fff;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}.chips button{text-align:center}
+.opts button:hover,.chips button:hover{background:var(--sage);border-color:var(--moss)}
+input[type=text],input[type=url],textarea{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:16px;background:#fff;font-size:16px}textarea{height:96px;resize:none;padding-right:56px}
+.mic{position:relative}.mb{position:absolute;right:8px;bottom:8px;width:42px;height:42px;border-radius:50%;border:0;background:var(--sage);font-size:19px;cursor:pointer}.mb[aria-pressed=true]{background:#e8605a;color:#fff}
+.note{font-size:13px;color:var(--mut);margin:10px 2px 0}.note a{color:var(--moss)}
+.send{margin-top:10px}
+/* final */
+.done{text-align:center;padding:18px 0 8px;animation:pop .35s both}.done .f svg{width:120px;height:120px;animation:jump .8s cubic-bezier(.3,1.6,.4,1) both}
+@keyframes jump{from{transform:scale(.3) rotate(-20deg);opacity:0}}
+.done h1{margin:10px 0 6px}.done p{color:var(--mut);margin:0 auto 18px;max-width:36ch}.done .row{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.conf i{position:fixed;top:-12px;width:10px;height:16px;border-radius:3px;animation:fall 1.8s linear forwards;pointer-events:none;z-index:9}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg);opacity:.8}}
+[hidden]{display:none!important}
+@media(min-width:700px){.app{margin:24px auto;min-height:calc(100dvh - 48px);background:rgba(255,255,255,.55);border-radius:32px;box-shadow:0 30px 80px #3f5a3a29;padding:0 28px 28px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<div class="app">
+<header class="top"><a class="brand" href="/"><img src="logo.png" alt=""><span>Avatar <b>ROI</b></span></a><button class="ic" id="vb" aria-pressed="true" aria-label="Voz de Roi" title="Voz de Roi">🔊</button></header>
+<main>
+<section class="start" id="start">
+  <button class="big" id="go" aria-label="Tocar a Roi para empezar"><img src="roi.png" alt="Roi"></button>
+  <h1 id="h">Valora lo que quieras</h1>
+  <p class="sub" id="sb">Toca a Roi y cuéntame cómo te sientes. Son 20 segundos y no necesitas instalar nada.</p>
+  <span class="chip" id="tg" hidden></span>
+  <button class="btn" id="go2">Empezar</button>
+</section>
+<section id="chat" hidden>
+  <div class="stage"><div class="av"><img src="roi.png" alt=""><span id="bd" hidden></span></div><div><b>Roi</b><small id="who"></small></div></div>
+  <div class="log" id="log" aria-live="polite"></div>
+</section>
+<section class="done" id="done" hidden>
+  <div class="f" id="df"></div><h1>¡Gracias!</h1><p id="ds">Tu valoración ya cuenta 💚</p>
+  <div class="row"><a class="btn" id="again" href="/v">Valorar otra cosa</a><a class="btn g" href="/#pide">Pedir que me valoren (QR)</a><a class="btn g" href="/#instalar">Tener a Roi siempre a mano</a><a class="btn g" id="visit" hidden>Ir a la web</a></div>
+</section>
+</main></div>
+<script>
+const $=id=>document.getElementById(id),RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const COL=['#e8605a','#f0913a','#f2d05c','#8cc35e','#5fb760'],MOU=['M33 68Q50 56 67 68','M33 66Q50 58 67 66','M34 64H66','M32 60Q50 76 68 60','M30 58Q50 82 70 58'];
+const NAMES=['Muy insatisfecho','Insatisfecho','Neutral','Satisfecho','Muy satisfecho'];
+const FEEL=[['Enfado','Frustración','Agobio'],['Decepción','Desconfianza','Estrés'],['Indiferencia','Desconexión','Calma'],['Confianza','Tranquilidad','Bienestar'],['Entusiasmo','Plenitud','Inspiración']];
+const face=i=>`<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="${COL[i]}"/><circle cx="36" cy="40" r="5" fill="#3a2a1a"/><circle cx="64" cy="40" r="5" fill="#3a2a1a"/>${i==0?'<path d="M26 28L44 34M74 28L56 34" stroke="#3a2a1a" stroke-width="5" stroke-linecap="round"/>':''}<path d="${MOU[i]}" stroke="#3a2a1a" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`;
+
+/* ---- qué se valora (parámetros del enlace / QR / «Compartir» de Android) ---- */
+const q=new URLSearchParams(location.search),TY=['web','project','place','org','person'];
+const clean=s=>(s||'').replace(/\s+/g,' ').trim();
+const asUrl=s=>{s=clean(s);if(!s||/\s/.test(s))return'';try{const x=new URL(/^https?:\/\//i.test(s)?s:'https://'+s);return/^https?:$/.test(x.protocol)&&x.hostname.includes('.')?x.href:''}catch(e){return''}};
+const hostOf=u=>{try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return''}};
+let t=TY.includes(q.get('t'))?q.get('t'):null,n=clean(q.get('n')).slice(0,80),u=asUrl(q.get('u')),src=['qr','link','share'].includes(q.get('s'))?q.get('s'):'web';
+if(!u&&(q.get('url')||q.get('text'))){const m=(q.get('text')||'').match(/https?:\/\/\S+/);u=asUrl(q.get('url')||(m&&m[0])||'');if(u){src='share';t=t||'web';n=n||clean(q.get('title')).slice(0,80)}}
+if(u&&!n)n=hostOf(u);if(!t&&(n||u))t=u?'web':'place';
+const subj=()=>t==='person'?'a '+n:n;
+const S={mood:null,feel:'',comment:''};
+
+/* ---- voz ---- */
+let VOICE=true;try{VOICE=localStorage.getItem('roi_voice')!=='0'}catch(e){}
+const vb=$('vb');vb.setAttribute('aria-pressed',VOICE);if(!('speechSynthesis'in window))vb.hidden=true;
+const speak=x=>{if(!VOICE||!('speechSynthesis'in window))return;speechSynthesis.cancel();const s=new SpeechSynthesisUtterance(x.replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu,'').replace(/\s+/g,' ').trim());s.lang='es-ES';speechSynthesis.speak(s)};
+vb.onclick=()=>{VOICE=!VOICE;vb.setAttribute('aria-pressed',VOICE);try{localStorage.setItem('roi_voice',VOICE?'1':'0')}catch(e){}VOICE?speak('Voz activada'):speechSynthesis.cancel()};
+
+/* ---- conversación ---- */
+const log=$('log');
+const add=(c,h)=>{const d=document.createElement('div');d.className=c;if(h!=null)d.innerHTML=h;log.append(d);d.scrollIntoView({behavior:RM?'auto':'smooth',block:'end'});return d};
+const bot=x=>{add('b').textContent=x;speak(x)},me=x=>{add('b me').textContent=x};
+const block=(c,h,on)=>{const d=add('blk '+c,h);d.onclick=e=>{const b=e.target.closest('button');if(b&&!d.classList.contains('lock'))on(b,d)};return d};
+const lock=d=>d.classList.add('lock');
+const setMood=i=>{document.documentElement.style.setProperty('--mood',COL[i]);$('bd').innerHTML=face(i);$('bd').hidden=false};
+
+function begin(){
+  $('start').hidden=true;$('chat').hidden=false;$('who').textContent=n||'Valora lo que quieras';
+  if(n){const x=`¡Hola! Soy Roi 👋 ¿Cómo valoras ${subj()}?`;add('b').textContent=x;speak(x);rate()}
+  else{const x='¡Hola! Soy Roi 👋 ¿Qué quieres valorar?';add('b').textContent=x;speak(x);what()}
+}
+function what(){
+  block('opts','<button data-t="web">🌐 Una web o experiencia digital</button><button data-t="project">💡 Una iniciativa o proyecto</button><button data-t="place">📍 Un lugar o establecimiento</button><button data-t="org">🏢 Una empresa o institución</button><button data-t="person">🙋 Una persona</button>',(b,d)=>{lock(d);t=b.dataset.t;me(b.textContent);name()})}
+function name(){
+  bot(t==='web'?'Pega la dirección de la web o escribe su nombre.':'Escribe el nombre.');
+  const d=add('blk','<input type="text" id="nm" maxlength="120" autocomplete="off" autocapitalize="sentences" aria-label="Qué valoras" placeholder="'+(t==='web'?'ejemplo.com':t==='place'?'Café Central, Madrid':t==='person'?'Nombre y apellidos':'Nombre')+'"><button class="btn w send">Continuar</button>');
+  const i=d.querySelector('input'),go=()=>{const v=clean(i.value);if(!v)return;lock(d);const w=asUrl(v);if(t==='web'&&w){u=w;n=hostOf(w)}else n=v.slice(0,80);me(n);$('who').textContent=n;rate()};
+  d.querySelector('button').onclick=go;i.onkeydown=e=>{if(e.key==='Enter')go()};i.focus({preventScroll:true})}
+function rate(){
+  if(!$('who').textContent||$('who').textContent==='Valora lo que quieras')$('who').textContent=n;
+  if(!log.querySelector('.b')||log.querySelectorAll('.b').length>1)bot(`¿Cómo valoras ${subj()}?`);
+  const d=block('',`<div class="faces">${NAMES.map((x,i)=>`<button data-m="${i}" aria-label="${x}" title="${x}">${face(i)}</button>`).join('')}</div><div class="cap" aria-hidden="true">Toca la carita que mejor te represente</div>`,(b,dd)=>{
+    S.mood=+b.dataset.m;lock(dd);dd.classList.remove('lock');dd.style.pointerEvents='none';dd.style.opacity=1;b.classList.add('on');me(NAMES[S.mood]);setMood(S.mood);setTimeout(feel,260)});
+  const cap=d.querySelector('.cap'),sh=e=>{const b=e.target.closest('button');if(b)cap.textContent=NAMES[+b.dataset.m]};d.addEventListener('mouseover',sh);d.addEventListener('focusin',sh)}
+function feel(){
+  bot('¿Cómo te sientes?');
+  block('chips',FEEL[S.mood].map(x=>`<button>${x}</button>`).join(''),(b,d)=>{S.feel=b.textContent;lock(d);me(S.feel);setTimeout(comment,220)})}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function comment(){
+  bot('¿Quieres añadir algo? Escríbelo o díctalo con el micro. Es opcional.');
+  const d=add('blk','<div class="mic"><textarea maxlength="1000" aria-label="Comentario" placeholder="Cuéntanos tu experiencia…"></textarea><button class="mb" type="button" aria-pressed="false" aria-label="Dictar con la voz">🎤</button></div><p class="note">Al enviar, tu valoración se guarda de forma anónima y el comentario se analiza con IA de Google. <a href="privacy.html">Privacidad</a></p><button class="btn w send">Enviar valoración</button>');
+  const ta=d.querySelector('textarea'),mb=d.querySelector('.mb');let rec=null;
+  if(!SR)mb.remove();else mb.onclick=()=>{if(rec){rec.stop();return}rec=new SR();rec.lang='es-ES';rec.interimResults=false;rec.onresult=e=>{ta.value=(ta.value+' '+e.results[0][0].transcript).trim()};rec.onend=()=>{rec=null;mb.setAttribute('aria-pressed','false')};rec.onerror=()=>bot('No he podido usar el micrófono. Puedes escribirlo.');mb.setAttribute('aria-pressed','true');rec.start()};
+  d.querySelector('.send').onclick=()=>{if(rec)rec.stop();S.comment=clean(ta.value);lock(d);if(S.comment)me(S.comment);send()}}
+
+/* ---- envío ---- */
+let anon='';try{anon=localStorage.getItem('roi_anon')||'';if(!anon){anon=crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);localStorage.setItem('roi_anon',anon)}}catch(e){anon=anon||'anon-'+Date.now().toString(36)}
+const cid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+async function send(){
+  let site=u?hostOf(u):null,url=null;try{if(u){const x=new URL(u);url=x.origin+x.pathname}}catch(e){}
+  const body={client_id:cid,anon_id:anon,source:src,type:t,subject:n,site,url,rating:S.mood+1,feeling:S.feel,comment:S.comment||null,place_name:t==='place'?n:null,lang:'es',created_at:new Date().toISOString(),website:''};
+  const go=async()=>{try{const r=await fetch('/api/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return r.ok}catch(e){return false}};
+  const w=add('b','Guardando tu valoración…');
+  if(await go()||await new Promise(r=>setTimeout(r,1500)).then(go)){w.remove();finish()}
+  else{w.textContent='No he podido guardar tu valoración. Revisa tu conexión e inténtalo de nuevo.';const d=add('blk','<button class="btn w">Reintentar</button>');d.querySelector('button').onclick=()=>{d.remove();w.remove();send()}}}
+function finish(){
+  $('chat').hidden=true;$('done').hidden=false;$('df').innerHTML=face(S.mood);
+  $('ds').textContent=`${NAMES[S.mood]} · ${S.feel} · ${n}. Tu valoración ya cuenta 💚`;speak('¡Gracias! Tu valoración ya cuenta.');
+  if(u){const v=$('visit');v.hidden=false;v.href=u;v.rel='noopener';v.textContent='Ir a '+(hostOf(u)||'la web')}
+  if(!RM){const c=document.createElement('div');c.className='conf';for(let i=0;i<26;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'vw';e.style.background=COL[i%5];e.style.animationDelay=Math.random()*.5+'s';e.style.animationDuration=1.4+Math.random()*1.2+'s';c.append(e)}document.body.append(c);setTimeout(()=>c.remove(),3500)}
+  scrollTo({top:0})}
+
+/* ---- portada de la página ---- */
+if(n){document.title='Valora '+n+' — Avatar ROI';$('h').textContent='¿Cómo valoras '+subj()+'?';const tg=$('tg');tg.hidden=false;tg.textContent={web:'🌐',project:'💡',place:'📍',org:'🏢',person:'🙋'}[t]+' '+n}
+$('go').onclick=$('go2').onclick=begin;
+if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script></body></html>

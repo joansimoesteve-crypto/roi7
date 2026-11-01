@@ -1,0 +1,7 @@
+{
+  "name": "avatar-roi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Avatar ROI · web y API",
+  "engines": { "node": ">=20" }
+}
