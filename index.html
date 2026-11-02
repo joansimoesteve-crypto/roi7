@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 :root{--ink:#26331f;--moss:#3f5a3a;--sage:#e9efdc;--paper:#fbf7ec;--mut:#4d5c43;--line:#cfd6c2;--roi-bottom:20px}
-*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}html,body{overflow-x:clip}
+*{box-sizing:border-box}[hidden]{display:none!important}html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}html,body{overflow-x:clip}
 body{margin:0;font:17px/1.6 "Bricolage Grotesque",system-ui,sans-serif;color:var(--ink);background:var(--paper)}
 img,svg,canvas{max-width:100%}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
@@ -125,7 +125,7 @@ footer{padding:70px 0 120px;color:var(--mut);font-size:14px;display:flex;gap:14p
 <section id="pide" class="rv"><div class="card gen"><div><h2>Pide que te valoren</h2><p class="sub">Crea un enlace y un QR para tu perfil de LinkedIn o Facebook, tu restaurante, tu proyecto, tu empresa o tu web. Quien lo abra valora desde el móvil, sin instalar nada.</p>
 <label for="ur">Pega un enlace (opcional)</label><input id="ur" type="url" inputmode="url" placeholder="linkedin.com/in/tu-nombre, facebook.com/…, Google Maps, tu web…" autocomplete="off"><p class="hint" id="det">Detectamos el nombre y el tipo solos.</p>
 <label for="nm">Nombre</label><input id="nm" placeholder="Ej. Ana García, Café Central, Peatonalización calle Mayor…" maxlength="80">
-<label for="ty">Qué es</label><select id="ty"><option value="person">Persona o perfil (LinkedIn, Facebook…)</option><option value="place">Local, restaurante o lugar</option><option value="project">Proyecto o iniciativa</option><option value="org">Empresa o institución</option><option value="web">Web</option></select>
+<label for="loc">Ubicación dentro del sitio (opcional)</label><input id="loc" placeholder="Ej. Planta 2, Aula 3.04, Recepción" maxlength="80"><p class="hint">Si tienes varios espacios, crea un QR para cada uno y compara cuál va mejor.</p><label for="ty">Qué es</label><select id="ty"><option value="person">Persona o perfil (LinkedIn, Facebook…)</option><option value="place">Local, restaurante o lugar</option><option value="project">Proyecto o iniciativa</option><option value="org">Empresa o institución</option><option value="web">Web</option></select>
 <button class="btn" id="gen">Crear enlace y QR</button>
 <div id="out" hidden><label for="lk">Enlace para compartir</label><input id="lk" readonly>
 <div class="row"><button class="btn s" id="cp">Copiar</button><button class="btn s g" id="sh">Compartir</button><button class="btn s g" id="dl">Descargar QR</button><a class="btn s g" id="tryit" target="_blank" rel="noopener">Probarlo</a></div>
@@ -255,7 +255,7 @@ function detect(v){let x;try{x=new URL(/^https?:\/\//i.test(v)?v:'https://'+v)}c
 $('ur').oninput=()=>{const d=detect($('ur').value.trim());if(!d){$('det').textContent='Detectamos el nombre y el tipo solos.';return}
  if(d.t)$('ty').value=d.t;if(d.n&&(auto||!$('nm').value)){$('nm').value=d.n.slice(0,80);auto=true}$('det').textContent=d.n?'Detectado: '+d.n+(d.t?'':'. Revisa el tipo.'):'Revisa el nombre y el tipo.'};
 $('nm').oninput=()=>{auto=false};
-const mk=(n,t,u,s)=>location.origin+'/v?t='+t+'&n='+encodeURIComponent(n)+(u?'&u='+encodeURIComponent(u):'')+'&s='+s;
+const mk=(n,t,u,s)=>{const l=$('loc').value.trim();return location.origin+'/v?t='+t+'&n='+encodeURIComponent(n)+(l?'&l='+encodeURIComponent(l):'')+(u?'&u='+encodeURIComponent(u):'')+'&s='+s};
 $('gen').onclick=()=>{const n=$('nm').value.trim();if(!n){$('nm').focus();return}let u='';try{const raw=$('ur').value.trim(),x=new URL(/^https?:\/\//i.test(raw)?raw:'https://'+raw);if(raw&&/^https?:$/.test(x.protocol))u=x.href}catch(e){}
  const t=$('ty').value,link=mk(n,t,u,'link'),qlink=mk(n,t,u,'qr');
  $('lk').value=link;$('tryit').href=link;$('em').value='<script src="'+location.origin+'/avatar.js" data-name="'+esc(n)+'" data-type="'+t+'"><\/script>';$('out').hidden=false;

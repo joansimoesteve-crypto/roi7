@@ -88,7 +88,7 @@ const q=new URLSearchParams(location.search),TY=['web','project','place','org','
 const clean=s=>(s||'').replace(/\s+/g,' ').trim();
 const asUrl=s=>{s=clean(s);if(!s||/\s/.test(s))return'';try{const x=new URL(/^https?:\/\//i.test(s)?s:'https://'+s);return/^https?:$/.test(x.protocol)&&x.hostname.includes('.')?x.href:''}catch(e){return''}};
 const hostOf=u=>{try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return''}};
-let t=TY.includes(q.get('t'))?q.get('t'):null,n=clean(q.get('n')).slice(0,80),u=asUrl(q.get('u')),src=['qr','link','share'].includes(q.get('s'))?q.get('s'):'web';
+let loc=clean(q.get('l')).slice(0,80),t=TY.includes(q.get('t'))?q.get('t'):null,n=clean(q.get('n')).slice(0,80),u=asUrl(q.get('u')),src=['qr','link','share'].includes(q.get('s'))?q.get('s'):'web';
 if(!u&&(q.get('url')||q.get('text'))){const m=(q.get('text')||'').match(/https?:\/\/\S+/);u=asUrl(q.get('url')||(m&&m[0])||'');if(u){src='share';t=t||'web';n=n||clean(q.get('title')).slice(0,80)}}
 if(u&&!n)n=hostOf(u);if(!t&&(n||u))t=u?'web':'place';
 const subj=()=>t==='person'?'a '+n:n;
@@ -142,7 +142,7 @@ let anon='';try{anon=localStorage.getItem('roi_anon')||'';if(!anon){anon=crypto.
 const cid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 async function send(){
   let site=u?hostOf(u):null,url=null;try{if(u){const x=new URL(u);url=x.origin+x.pathname}}catch(e){}
-  const body={client_id:cid,anon_id:anon,source:src,type:t,subject:n,site,url,rating:S.mood+1,feeling:S.feel,comment:S.comment||null,place_name:t==='place'?n:null,lang:'es',created_at:new Date().toISOString(),website:''};
+  const body={client_id:cid,anon_id:anon,source:src,type:t,subject:n,site,url,rating:S.mood+1,feeling:S.feel,comment:S.comment||null,place_name:t==='place'?n:null,location:loc||null,lang:'es',created_at:new Date().toISOString(),website:''};
   const go=async()=>{try{const r=await fetch('/api/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return r.ok}catch(e){return false}};
   const w=add('b','Guardando tu valoración…');
   if(await go()||await new Promise(r=>setTimeout(r,1500)).then(go)){w.remove();finish()}
@@ -155,7 +155,7 @@ function finish(){
   scrollTo({top:0})}
 
 /* ---- portada de la página ---- */
-if(n){document.title='Valora '+n+' — Avatar ROI';$('h').textContent='¿Cómo valoras '+subj()+'?';const tg=$('tg');tg.hidden=false;tg.textContent={web:'🌐',project:'💡',place:'📍',org:'🏢',person:'🙋'}[t]+' '+n}
+if(n){document.title='Valora '+n+' — Avatar ROI';$('h').textContent='¿Cómo valoras '+subj()+'?';const tg=$('tg');tg.hidden=false;tg.textContent={web:'🌐',project:'💡',place:'📍',org:'🏢',person:'🙋'}[t]+' '+n+(loc?' · '+loc:'')}
 $('go').onclick=$('go2').onclick=begin;
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 </script></body></html>

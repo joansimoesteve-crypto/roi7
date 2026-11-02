@@ -32,11 +32,20 @@ Una sola base de datos (Supabase) recibe las valoraciones de la extensión, de `
 6. Enlaces: `/panel` (acceso), `/panel?demo` (muestra completa para reuniones), `/panel?demo=muestra` (cómo ve el plan gratuito).
 7. Cuando tengas el enlace de pago de Stripe, pégalo en `UPGRADE_URL` de `panel.html`.
 
+## Ubicaciones, informes y alertas (v4)
+1. Supabase → SQL Editor: ejecuta `supabase_v2.sql` (añade la columna de ubicación y los ajustes de informes; no borra nada).
+2. Vercel → variables nuevas: `CRON_SECRET` (una clave larga inventada por ti; Vercel la usa para llamar al cron) y, opcional, `REPORTS_FROM_EMAIL` (p. ej. `Avatar ROI <avisos@citizenvoice.es>`, necesita dominio verificado en Resend) y `SITE_URL`.
+3. `vercel.json` ya programa `/api/cron` cada día a las 07:00 UTC: los lunes envía el informe semanal y cada día comprueba si hay que mandar una alerta (máximo una cada 3 días por organización).
+4. Probar sin esperar: `GET /api/cron?force=weekly` o `?force=alert` con la cabecera `Authorization: Bearer <CRON_SECRET>`.
+5. Desactivar a una organización los informes o las alertas: `update organizations set report_weekly = false, alerts = false where name = '...';`
+6. QR por ubicación: en el panel (sección «Códigos QR por ubicación») o en la landing («Pide que te valoren» → campo Ubicación). El enlace es `/v?t=place&n=Nombre&l=Planta%202&s=qr`.
+
 ## Endpoints
 - `POST /api/ratings` valoración (rate limit, honeypot, Gemini opcional; se guarda aunque la IA falle)
 - `GET /api/rankings` rankings, totales y últimas valoraciones (las de tipo persona no salen)
 - `POST /api/auth` envía el enlace de acceso solo a correos de organizaciones
 - `GET /api/panel` datos de la organización de quien ha entrado (token de Supabase Auth)
+- `GET /api/cron` informe semanal y alertas (solo con `CRON_SECRET`)
 - `POST /api/leads` contacto de empresas (teléfono obligatorio)
 
 ## Móvil
