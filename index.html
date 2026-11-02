@@ -139,7 +139,7 @@ footer{padding:70px 0 120px;color:var(--mut);font-size:14px;display:flex;gap:14p
 <form class="try" id="tryf"><input id="tu" type="text" inputmode="url" aria-label="Dirección de la web" placeholder="ejemplo.com" autocomplete="off"><button class="btn">Valorar esta web</button></form></div>
 <div class="pane" id="p2" role="tabpanel" aria-labelledby="t2" hidden><h3>Roi en tu móvil, en un toque</h3>
 <details id="dA"><summary>🤖 Android (Chrome, Edge, Samsung Internet)</summary><ol><li>Instala Avatar ROI como app. <button class="btn s" id="pwa" hidden>Instalar app</button> Si no ves el botón: menú ⋮ → <em>Instalar app</em> o <em>Añadir a pantalla de inicio</em>.</li><li>En cualquier web o app: <b>Compartir → Avatar ROI</b>.</li><li>Se abre Roi con esa web ya puesta. Carita, emoción y listo.</li></ol></details>
-<details id="dI"><summary>🍎 iPhone y iPad (Safari)</summary><ol><li>Pulsa <b>Compartir → Añadir a pantalla de inicio</b>.</li><li>Cuando quieras valorar una web, <b>copia su dirección</b>, abre Avatar ROI y toca <em>Pegar lo que he copiado</em>.</li></ol><p style="margin:0;color:var(--mut);font-size:14px">iOS no permite «Compartir → app» en webs; por eso se pega la dirección.</p></details>
+<details id="dI"><summary>🍎 iPhone y iPad (Safari)</summary><ol><li><a class="btn s" id="sc" href="#" aria-disabled="true">Atajo «Valorar con Roi» · próximamente</a></li><li>Con el atajo añadido, en cualquier web: <b>Compartir → Valorar con Roi</b>. Se abre Roi con esa web ya puesta.</li><li>Sin atajo: copia la dirección de la web, abre Roi en <b>citizenvoice.es/v</b> y toca <em>Valorar lo que he copiado</em>.</li></ol><p style="margin:0;color:var(--mut);font-size:14px">Para tenerlo siempre a mano: <b>Compartir → Añadir a pantalla de inicio</b>. iOS no permite «Compartir → app» en webs, por eso usamos un atajo.</p></details>
 <details id="dQ"><summary>📷 Si te comparten un QR o un enlace</summary><p style="margin:6px 0 0">Escanea o toca. Se abre Roi a pantalla completa y votas en 20 segundos, sin instalar nada.</p></details></div>
 <div class="pane" id="p3" role="tabpanel" aria-labelledby="t3" hidden><h3>Un marcador que invoca a Roi en cualquier web</h3>
 <p style="margin-top:0"><b>Ordenador:</b> arrastra este botón a tu barra de marcadores y púlsalo en la web que quieras valorar.</p><a class="bm" id="bm" href="#">⭐ Roi</a><button class="btn s g" id="cpb">Copiar código</button>
@@ -147,7 +147,7 @@ footer{padding:70px 0 120px;color:var(--mut);font-size:14px;display:flex;gap:14p
 <p class="note">No funciona en webs que bloquean scripts externos (algunos bancos o GitHub). En esas, usa «Con un enlace».</p></div>
 <div class="ext"><div><h3>Extensión completa (Chrome, Edge, Brave)</h3><p id="extp">Valora sin salir de la página, con tu historial y tu ánimo del día.</p></div><a class="btn" id="extb" href="#" aria-disabled="true">Próximamente en Chrome Web Store</a></div></section>
 
-<section id="empresas" class="rv"><h2>Hablemos de tu organización</h2><p class="sub">Panel de resultados, Roi en tu web, QR para tus locales y proyectos ciudadanos. Déjanos tu teléfono y te contactamos.</p>
+<section id="empresas" class="rv"><h2>Hablemos de tu organización</h2><p class="sub">Panel de resultados, Roi en tu web, QR para tus locales y proyectos ciudadanos. Déjanos tu teléfono y te contactamos.</p><p><a class="btn s g" href="/panel?demo">Ver un panel de muestra</a> <a class="btn s g" href="/panel">Acceso para organizaciones</a></p>
 <form class="card" id="lead"><div class="two"><div><label for="ln">Tu nombre</label><input id="ln" required maxlength="100" autocomplete="name"></div><div><label for="lo">Organización</label><input id="lo" required maxlength="120" autocomplete="organization"></div>
 <div><label for="lp">Teléfono</label><input id="lp" type="tel" inputmode="tel" required maxlength="30" autocomplete="tel" placeholder="+34 600 000 000"></div><div><label for="le">Email (opcional)</label><input id="le" type="email" maxlength="120" autocomplete="email"></div>
 <div><label for="lk2">Somos</label><select id="lk2"><option>Ayuntamiento o institución</option><option>Empresa</option><option>Otro</option></select></div><div><label for="li">Me interesa</label><select id="li"><option>Panel de resultados</option><option>Roi en mi web</option><option>QR para mis locales</option><option>Proyectos ciudadanos</option><option>Todo lo anterior</option></select></div></div>
@@ -155,7 +155,7 @@ footer{padding:70px 0 120px;color:var(--mut);font-size:14px;display:flex;gap:14p
 <label class="chk"><input type="checkbox" id="lc" required><span>Acepto que Avatar ROI use estos datos para contactarme. Más información en la <a href="privacy.html">política de privacidad</a>.</span></label>
 <button class="btn" type="submit">Quiero que me llamen</button> <span id="lr" role="status"></span></form></section>
 
-<footer><img src="logo.png" alt=""><span>Avatar ROI · Valora. Comparte. TU bienestar importa. · <a href="privacy.html">Privacidad</a></span></footer>
+<footer><img src="logo.png" alt=""><span>Avatar ROI · Valora. Comparte. TU bienestar importa. · <a href="privacy.html">Privacidad</a> · <a href="/panel">Panel de organizaciones</a></span></footer>
 </div>
 
 <nav class="dock" id="dock" aria-label="Atajos"><button class="p" id="dTry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5q3.5 3 7 0M9 9.5v.5M15 9.5v.5"/></svg>Probar</button>
@@ -168,6 +168,7 @@ footer{padding:70px 0 120px;color:var(--mut);font-size:14px;display:flex;gap:14p
 <script src="avatar.js"></script>
 <script>
 /* ===== Ajustes ===== */
+const SHORTCUT_URL='';                     // ← enlace de iCloud del atajo «Valorar con Roi»
 const CHROME_URL='';                       // ← pega aquí el enlace de Chrome Web Store cuando esté publicado
 const CE=['urnovai','outlook.es'].join('@'); // email de reserva si falla el formulario (no aparece en el HTML)
 
@@ -280,6 +281,7 @@ const BM="javascript:(function(){var s=document.createElement('script');s.src='"
 $('bm').href=BM;$('bm').onclick=e=>e.preventDefault();$('cpb').onclick=()=>{navigator.clipboard.writeText(BM);flash($('cpb'),'Copiado')};
 if(CHROME_URL){const b=$('extb');b.href=CHROME_URL;b.target='_blank';b.rel='noopener';b.removeAttribute('aria-disabled');b.textContent='Añadir a Chrome';document.querySelectorAll('a[href="#instalar"].g').forEach(a=>{a.textContent='Añadir a Chrome'})}
 else $('extb').onclick=e=>e.preventDefault();
+if(SHORTCUT_URL){const a=$('sc');a.href=SHORTCUT_URL;a.removeAttribute('aria-disabled');a.textContent='Añadir el atajo «Valorar con Roi»'}else $('sc').onclick=e=>e.preventDefault();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 
 /* ===== Contacto de empresas ===== */

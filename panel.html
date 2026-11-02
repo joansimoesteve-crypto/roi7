@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Panel de organizaciones · Avatar ROI</title><meta name="robots" content="noindex">
+<meta name="theme-color" content="#3f5a3a"><link rel="icon" href="favicon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#26331f;--moss:#3f5a3a;--sage:#e9efdc;--paper:#fbf7ec;--mut:#4d5c43;--line:#cfd6c2;--card:#fff}
+*{box-sizing:border-box}html,body{overflow-x:clip}
+body{margin:0;font:16px/1.5 "Bricolage Grotesque",system-ui,sans-serif;color:var(--ink);background:var(--paper);-webkit-text-size-adjust:100%}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}svg{max-width:100%}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+header{position:sticky;top:0;z-index:20;background:#fbf7ecee;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:12px;padding-top:8px;padding-bottom:8px}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font-weight:800;font-size:20px;letter-spacing:-.02em}.brand img{width:40px;height:40px}
+.sp{flex:1}.org{font-weight:800;font-size:15px;text-align:right;line-height:1.2}.org small{display:block;font-weight:600;color:var(--mut)}
+.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:800;background:var(--sage);color:var(--moss);vertical-align:middle}.badge.pro{background:var(--moss);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 20px;border-radius:99px;background:var(--moss);color:#fff;text-decoration:none;font:600 15px "Bricolage Grotesque",sans-serif;border:2px solid var(--moss);cursor:pointer;transition:transform .2s,box-shadow .2s}.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px #3f5a3a40}.btn.g{background:transparent;color:var(--ink);border-color:var(--ink)}.btn.s{min-height:40px;padding:6px 14px;font-size:14px}.btn[disabled]{opacity:.6;cursor:wait;transform:none}
+main{padding:22px 0 80px}h1{font-size:clamp(26px,5vw,38px);letter-spacing:-.03em;margin:0 0 4px;line-height:1.05}h2{font-size:19px;margin:0 0 4px;letter-spacing:-.01em}.sub{color:var(--mut);margin:0 0 18px;font-size:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;position:relative;animation:in .45s both}@keyframes in{from{opacity:0;transform:translateY(14px)}}
+.grid{display:grid;gap:14px}.kpis{grid-template-columns:repeat(4,1fr);margin-bottom:14px}.two{grid-template-columns:1.6fr 1fr;margin-bottom:14px}.two2{grid-template-columns:1fr 1fr;margin-bottom:14px}
+.kpi{display:flex;flex-direction:column;gap:2px}.kpi .l{font-size:13px;font-weight:600;color:var(--mut)}.kpi .v{font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1.05}.kpi .d{font-size:13px;font-weight:600;color:var(--mut)}
+.kpi.face{flex-direction:row;align-items:center;gap:12px}.kpi.face svg{width:60px;height:60px;flex:none}.up{color:#2f7a35}.down{color:#a3322c}
+.login{max-width:440px;margin:6vh auto 0;text-align:center}.login img{width:84px;margin-bottom:8px}.login input{width:100%;min-height:50px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;font:inherit;font-size:16px;margin:10px 0 12px}.login .m{min-height:24px;font-weight:600;margin-top:12px}.ok{color:var(--moss)}.err{color:#a3322c}
+.bars{display:grid;gap:8px}.bar{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;font-size:14px}.bar svg{width:28px;height:28px}.bar .t{height:12px;background:var(--sage);border-radius:99px 99px 99px 99px;overflow:hidden}.bar .t i{display:block;height:100%;border-radius:0 6px 6px 0;min-width:2px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.bar.e{grid-template-columns:110px 1fr auto}.bar.e span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{background:var(--sage);border-radius:99px;padding:6px 14px;font-size:14px;font-weight:600}.chip b{color:var(--moss);margin-left:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;color:var(--mut);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line)}td{padding:9px 8px;border-bottom:1px solid var(--line)}td.n,th.n{text-align:right;white-space:nowrap}td svg{width:22px;height:22px;vertical-align:middle;margin-right:6px}
+.tw{overflow-x:auto;margin:0 -4px}.tw table{min-width:0}td,th{padding-left:6px;padding-right:6px}
+#chart{width:100%;height:230px;touch-action:pan-y}#tip{position:fixed;pointer-events:none;background:var(--ink);color:#fff;font-size:13px;font-weight:600;padding:7px 11px;border-radius:10px;z-index:50;opacity:0;transition:opacity .12s;white-space:nowrap;box-shadow:0 8px 20px #0003}
+details.tbl{margin-top:8px;font-size:14px}details.tbl summary{cursor:pointer;color:var(--mut);font-weight:600;min-height:32px}
+.cm{display:grid;gap:10px}.cmi{display:grid;grid-template-columns:36px 1fr;gap:12px;padding:14px;border:1px solid var(--line);border-radius:16px}.cmi svg{width:34px;height:34px}.cmi .h{font-size:13px;color:var(--mut);font-weight:600}.cmi p{margin:4px 0 0}.cmi .ai{margin-top:6px;font-size:13px;color:var(--moss);background:var(--sage);display:inline-block;padding:3px 10px;border-radius:99px;font-weight:600}
+.lock{position:relative;overflow:hidden;min-height:170px}.lock .blur{filter:blur(7px);opacity:.7;pointer-events:none;user-select:none}.lock .cta{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:18px;background:#ffffffb8}.lock .cta b{font-size:17px}.lock .cta span{font-size:14px;color:var(--mut);max-width:34ch}
+.ban{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--moss);color:#fff;border-radius:18px;padding:14px 18px;margin-bottom:14px;font-weight:600}.ban .btn{background:#fff;color:var(--moss);border-color:#fff}
+.demo{background:#f2d05c;color:#26331f;border-radius:99px;padding:3px 12px;font-size:12px;font-weight:800}
+.empty{text-align:center;padding:30px 10px;color:var(--mut)}
+@media(max-width:860px){.kpis{grid-template-columns:1fr 1fr}.two,.two2{grid-template-columns:1fr}.kpi .v{font-size:30px}.org small{display:none}main{padding-top:16px}.wrap{padding:0 14px}.brand span{display:none}.bar.e{grid-template-columns:96px 1fr auto}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<header><div class="wrap"><a class="brand" href="/"><img src="logo.png" alt=""><span>Avatar ROI</span></a><span class="sp"></span>
+<div class="org" id="org" hidden></div><button class="btn s g" id="out" hidden>Salir</button></div></header>
+<main class="wrap" id="app"></main><div id="tip" role="tooltip"></div>
+<script>
+/* ===== Ajustes ===== */
+const UPGRADE_URL='';   // ← enlace de pago (Stripe Payment Link). Si está vacío, lleva al formulario de contacto
+const $=id=>document.getElementById(id),esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const COL=['#e8605a','#f0913a','#f2d05c','#8cc35e','#5fb760'],MOU=['M33 68Q50 56 67 68','M33 66Q50 58 67 66','M34 64H66','M32 60Q50 76 68 60','M30 58Q50 82 70 58'],NAMES=['Muy insatisfecho','Insatisfecho','Neutral','Satisfecho','Muy satisfecho'];
+const face=i=>`<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="${COL[i]}"/><circle cx="36" cy="40" r="5" fill="#3a2a1a"/><circle cx="64" cy="40" r="5" fill="#3a2a1a"/>${i==0?'<path d="M26 28L44 34M74 28L56 34" stroke="#3a2a1a" stroke-width="5" stroke-linecap="round"/>':''}<path d="${MOU[i]}" stroke="#3a2a1a" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`;
+const ci=a=>Math.min(4,Math.max(0,Math.round(a)-1)),f1=v=>v==null?'–':v.toFixed(1).replace('.',','),pct=(n,t)=>t?Math.round(n*100/t):0;
+const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],fd=s=>{const d=new Date(s);return d.getDate()+' '+MES[d.getMonth()]},fdt=s=>fd(s)+', '+String(new Date(s).getHours()).padStart(2,'0')+':'+String(new Date(s).getMinutes()).padStart(2,'0');
+const Q=new URLSearchParams(location.search),DEMO=Q.has('demo');let D=null,tok=null;
+const store={get(k){try{return sessionStorage.getItem(k)}catch(e){return null}},set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}},del(k){try{sessionStorage.removeItem(k)}catch(e){}}};
+
+/* ===== Entrada ===== */
+function loginView(msg){$('org').hidden=true;$('out').hidden=true;$('app').innerHTML=`<div class="card login"><img src="logo.png" alt=""><h1>Panel de organizaciones</h1><p class="sub">Escribe tu correo y te enviamos un enlace de acceso. Sin contraseñas.</p>
+<form id="lf"><label class="sr" for="em" style="position:absolute;left:-9999px">Correo</label><input id="em" type="email" inputmode="email" autocomplete="email" placeholder="tu@organizacion.es" required><button class="btn" style="width:100%">Enviarme el enlace</button></form><div class="m" id="lm" role="status">${msg||''}</div>
+<p class="sub" style="margin:14px 0 0">¿Quieres verlo antes? <a href="?demo">Ver panel de muestra</a></p></div>`;
+ $('lf').onsubmit=async e=>{e.preventDefault();const b=e.submitter,m=$('lm');b.disabled=true;m.className='m';m.textContent='Enviando…';
+  try{const r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:$('em').value})});
+   if(r.ok){m.className='m ok';m.textContent='Si tu correo está dado de alta, te llega un enlace en un minuto. Revisa también el spam.'}else throw 0}catch(x){m.className='m err';m.textContent='No hemos podido enviarlo. Inténtalo en un momento.'}b.disabled=false}}
+function logout(){store.del('roi_tok');location.href='/panel'}
+async function boot(){
+ if(DEMO){D=demo(Q.get('demo')==='muestra');return show()}
+ const h=new URLSearchParams(location.hash.slice(1));if(h.get('access_token')){store.set('roi_tok',h.get('access_token'));history.replaceState(null,'',location.pathname)}
+ if(h.get('error_description')){history.replaceState(null,'',location.pathname);return loginView('<span class="err">El enlace ha caducado o ya se usó. Pide uno nuevo.</span>')}
+ tok=store.get('roi_tok');if(!tok)return loginView();
+ $('app').innerHTML='<div class="card empty">Cargando…</div>';
+ try{const r=await fetch('/api/panel',{headers:{Authorization:'Bearer '+tok}});
+  if(r.status===401){store.del('roi_tok');return loginView('<span class="err">La sesión ha caducado. Pide un enlace nuevo.</span>')}
+  if(r.status===403){const j=await r.json();store.del('roi_tok');return loginView(`<span class="err">${esc(j.email||'Ese correo')} no tiene una organización asociada. Escríbenos y la damos de alta.</span>`)}
+  if(!r.ok)throw 0;D=await r.json()}catch(e){return $('app').innerHTML='<div class="card empty">No se pudo cargar el panel. Recarga la página en un momento.</div>'}
+ show()}
+
+/* ===== Panel ===== */
+const lockBox=(inner,txt,n)=>`<div class="lock"><div class="blur" aria-hidden="true">${inner}</div><div class="cta"><b>Incluido en el plan completo</b><span>${txt}</span><a class="btn s" href="${UPGRADE_URL||'/#empresas'}">Desbloquear</a></div></div>`;
+function show(){const T=D.totals,pro=D.org.plan==='completo',days=D.days;
+ $('org').hidden=false;$('org').innerHTML=esc(D.org.name)+' <span class="badge'+(pro?' pro':'')+'">'+(pro?'Completo':'Muestra')+'</span>'+(DEMO?' <span class="demo">DEMO</span>':'')+(D.email?'<small>'+esc(D.email)+'</small>':'');
+ $('out').hidden=false;$('out').textContent=DEMO?'Salir':'Salir';$('out').onclick=DEMO?()=>location.href='/':logout;
+ const dl=T.avg7!=null&&T.prevAvg7!=null?+(T.avg7-T.prevAvg7).toFixed(1):null,
+  dtxt=dl==null?'Sin semana anterior':(dl>0?'<span class="up">▲ +'+f1(dl)+'</span>':dl<0?'<span class="down">▼ '+f1(dl)+'</span>':'= igual')+' vs. semana anterior';
+ const maxD=Math.max(...D.dist,1),maxE=Math.max(...D.emotions.map(e=>e.n),1);
+ const trend=`<div class="card" style="animation-delay:.08s"><h2>Cómo evoluciona el ánimo</h2><p class="sub">Media diaria, últimos ${days} días (1 muy insatisfecho · 5 muy satisfecho)</p><svg id="chart" role="img" aria-label="Gráfico de la media diaria de valoraciones"></svg>
+ <details class="tbl"><summary>Ver como tabla</summary><div class="tw"><table><thead><tr><th>Día</th><th class="n">Media</th><th class="n">Valoraciones</th></tr></thead><tbody>${D.daily.filter(x=>x.n).slice(-14).reverse().map(x=>`<tr><td>${fd(x.d)}</td><td class="n">${f1(x.avg)}</td><td class="n">${x.n}</td></tr>`).join('')||'<tr><td colspan="3">Sin datos todavía</td></tr>'}</tbody></table></div></details></div>`;
+ const dist=`<div class="card" style="animation-delay:.12s"><h2>Reparto de caritas</h2><p class="sub">Qué sienten quienes valoran</p><div class="bars">${[4,3,2,1,0].map(i=>`<div class="bar" title="${NAMES[i]}: ${D.dist[i]}">${face(i)}<div class="t"><i style="width:0;background:${COL[i]}" data-w="${D.dist[i]*100/maxD}"></i></div><span>${D.dist[i]} · ${pct(D.dist[i],T.n)}%</span></div>`).join('')}</div></div>`;
+ const emo=`<div class="card" style="animation-delay:.16s"><h2>Emociones más frecuentes</h2><p class="sub">Lo que eligen al contarte cómo se sienten</p>${D.emotions.length?`<div class="bars">${D.emotions.map(e=>`<div class="bar e" title="${esc(e.name)}: ${e.n} · media ${f1(e.avg)}"><span>${esc(e.name)}</span><div class="t"><i style="width:0;background:${COL[ci(e.avg)]}" data-w="${e.n*100/maxE}"></i></div><span style="text-align:right">${e.n}</span></div>`).join('')}</div>`:'<div class="empty">Aún no hay emociones</div>'}</div>`;
+ const topicsInner=`<div class="chips">${(D.topics||[['trámites',18],['esperas',12],['atención',9],['web lenta',7],['limpieza',5]].map(a=>({name:a[0],n:a[1]}))).map(t=>`<span class="chip">${esc(t.name)}<b>${t.n}</b></span>`).join('')}</div>`;
+ const topics=`<div class="card" style="animation-delay:.2s"><h2>De qué hablan (análisis con IA)</h2><p class="sub">Temas que más se repiten en los comentarios</p>${pro?(D.topics&&D.topics.length?topicsInner:'<div class="empty">Cuando lleguen comentarios, verás aquí los temas</div>'):lockBox(topicsInner,'Temas y resumen de los comentarios, agrupados por IA.')}</div>`;
+ const tgt=`<div class="card" style="animation-delay:.24s"><h2>Por servicio, lugar o web</h2><p class="sub">Dónde se valora mejor y peor</p><div class="tw"><table><thead><tr><th>Qué</th><th class="n">Media</th><th class="n">Votos</th></tr></thead><tbody>${D.targets.map(x=>`<tr><td>${esc(x.name)}</td><td class="n">${face(ci(x.avg))}<b>${f1(x.avg)}</b></td><td class="n">${x.n}</td></tr>`).join('')||'<tr><td colspan="3">Sin datos todavía</td></tr>'}</tbody></table></div></div>`;
+ const cmList=a=>`<div class="cm">${a.map(c=>`<div class="cmi">${face(ci(c.rating))}<div><div class="h">${esc(c.name||'')} · ${esc(c.feeling||NAMES[ci(c.rating)])} · ${fdt(c.ts)}</div><p>${esc(c.comment)}</p>${c.summary?`<span class="ai">IA: ${esc(c.summary)}</span>`:''}</div></div>`).join('')}</div>`;
+ const sample=[{rating:2,name:'tu-web',feeling:'Estrés',ts:Date.now(),comment:'No encontraba el trámite que necesitaba y tuve que llamar por teléfono.',summary:'Dificultad para encontrar un trámite'},{rating:5,name:'tu-servicio',feeling:'Tranquilidad',ts:Date.now()-864e5,comment:'Atención muy rápida y amable, todo claro desde el principio.',summary:'Elogio a la atención'}];
+ const cms=`<div class="card" style="animation-delay:.28s;margin-top:14px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start"><div><h2>Comentarios</h2><p class="sub">Con el resumen de la IA. Se filtran spam, ofensivos y datos personales.</p></div>${pro&&D.comments&&D.comments.length?'<button class="btn s g" id="csv">Descargar CSV</button>':''}</div>${pro?(D.comments&&D.comments.length?cmList(D.comments):'<div class="empty">Todavía no hay comentarios</div>'):lockBox(cmList(sample),(D.locked&&D.locked.comments?`Hay ${D.locked.comments} comentarios esperándote. `:'')+'Léelos con su resumen de IA y descárgalos en CSV.')}</div>`;
+ const ban=pro?'':`<div class="ban"><span>Estás viendo la <b>muestra</b>: últimos 7 días, sin comentarios ni temas.</span><a class="btn s" href="${UPGRADE_URL||'/#empresas'}">Ver el plan completo</a></div>`;
+ $('app').innerHTML=`<h1>Cómo se sienten tus usuarios</h1><p class="sub">${esc(D.org.name)} · últimos ${days} días${pro?'':' (muestra)'}</p>${ban}
+ <div class="grid kpis"><div class="card kpi face" style="animation-delay:.02s">${T.avg!=null?face(ci(T.avg)):''}<div><div class="l">Ánimo medio</div><div class="v">${f1(T.avg)}<small style="font-size:16px;color:var(--mut)"> /5</small></div><div class="d">${dtxt}</div></div></div>
+ <div class="card kpi" style="animation-delay:.04s"><div class="l">Valoraciones</div><div class="v">${T.n}</div><div class="d">${T.today} en las últimas 24 h</div></div>
+ <div class="card kpi" style="animation-delay:.06s"><div class="l">Satisfechos</div><div class="v up">${T.pos}%</div><div class="d">caritas 4 y 5</div></div>
+ <div class="card kpi" style="animation-delay:.08s"><div class="l">Insatisfechos</div><div class="v down">${T.neg}%</div><div class="d">caritas 1 y 2</div></div></div>
+ <div class="grid two">${trend}${dist}</div><div class="grid two2">${emo}${topics}</div>${tgt}${cms}
+ <p class="sub" style="margin-top:20px">¿Quieres un QR o un botón de Roi para tu web? <a href="/#pide">Créalo aquí</a> o escríbenos a través del <a href="/#empresas">formulario</a>.</p>`;
+ requestAnimationFrame(()=>document.querySelectorAll('.t i[data-w]').forEach(i=>i.style.width=Math.max(+i.dataset.w,1.5)+'%'));
+ draw();if($('csv'))$('csv').onclick=csv}
+
+function csv(){const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"',rows=[['fecha','que','carita','emocion','comentario','resumen_ia']].concat(D.comments.map(c=>[c.ts,c.name,c.rating,c.feeling,c.comment,c.summary]));
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.map(r=>r.map(q).join(';')).join('\n')],{type:'text/csv'}));a.download='comentarios-avatar-roi.csv';a.click()}
+
+/* ===== Gráfico de tendencia (SVG propio, con hover) ===== */
+function draw(){const sv=$('chart');if(!sv)return;const W=sv.clientWidth||600,H=230,m={l:30,r:12,t:12,b:26},pw=W-m.l-m.r,ph=H-m.t-m.b,P=D.daily,n=P.length;
+ const x=i=>m.l+(n<2?pw/2:pw*i/(n-1)),y=v=>m.t+ph*(1-(v-1)/4);sv.setAttribute('viewBox',`0 0 ${W} ${H}`);
+ let s='';for(let v=1;v<=5;v++)s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}" stroke="#cfd6c2" stroke-width="1" ${v==3?'':'stroke-dasharray="2 4"'}/><text x="${m.l-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#4d5c43">${v}</text>`;
+ const k=Math.min(n,W<520?4:6);for(let j=0;j<k;j++){const i=Math.round(j*(n-1)/(k-1||1));s+=`<text x="${x(i)}" y="${H-6}" text-anchor="${j==0?'start':j==k-1?'end':'middle'}" font-size="11" fill="#4d5c43">${fd(P[i].d)}</text>`}
+ let d='',pen=false;P.forEach((p,i)=>{if(p.avg==null){pen=false;return}d+=(pen?'L':'M')+x(i).toFixed(1)+' '+y(p.avg).toFixed(1);pen=true});
+ const pts=P.map((p,i)=>p.avg!=null?{i,p}:null).filter(Boolean);
+ if(!pts.length){sv.innerHTML=s+`<text x="${W/2}" y="${H/2}" text-anchor="middle" fill="#4d5c43" font-size="14">Aún no hay valoraciones en este periodo</text>`;return}
+ s+=`<path d="${d}" fill="none" stroke="#3f5a3a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+ if(pts.length<=40)s+=pts.map(o=>`<circle cx="${x(o.i)}" cy="${y(o.p.avg)}" r="4.5" fill="${COL[ci(o.p.avg)]}" stroke="#fff" stroke-width="2"/>`).join('');
+ s+=`<line id="cx" y1="${m.t}" y2="${m.t+ph}" stroke="#26331f" stroke-width="1" opacity="0"/><circle id="cd" r="6" fill="#26331f" stroke="#fff" stroke-width="2" opacity="0"/>`;sv.innerHTML=s;
+ const tip=$('tip'),cx=sv.querySelector('#cx'),cd=sv.querySelector('#cd');
+ const mv=e=>{const r=sv.getBoundingClientRect(),px=(e.clientX-r.left)*W/r.width;let b=null,bd=1e9;pts.forEach(o=>{const dd=Math.abs(x(o.i)-px);if(dd<bd){bd=dd;b=o}});if(!b)return;
+  cx.setAttribute('x1',x(b.i));cx.setAttribute('x2',x(b.i));cx.setAttribute('opacity','.35');cd.setAttribute('cx',x(b.i));cd.setAttribute('cy',y(b.p.avg));cd.setAttribute('opacity','1');
+  tip.textContent=fd(b.p.d)+' · media '+f1(b.p.avg)+' · '+b.p.n+(b.p.n==1?' valoración':' valoraciones');tip.style.opacity=1;tip.style.left=Math.min(innerWidth-tip.offsetWidth-8,Math.max(8,e.clientX-tip.offsetWidth/2))+'px';tip.style.top=(r.top+y(b.p.avg)*r.height/H-46)+'px'};
+ sv.onpointermove=mv;sv.onpointerdown=mv;sv.onpointerleave=()=>{tip.style.opacity=0;cx.setAttribute('opacity','0');cd.setAttribute('opacity','0')}}
+let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>D&&draw(),150)});
+
+/* ===== Datos de muestra para reuniones (?demo y ?demo=muestra) ===== */
+function demo(muestra){let sd=7;const rnd=()=>(sd=(sd*9301+49297)%233280)/233280,days=muestra?7:90,daily=[],dist=[0,0,0,0,0],E={},targets=[['campus.universidad-demo.es',.72],['secretaria.universidad-demo.es',.55],['Biblioteca Central',.85],['Aula virtual',.6],['Cafetería',.7]],TG={};
+ for(let i=days-1;i>=0;i--){const base=3.2+Math.min(1,(days-i)/days)*.6+Math.sin(i/5)*.35,n=Math.round(4+rnd()*10+(days-i)/12);let s=0,c=0;
+  for(let k=0;k<n;k++){const t=targets[Math.floor(rnd()*targets.length)],r=Math.max(1,Math.min(5,Math.round(base+(t[1]-.65)*2+(rnd()-.5)*3)));dist[r-1]++;s+=r;c++;const g=TG[t[0]]||(TG[t[0]]={n:0,s:0});g.n++;g.s+=r;
+   const fe=[['Enfado','Frustración','Agobio'],['Decepción','Desconfianza','Estrés'],['Indiferencia','Desconexión','Calma'],['Confianza','Tranquilidad','Bienestar'],['Entusiasmo','Plenitud','Inspiración']][r-1][Math.floor(rnd()*3)],e=E[fe]||(E[fe]={n:0,s:0});e.n++;e.s+=r}
+  const d=new Date(Date.now()-i*864e5);daily.push({d:d.toISOString().slice(0,10),n:c,avg:c?+(s/c).toFixed(2):null})}
+ const n=dist.reduce((a,b)=>a+b,0),sum=dist.reduce((a,b,i)=>a+b*(i+1),0),l7=daily.slice(-7),p7=daily.slice(-14,-7),av=a=>{const c=a.reduce((x,y)=>x+y.n,0);return c?+(a.reduce((x,y)=>x+(y.avg||0)*y.n,0)/c).toFixed(2):null};
+ const cm=[[5,'Biblioteca Central','Tranquilidad','Un espacio muy tranquilo y con buen horario de apertura.','Elogio al espacio y horario'],[2,'secretaria.universidad-demo.es','Estrés','No encontré cómo pedir el certificado y tuve que ir en persona.','Dificultad para encontrar un trámite'],[4,'Aula virtual','Confianza','Carga rápido y los materiales están bien organizados.','Valoración positiva del aula virtual'],[1,'campus.universidad-demo.es','Frustración','Se cayó dos veces durante el examen. Inaceptable.','Caída del campus en examen'],[5,'Cafetería','Bienestar','Buen trato y menú variado.','Elogio al trato'],[3,'secretaria.universidad-demo.es','Calma','Atención correcta pero con mucha espera.','Esperas largas']];
+ return{org:{name:'Universidad Demo',plan:muestra?'muestra':'completo'},email:null,days,totals:{n,avg:+(sum/n).toFixed(2),today:daily[days-1].n,n7:l7.reduce((a,b)=>a+b.n,0),avg7:av(l7),prevAvg7:av(p7),pos:pct(dist[3]+dist[4],n),neg:pct(dist[0]+dist[1],n)},dist,daily,
+  emotions:Object.entries(E).sort((a,b)=>b[1].n-a[1].n).slice(0,8).map(([name,v])=>({name,n:v.n,avg:+(v.s/v.n).toFixed(2)})),
+  targets:Object.entries(TG).sort((a,b)=>b[1].n-a[1].n).map(([name,v])=>({name,kind:'web',n:v.n,avg:+(v.s/v.n).toFixed(2)})),
+  topics:muestra?null:[['trámites',34],['esperas',27],['campus virtual',22],['atención',19],['accesibilidad',9],['limpieza',6]].map(a=>({name:a[0],n:a[1]})),
+  comments:muestra?null:cm.map((c,i)=>({rating:c[0],name:c[1],feeling:c[2],comment:c[3],summary:c[4],ts:Date.now()-i*36e5*7})),locked:muestra?{comments:48}:undefined}}
+boot();
+</script></body></html>

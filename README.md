@@ -23,9 +23,20 @@ Una sola base de datos (Supabase) recibe las valoraciones de la extensión, de `
 6. **Extensión**: en `config.js` pon `API_URL: 'https://TU-DOMINIO.vercel.app/api/ratings'`.
 7. **Privacidad**: completa en `privacy.html` nombre, NIF, región de Supabase y plazos.
 
+## Panel de organizaciones (`/panel`)
+1. Supabase → SQL Editor: ejecuta `supabase_panel.sql` (después de `supabase.sql`).
+2. Vercel → variable nueva `SUPABASE_ANON_KEY` (clave pública «anon» / «publishable»). Redeploy.
+3. Supabase → Authentication → URL Configuration: *Site URL* = `https://TU-DOMINIO/panel` y la misma URL en *Redirect URLs*.
+4. Supabase → Authentication → SMTP: el correo por defecto de Supabase tiene un límite muy bajo (pocos correos por hora). Para clientes reales conecta Resend por SMTP.
+5. Dar de alta una organización: ejemplo comentado al final de `supabase_panel.sql` (organización + correos autorizados + qué webs/lugares son suyos). `plan = 'completo'` desbloquea comentarios y temas; `'muestra'` los bloquea.
+6. Enlaces: `/panel` (acceso), `/panel?demo` (muestra completa para reuniones), `/panel?demo=muestra` (cómo ve el plan gratuito).
+7. Cuando tengas el enlace de pago de Stripe, pégalo en `UPGRADE_URL` de `panel.html`.
+
 ## Endpoints
 - `POST /api/ratings` valoración (rate limit, honeypot, Gemini opcional; se guarda aunque la IA falle)
 - `GET /api/rankings` rankings, totales y últimas valoraciones (las de tipo persona no salen)
+- `POST /api/auth` envía el enlace de acceso solo a correos de organizaciones
+- `GET /api/panel` datos de la organización de quien ha entrado (token de Supabase Auth)
 - `POST /api/leads` contacto de empresas (teléfono obligatorio)
 
 ## Móvil
