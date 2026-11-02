@@ -67,7 +67,7 @@ module.exports = async (req, res) => {
     feeling: FEELINGS.includes(feeling) ? feeling : null,
     ext_version: db.clip(b.ext_version, 20),
     subject: db.clip(b.subject, 160), site: db.clip(b.site, 120), url: db.clip(b.url, 300), target_label: db.clip(b.target_label, 80),
-    comment: db.clip(b.comment, 1000), place_name: db.clip(b.place_name, 160),
+    location: db.clip(b.location, 80), comment: db.clip(b.comment, 1000), place_name: db.clip(b.place_name, 160),
     lat: db.num(b.lat, -90, 90), lng: db.num(b.lng, -180, 180), place_verified: b.place_verified === true, lang: db.clip(b.lang, 10),
     created_at: (Math.abs(created - Date.now()) < 400 * 864e5 ? created : new Date()).toISOString(),
     ai_status: 'none'
