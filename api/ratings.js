@@ -30,9 +30,11 @@ async function analyze(comment, ctx) {
               score: { type: 'NUMBER', description: 'de -1 (muy negativo) a 1 (muy positivo)' },
               topics: { type: 'ARRAY', items: { type: 'STRING' }, description: 'hasta 4 temas, 1-3 palabras cada uno' },
               summary: { type: 'STRING', description: 'resumen de una frase, sin datos personales' },
-              flags: { type: 'ARRAY', items: { type: 'STRING' } }
+              flags: { type: 'ARRAY', items: { type: 'STRING' } },
+              kind: { type: 'STRING', enum: ['queja', 'sugerencia', 'elogio', 'pregunta'], description: 'qué tipo de comentario es' },
+              urgency: { type: 'INTEGER', description: '0 normal, 1 importante, 2 urgente (riesgo, avería, seguridad o problema que afecta a mucha gente)' }
             },
-            required: ['sentiment', 'score', 'topics', 'summary', 'flags']
+            required: ['sentiment', 'score', 'topics', 'summary', 'flags', 'kind', 'urgency']
           }
         }
       })
@@ -44,7 +46,9 @@ async function analyze(comment, ctx) {
       score: Math.max(-1, Math.min(1, Number(out.score) || 0)),
       topics: (Array.isArray(out.topics) ? out.topics : []).slice(0, 4).map(x => String(x).slice(0, 40)),
       summary: String(out.summary || '').slice(0, 300),
-      flags: (Array.isArray(out.flags) ? out.flags : []).filter(f => FLAGS.includes(String(f)))
+      flags: (Array.isArray(out.flags) ? out.flags : []).filter(f => FLAGS.includes(String(f))),
+      kind: ['queja', 'sugerencia', 'elogio', 'pregunta'].includes(out.kind) ? out.kind : null,
+      urgency: Math.max(0, Math.min(2, Math.round(Number(out.urgency) || 0)))
     };
   } finally { clearTimeout(t); }
 }
@@ -67,7 +71,7 @@ module.exports = async (req, res) => {
     feeling: FEELINGS.includes(feeling) ? feeling : null,
     ext_version: db.clip(b.ext_version, 20),
     subject: db.clip(b.subject, 160), site: db.clip(b.site, 120), url: db.clip(b.url, 300), target_label: db.clip(b.target_label, 80),
-    location: db.clip(b.location, 80), comment: db.clip(b.comment, 1000), place_name: db.clip(b.place_name, 160),
+    location: db.clip(b.location, 80), pulse_id: /^[0-9a-f-]{32,40}$/i.test(String(b.pulse_id || '')) ? String(b.pulse_id) : null, comment: db.clip(b.comment, 1000), place_name: db.clip(b.place_name, 160),
     lat: db.num(b.lat, -90, 90), lng: db.num(b.lng, -180, 180), place_verified: b.place_verified === true, lang: db.clip(b.lang, 10),
     created_at: (Math.abs(created - Date.now()) < 400 * 864e5 ? created : new Date()).toISOString(),
     ai_status: 'none'
@@ -77,11 +81,14 @@ module.exports = async (req, res) => {
   if (row.comment) {
     try {
       const ai = await analyze(row.comment, { type, subject: row.subject, rating: row.rating, feeling: row.feeling });
-      if (ai) Object.assign(row, { ai_status: 'ok', ai_sentiment: ai.sentiment, ai_score: ai.score, ai_topics: ai.topics, ai_summary: ai.summary, ai_flags: ai.flags });
+      if (ai) Object.assign(row, { ai_status: 'ok', ai_sentiment: ai.sentiment, ai_score: ai.score, ai_topics: ai.topics, ai_summary: ai.summary, ai_flags: ai.flags, ai_kind: ai.kind, ai_urgency: ai.urgency });
     } catch (e) { console.error('gemini', String(e)); row.ai_status = 'failed'; }
   }
 
-  const r = await db.upsert('ratings', row, 'client_id');
+  let r = await db.upsert('ratings', row, 'client_id');
+  if (!r.ok && r.status >= 400 && r.status < 500) { // columnas de v4 aún no creadas: guarda igualmente sin ellas
+    delete row.ai_kind; delete row.ai_urgency; r = await db.upsert('ratings', row, 'client_id');
+  }
   if (!r.ok) { console.error('insert', r.status, await r.text()); return res.status(500).json({ ok: false }); }
   res.status(200).json({ ok: true, ai: row.ai_status });
 };

@@ -12,6 +12,7 @@ exports.ok = () => !!(U && K);
 exports.insert = (table, row) => fetch(`${U}/rest/v1/${table}`, { method: 'POST', headers: { ...H, Prefer: 'return=minimal' }, body: JSON.stringify(row) });
 // Inserta o actualiza si ya existe (evita duplicados al reintentar): la columna debe ser única
 exports.upsert = (table, row, conflict) => fetch(`${U}/rest/v1/${table}?on_conflict=${conflict}`, { method: 'POST', headers: { ...H, Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(row) });
+exports.insertRet = async (table, row) => { const r = await fetch(`${U}/rest/v1/${table}`, { method: 'POST', headers: { ...H, Prefer: 'return=representation' }, body: JSON.stringify(row) }); return r.ok ? (await r.json())[0] : null; };
 exports.patch = (q, row) => fetch(`${U}/rest/v1/${q}`, { method: 'PATCH', headers: { ...H, Prefer: 'return=minimal' }, body: JSON.stringify(row) });
 exports.select = async q => (await fetch(`${U}/rest/v1/${q}`, { headers: H })).json();
 exports.clip = (v, n) => (typeof v === 'string' && v.trim() ? v.trim().slice(0, n) : null);
