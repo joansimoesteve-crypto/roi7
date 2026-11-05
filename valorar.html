@@ -56,6 +56,7 @@ input[type=text],input[type=url],textarea{width:100%;padding:13px 15px;border:1p
 [hidden]{display:none!important}
 @media(min-width:700px){.app{margin:24px auto;min-height:calc(100dvh - 48px);background:rgba(255,255,255,.55);border-radius:32px;box-shadow:0 30px 80px #3f5a3a29;padding:0 28px 28px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.tdy{max-width:420px;margin:14px auto 0;font-weight:700;color:var(--moss);font-size:15px}.upd{max-width:420px;margin:18px auto 0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;text-align:left;font-size:15px}.upd p{margin:8px 0 0}.upd span{color:var(--mut)}
 </style></head><body>
 <div class="app">
 <header class="top"><a class="brand" href="/"><img src="logo.png" alt=""><span>Avatar <b>ROI</b></span></a><button class="ic" id="vb" aria-pressed="true" aria-label="Voz de Roi" title="Voz de Roi">🔊</button></header>
@@ -66,13 +67,14 @@ input[type=text],input[type=url],textarea{width:100%;padding:13px 15px;border:1p
   <p class="sub" id="sb">Toca a Roi y cuéntame cómo te sientes. Son 20 segundos y no necesitas instalar nada.</p>
   <span class="chip" id="tg" hidden></span>
   <button class="btn" id="go2">Empezar</button>
+  <a class="chip" id="nearl" href="/mapa" style="margin-top:6px">📍 Ver lo que tengo cerca</a>
 </section>
 <section id="chat" hidden>
   <div class="stage"><div class="av"><img src="roi.png" alt=""><span id="bd" hidden></span></div><div><b>Roi</b><small id="who"></small></div></div>
   <div class="log" id="log" aria-live="polite"></div>
 </section>
 <section class="done" id="done" hidden>
-  <div class="f" id="df"></div><h1>¡Gracias!</h1><p id="ds">Tu valoración ya cuenta 💚</p>
+  <div class="f" id="df"></div><h1>¡Gracias!</h1><p id="ds">Tu valoración ya cuenta 💚</p><p id="tdy" class="tdy" hidden></p><div id="upd" class="upd" hidden></div>
   <div class="row"><a class="btn" id="again" href="/v">Valorar otra cosa</a><a class="btn g" href="/#pide">Pedir que me valoren (QR)</a><a class="btn g" href="/#instalar">Tener a Roi siempre a mano</a><a class="btn g" id="visit" hidden>Ir a la web</a></div>
 </section>
 </main></div>
@@ -92,7 +94,11 @@ let loc=clean(q.get('l')).slice(0,80),t=TY.includes(q.get('t'))?q.get('t'):null,
 if(!u&&(q.get('url')||q.get('text'))){const m=(q.get('text')||'').match(/https?:\/\/\S+/);u=asUrl(q.get('url')||(m&&m[0])||'');if(u){src='share';t=t||'web';n=n||clean(q.get('title')).slice(0,80)}}
 if(u&&!n)n=hostOf(u);if(!t&&(n||u))t=u?'web':'place';
 const subj=()=>t==='person'?'a '+n:n;
+const G=(q.get('g')||'').split(',').map(Number),geo=G.length===2&&G.every(isFinite)&&Math.abs(G[0])<=90&&Math.abs(G[1])<=180?G:null,verified=q.get('v')==='1'&&!!geo;
 const S={mood:null,feel:'',comment:''};
+/* pregunta puntual de una organización: /v?p=<id> */
+const P=/^[0-9a-f-]{32,40}$/i.test(q.get('p')||'')?q.get('p'):'';let Q='',pulseP=null;
+if(P)pulseP=fetch('/api/public?pulse='+P).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.ok){Q=j.question;n=j.subject;t=j.type;loc=j.location||'';cover()}}).catch(()=>{});
 
 /* ---- voz ---- */
 let VOICE=true;try{VOICE=localStorage.getItem('roi_voice')!=='0'}catch(e){}
@@ -108,9 +114,10 @@ const block=(c,h,on)=>{const d=add('blk '+c,h);d.onclick=e=>{const b=e.target.cl
 const lock=d=>d.classList.add('lock');
 const setMood=i=>{document.documentElement.style.setProperty('--mood',COL[i]);$('bd').innerHTML=face(i);$('bd').hidden=false};
 
-function begin(){
+async function begin(){
+  if(pulseP)await pulseP;
   $('start').hidden=true;$('chat').hidden=false;$('who').textContent=n||'Valora lo que quieras';
-  if(n){const x=`¡Hola! Soy Roi 👋 ¿Cómo valoras ${subj()}?`;add('b').textContent=x;speak(x);rate()}
+  if(n){const x=`¡Hola! Soy Roi 👋 ${Q||'¿Cómo valoras '+subj()+'?'}`;add('b').textContent=x;speak(x);rate()}
   else{const x='¡Hola! Soy Roi 👋 ¿Qué quieres valorar?';add('b').textContent=x;speak(x);what()}
 }
 function what(){
@@ -122,7 +129,7 @@ function name(){
   d.querySelector('button').onclick=go;i.onkeydown=e=>{if(e.key==='Enter')go()};i.focus({preventScroll:true})}
 function rate(){
   if(!$('who').textContent||$('who').textContent==='Valora lo que quieras')$('who').textContent=n;
-  if(!log.querySelector('.b')||log.querySelectorAll('.b').length>1)bot(`¿Cómo valoras ${subj()}?`);
+  if(!log.querySelector('.b')||log.querySelectorAll('.b').length>1)bot(Q||`¿Cómo valoras ${subj()}?`);
   const d=block('',`<div class="faces">${NAMES.map((x,i)=>`<button data-m="${i}" aria-label="${x}" title="${x}">${face(i)}</button>`).join('')}</div><div class="cap" aria-hidden="true">Toca la carita que mejor te represente</div>`,(b,dd)=>{
     S.mood=+b.dataset.m;lock(dd);dd.classList.remove('lock');dd.style.pointerEvents='none';dd.style.opacity=1;b.classList.add('on');me(NAMES[S.mood]);setMood(S.mood);setTimeout(feel,260)});
   const cap=d.querySelector('.cap'),sh=e=>{const b=e.target.closest('button');if(b)cap.textContent=NAMES[+b.dataset.m]};d.addEventListener('mouseover',sh);d.addEventListener('focusin',sh)}
@@ -142,7 +149,7 @@ let anon='';try{anon=localStorage.getItem('roi_anon')||'';if(!anon){anon=crypto.
 const cid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 async function send(){
   let site=u?hostOf(u):null,url=null;try{if(u){const x=new URL(u);url=x.origin+x.pathname}}catch(e){}
-  const body={client_id:cid,anon_id:anon,source:src,type:t,subject:n,site,url,rating:S.mood+1,feeling:S.feel,comment:S.comment||null,place_name:t==='place'?n:null,location:loc||null,lang:'es',created_at:new Date().toISOString(),website:''};
+  const body={client_id:cid,anon_id:anon,source:src,type:t,subject:n,site,url,rating:S.mood+1,feeling:S.feel,comment:S.comment||null,place_name:t==='place'?n:null,location:loc||null,lat:geo?geo[0]:null,lng:geo?geo[1]:null,place_verified:verified,pulse_id:P&&Q?P:null,lang:'es',created_at:new Date().toISOString(),website:''};
   const go=async()=>{try{const r=await fetch('/api/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return r.ok}catch(e){return false}};
   const w=add('b','Guardando tu valoración…');
   if(await go()||await new Promise(r=>setTimeout(r,1500)).then(go)){w.remove();finish()}
@@ -152,10 +159,17 @@ function finish(){
   $('ds').textContent=`${NAMES[S.mood]} · ${S.feel} · ${n}. Tu valoración ya cuenta 💚`;speak('¡Gracias! Tu valoración ya cuenta.');
   if(u){const v=$('visit');v.hidden=false;v.href=u;v.rel='noopener';v.textContent='Ir a '+(hostOf(u)||'la web')}
   if(!RM){const c=document.createElement('div');c.className='conf';for(let i=0;i<26;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'vw';e.style.background=COL[i%5];e.style.animationDelay=Math.random()*.5+'s';e.style.animationDuration=1.4+Math.random()*1.2+'s';c.append(e)}document.body.append(c);setTimeout(()=>c.remove(),3500)}
-  scrollTo({top:0})}
+  loadUpdates();scrollTo({top:0})}
+async function loadUpdates(){const names=[...new Set([n,u?hostOf(u):''].filter(Boolean))];let all=[],today=null;
+  try{for(const x of names){const r=await fetch('/api/public?n='+encodeURIComponent(x));if(r.ok){const j=await r.json();all=all.concat(j.updates||[]);if(!today&&j.today)today=j.today}}}catch(e){}
+  if(today){const t=$('tdy');t.hidden=false;t.textContent='👥 En las últimas 24 h han valorado '+n+' '+today.n+' personas · ánimo medio '+String(today.avg).replace('.',',')+'/5'}
+  all=all.slice(0,3);if(!all.length)return;const el=$('upd');el.hidden=false;
+  el.innerHTML='<b>💬 Tú dijiste, nosotros hicimos</b>'+all.map(x=>'<p><strong></strong><span></span></p>').join('');
+  [...el.querySelectorAll('p')].forEach((p,i)=>{p.firstChild.textContent=all[i].title;p.lastChild.textContent=all[i].body?' — '+all[i].body:''})}
 
 /* ---- portada de la página ---- */
-if(n){document.title='Valora '+n+' — Avatar ROI';$('h').textContent='¿Cómo valoras '+subj()+'?';const tg=$('tg');tg.hidden=false;tg.textContent={web:'🌐',project:'💡',place:'📍',org:'🏢',person:'🙋'}[t]+' '+n+(loc?' · '+loc:'')}
+function cover(){if(n){const nl=$('nearl');if(nl)nl.hidden=true;document.title='Valora '+n+' — Avatar ROI';$('h').textContent=Q||'¿Cómo valoras '+subj()+'?';const tg=$('tg');tg.hidden=false;tg.textContent={web:'🌐',project:'💡',place:'📍',org:'🏢',person:'🙋'}[t]+' '+n+(loc?' · '+loc:'')}}
+cover();
 $('go').onclick=$('go2').onclick=begin;
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 </script></body></html>

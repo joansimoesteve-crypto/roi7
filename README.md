@@ -40,11 +40,27 @@ Una sola base de datos (Supabase) recibe las valoraciones de la extensión, de `
 5. Desactivar a una organización los informes o las alertas: `update organizations set report_weekly = false, alerts = false where name = '...';`
 6. QR por ubicación: en el panel (sección «Códigos QR por ubicación») o en la landing («Pide que te valoren» → campo Ubicación). El enlace es `/v?t=place&n=Nombre&l=Planta%202&s=qr`.
 
+## «Tú dijiste, nosotros hicimos» y preguntas puntuales (v5)
+1. Supabase → SQL Editor: ejecuta `supabase_v3.sql` (tablas `org_updates` y `pulses`, y la columna `pulse_id` en `ratings`; no borra nada).
+2. En el panel (plan `completo`) aparecen dos tarjetas: **Preguntas puntuales** (cada una tiene su enlace `/v?p=<id>` y su QR; sus votos se cuentan aparte) y **Tú dijiste, nosotros hicimos** (la novedad se muestra al terminar de votar en ese servicio).
+3. Quien vota ve también «En las últimas 24 h han valorado N personas» cuando hay al menos 3 votos (nunca para personas).
+4. `/panel?demo` es una demostración que funciona sin base de datos: puedes crear preguntas y novedades de prueba y desaparecen al recargar.
+
+## Versión definitiva (v6): mapa, lugares y IA que prioriza
+1. Supabase → SQL Editor: ejecuta `supabase_v4.sql` (tabla `places` y columnas `ai_kind`, `ai_urgency`; no borra nada). Si aún no lo has ejecutado, todo sigue funcionando, solo sin tipo/urgencia.
+2. Sube todo el contenido del zip (incluye la nueva página `mapa.html` y `vercel.json` con la ruta `/mapa`).
+3. Panel → «Tus lugares en el mapa»: añade biblioteca, parque, obra… con coordenadas (o «Usar mi ubicación»). Aparecen en `/mapa` y cada uno tiene su QR (`/v?...&g=lat,lng&v=1`: voto «verificado en el lugar»).
+4. «Qué hacer esta semana»: temas en alza (7 días frente a los 7 anteriores) y comentarios importantes/urgentes según la IA.
+5. Demo con datos reales: edita `seed_demo.sql` (tu correo) y ejecútalo. Sus votos (`client_id` `demo-…`) no salen en rankings públicos. `/panel?demo` sigue funcionando sin base de datos.
+6. La ubicación del visitante en `/mapa` se calcula en su móvil y no se envía ni se guarda.
+
 ## Endpoints
 - `POST /api/ratings` valoración (rate limit, honeypot, Gemini opcional; se guarda aunque la IA falle)
 - `GET /api/rankings` rankings, totales y últimas valoraciones (las de tipo persona no salen)
 - `POST /api/auth` envía el enlace de acceso solo a correos de organizaciones
 - `GET /api/panel` datos de la organización de quien ha entrado (token de Supabase Auth)
+- `POST /api/org` crear/cerrar preguntas y publicar/retirar novedades (plan completo)
+- `GET /api/public` pregunta puntual y novedades que ve quien vota
 - `GET /api/cron` informe semanal y alertas (solo con `CRON_SECRET`)
 - `POST /api/leads` contacto de empresas (teléfono obligatorio)
 

@@ -7,6 +7,10 @@
     {
       "source": "/panel",
       "destination": "/panel.html"
+    },
+    {
+      "source": "/mapa",
+      "destination": "/mapa.html"
     }
   ],
   "headers": [

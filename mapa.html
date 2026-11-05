@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cerca de ti — Avatar ROI</title>
+<meta name="description" content="Lugares y proyectos de tu ciudad, universidad o barrio donde puedes opinar. Tu ubicación no se guarda."><meta name="theme-color" content="#3f5a3a">
+<link rel="icon" href="favicon.png" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#26331f;--moss:#3f5a3a;--sage:#e9efdc;--paper:#fbf7ec;--mut:#4d5c43;--line:#cfd6c2}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;font:17px/1.5 "Bricolage Grotesque",system-ui,sans-serif;color:var(--ink);background:var(--paper)}
+.app{max-width:640px;margin:0 auto;padding:0 16px calc(28px + env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;justify-content:space-between;padding:calc(12px + env(safe-area-inset-top)) 0 8px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:600;font-size:22px;letter-spacing:-.03em}.brand b{font-weight:800}.brand img{width:40px;height:40px}
+h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:8px 0 4px;font-weight:800;text-wrap:balance}
+.sub{color:var(--mut);margin:0 0 14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 22px;border-radius:99px;border:0;background:var(--moss);color:#fff;font:inherit;font-weight:600;text-decoration:none;cursor:pointer}.btn.g{background:#fff;color:var(--ink);border:1px solid var(--line)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+#map{height:260px;border-radius:20px;border:1px solid var(--line);margin:12px 0;background:var(--sage)}
+.here{background:#fff;border:2px solid var(--moss);border-radius:20px;padding:16px;margin:12px 0}.here p{margin:0 0 10px;font-weight:600}
+.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.it{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;color:inherit;text-decoration:none}
+.it:hover{border-color:var(--moss)}.it .t{flex:1;min-width:0}.it b{display:block}.it small{color:var(--mut)}
+.it .d{font-size:14px;font-weight:600;color:var(--moss);white-space:nowrap}
+.k{width:40px;height:40px;border-radius:12px;background:var(--sage);display:grid;place-items:center;font-size:20px}
+.note{font-size:14px;color:var(--mut);margin-top:16px}.empty{background:var(--sage);border-radius:18px;padding:18px;text-align:center;color:var(--mut)}
+</style></head><body><div class="app">
+<div class="top"><a class="brand" href="/"><img src="logo.png" alt="" width="40" height="40"><span>Avatar <b>ROI</b></span></a><a class="btn g" href="/v" style="min-height:40px;padding:6px 16px">Valorar otra cosa</a></div>
+<h1>Cerca de ti</h1><p class="sub">Bibliotecas, parques, aulas, proyectos de tu ciudad… Elige un lugar y cuenta cómo estuvo.</p>
+<button class="btn" id="loc">📍 Ver lo que tengo cerca</button>
+<div class="here" id="here" hidden><p id="ht"></p><a class="btn" id="hb" href="#">Opinar ahora</a></div>
+<div id="map" role="img" aria-label="Mapa de lugares"></div>
+<ul class="list" id="list"></ul>
+<p class="note">Tu ubicación se usa solo en este móvil para ordenar los lugares y comprobar que estás allí. No se envía ni se guarda.</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);let PL=[],me=null,map=null,layer=null;
+const km=(a,b,c,d)=>{const R=6371e3,r=x=>x*Math.PI/180,h=Math.sin(r(c-a)/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(r(d-b)/2)**2;return 2*R*Math.asin(Math.sqrt(h))};
+const fmt=m=>m<1000?Math.round(m/10)*10+' m':(m/1000).toFixed(1).replace('.',',')+' km';
+const href=(p,v)=>'/v?t='+p.kind+'&n='+encodeURIComponent(p.name)+'&s=qr&g='+p.lat+','+p.lng+(v?'&v=1':'');
+function draw(){
+  const L=PL.map(p=>({p,d:me?km(me[0],me[1],p.lat,p.lng):null})).sort((a,b)=>me?a.d-b.d:a.p.name.localeCompare(b.p.name,'es'));
+  const ul=$('list');ul.textContent='';
+  if(!L.length){const e=document.createElement('li');e.className='empty';e.textContent='Aún no hay lugares en el mapa. Las organizaciones los añaden desde su panel.';ul.append(e)}
+  L.forEach(({p,d})=>{const a=document.createElement('a');a.className='it';a.href=href(p,d!=null&&d<=p.radius_m);
+    a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';
+    a.firstChild.textContent=p.kind==='project'?'🏗️':'📍';a.querySelector('b').textContent=p.name;a.querySelector('small').textContent=p.description||(p.kind==='project'?'Proyecto':'Lugar');
+    a.querySelector('.d').textContent=d!=null?fmt(d):'Opinar';const li=document.createElement('li');li.append(a);ul.append(li)});
+  const near=L.find(x=>x.d!=null&&x.d<=x.p.radius_m);
+  $('here').hidden=!near;if(near){$('ht').textContent='Estás en «'+near.p.name+'». ¿Cómo ha ido?';$('hb').href=href(near.p,true)}
+  if(window.L&&map){layer.clearLayers();const pts=[];PL.forEach(p=>{pts.push([p.lat,p.lng]);L2.marker([p.lat,p.lng]).addTo(layer).bindPopup('<b></b>').getPopup().setContent(Object.assign(document.createElement('a'),{href:href(p,false),textContent:p.name}))});
+    if(me){L2.circleMarker(me,{radius:8,color:'#3f5a3a',fillOpacity:.9}).addTo(layer);pts.push(me)}if(pts.length)map.fitBounds(pts,{padding:[30,30],maxZoom:16})}
+}
+let L2=null;
+try{if(window.L){L2=window.L;map=L2.map('map',{scrollWheelZoom:false}).setView([40.4,-3.7],5);L2.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);layer=L2.layerGroup().addTo(map)}else $('map').hidden=true}catch(e){$('map').hidden=true}
+fetch('/api/public?places=1').then(r=>r.json()).then(j=>{PL=(j&&j.places)||[];draw()}).catch(()=>draw());
+$('loc').onclick=()=>{if(!navigator.geolocation){$('loc').textContent='Tu navegador no da la ubicación';return}
+  $('loc').textContent='Buscando…';navigator.geolocation.getCurrentPosition(p=>{me=[p.coords.latitude,p.coords.longitude];$('loc').hidden=true;draw()},()=>{$('loc').textContent='No pude ver tu ubicación · elige un lugar de la lista'},{enableHighAccuracy:true,timeout:10000,maximumAge:60000})};
+</script></body></html>
