@@ -54,6 +54,12 @@ Una sola base de datos (Supabase) recibe las valoraciones de la extensión, de `
 5. Demo con datos reales: edita `seed_demo.sql` (tu correo) y ejecútalo. Sus votos (`client_id` `demo-…`) no salen en rankings públicos. `/panel?demo` sigue funcionando sin base de datos.
 6. La ubicación del visitante en `/mapa` se calcula en su móvil y no se envía ni se guarda.
 
+## v8: zonas dibujadas, información por zona y módulos
+1. Ejecuta `supabase_v6.sql` (añade `shape` e `info` a `places` y `status` a `org_updates`). Sin él todo funciona, pero las zonas se guardan como punto con radio.
+2. Panel → «Publica y escucha»: atajos a Preguntar, Informar, Zona o proyecto, QR y Charla.
+3. Zonas: se dibujan tocando las esquinas en el mapa. En `/mapa`, al tocar «Ver lo que tengo cerca», la página sigue la posición mientras esté abierta y avisa al entrar en una zona con su información, sus novedades y su pregunta activa. Con el móvil bloqueado no avisa (limitación de las webs).
+4. Novedades con estado (En estudio, En marcha, Hecho) y «Responder públicamente» desde cada comentario.
+
 ## Endpoints
 - `POST /api/ratings` valoración (rate limit, honeypot, Gemini opcional; se guarda aunque la IA falle)
 - `GET /api/rankings` rankings, totales y últimas valoraciones (las de tipo persona no salen)

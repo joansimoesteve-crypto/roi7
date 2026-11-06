@@ -166,7 +166,7 @@ async function loadUpdates(){const names=[...new Set([n,u?hostOf(u):''].filter(B
   if(today){const t=$('tdy');t.hidden=false;t.textContent='👥 En las últimas 24 h han valorado '+n+' '+today.n+' personas · ánimo medio '+String(today.avg).replace('.',',')+'/5'}
   all=all.slice(0,3);if(!all.length)return;const el=$('upd');el.hidden=false;
   el.innerHTML='<b>💬 Tú dijiste, nosotros hicimos</b>'+all.map(x=>'<p><strong></strong><span></span></p>').join('');
-  [...el.querySelectorAll('p')].forEach((p,i)=>{p.firstChild.textContent=all[i].title;p.lastChild.textContent=all[i].body?' — '+all[i].body:''})}
+  [...el.querySelectorAll('p')].forEach((p,i)=>{p.firstChild.textContent=(all[i].status&&all[i].status!=='hecho'?'['+({estudio:'En estudio',marcha:'En marcha'}[all[i].status]||'')+'] ':'')+all[i].title;p.lastChild.textContent=all[i].body?' — '+all[i].body:''})}
 
 /* ---- portada de la página ---- */
 function cover(){if(n){const nl=$('nearl');if(nl)nl.hidden=true;document.title='Valora '+n+' — Avatar ROI';$('h').textContent=Q||'¿Cómo valoras '+subj()+'?';const tg=$('tg');tg.hidden=false;tg.textContent={web:'🌐',project:'💡',place:'📍',org:'🏢',person:'🙋'}[t]+' '+n+(loc?' · '+loc:'')}}
