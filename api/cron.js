@@ -24,6 +24,7 @@ module.exports = async (req, res) => {
   const secret = process.env.CRON_SECRET;
   if (!secret) return res.status(503).json({ ok: false, error: 'falta CRON_SECRET' });
   if (req.headers.authorization !== 'Bearer ' + secret) return res.status(401).json({ ok: false });
+  if (db.ok()) { const old = encodeURIComponent(new Date(Date.now() - 30 * 864e5).toISOString()); await db.del('chat_messages?created_at=lt.' + old).catch(() => {}); await db.del('chat_presence?seen_at=lt.' + old).catch(() => {}); } // la charla se borra a los 30 días
   if (!db.ok() || !process.env.RESEND_API_KEY) return res.status(503).json({ ok: false, error: 'sin configurar' });
   const force = (req.query && req.query.force) || '', weekly = force === 'weekly' || new Date().getUTCDay() === 1, sent = [];
   try {

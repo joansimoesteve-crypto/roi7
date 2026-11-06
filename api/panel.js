@@ -21,6 +21,8 @@ module.exports = async (req, res) => {
         db.select(`pulses?select=id,question,subject,type,location,active,created_at&org_id=eq.${o.id}&order=created_at.desc&limit=20`),
         db.select(`places?select=id,name,kind,description,lat,lng,radius_m&org_id=eq.${o.id}&active=eq.true&order=created_at.desc&limit=100`)
       ]);
+      const rooms = [...new Set(tg.map(t => String(t.value).toLowerCase()))].map(v => '"' + v.replace(/[\\"]/g, '\\$&') + '"');
+      out.chat = rooms.length ? list(await db.select(`chat_messages?select=id,room,nick,body,created_at&hidden=eq.false&room=in.(${rooms.join(',')})&order=created_at.desc&limit=30`)) : [];
       out.places = list(pcs); out.updates = list(ups); out.pulses = list(pls);
       if (out.pulses.length) {
         const rs = list(await db.select(`ratings?select=pulse_id,rating&pulse_id=in.(${out.pulses.map(p => p.id).join(',')})&limit=5000`)), S = {};

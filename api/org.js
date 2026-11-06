@@ -5,6 +5,7 @@
 //   {action:'close_pulse', id}                  la cierra
 //   {action:'place', name, kind, description, lat, lng, radius_m}  añade un lugar/proyecto geolocalizado (sale en /mapa)
 //   {action:'delete_place', id}                 lo retira
+//   {action:'hide_msg', id}                     oculta un mensaje de la charla de sus salas
 const db = require('./_db'), org = require('./_org');
 const ID = /^[0-9a-f-]{32,40}$/i;
 module.exports = async (req, res) => {
@@ -44,6 +45,12 @@ module.exports = async (req, res) => {
     }
     if (b.action === 'delete_place' && ID.test(String(b.id))) {
       const r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, { active: false }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
+    }
+    if (b.action === 'hide_msg' && ID.test(String(b.id))) { // oculta un mensaje de la charla de una sala suya
+      const m = (await db.select(`chat_messages?select=room&id=eq.${b.id}&limit=1`))[0];
+      const tg = await db.select('org_targets?select=value&org_id=eq.' + oid);
+      if (!m || !Array.isArray(tg) || !tg.some(t => String(t.value).toLowerCase() === m.room)) return res.status(403).json({ ok: false });
+      const r = await db.patch(`chat_messages?id=eq.${b.id}`, { hidden: true }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
     }
     res.status(400).json({ ok: false, error: 'action' });
   } catch (e) { console.error('org', String(e)); res.status(500).json({ ok: false }); }
