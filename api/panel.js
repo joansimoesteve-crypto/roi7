@@ -17,9 +17,9 @@ module.exports = async (req, res) => {
     out.targetList = tg.map(t => ({ kind: t.kind, value: t.value }));
     if (full) {
       const [ups, pls, pcs] = await Promise.all([
-        db.select(`org_updates?select=id,title,body,target,created_at&org_id=eq.${o.id}&published=eq.true&order=created_at.desc&limit=20`),
+        db.select(`org_updates?select=id,title,body,target,created_at,status&org_id=eq.${o.id}&published=eq.true&order=created_at.desc&limit=20`).then(r => Array.isArray(r) ? r : db.select(`org_updates?select=id,title,body,target,created_at&org_id=eq.${o.id}&published=eq.true&order=created_at.desc&limit=20`)),
         db.select(`pulses?select=id,question,subject,type,location,active,created_at&org_id=eq.${o.id}&order=created_at.desc&limit=20`),
-        db.select(`places?select=id,name,kind,description,lat,lng,radius_m&org_id=eq.${o.id}&active=eq.true&order=created_at.desc&limit=100`)
+        db.select(`places?select=id,name,kind,description,lat,lng,radius_m,shape,info&org_id=eq.${o.id}&active=eq.true&order=created_at.desc&limit=100`).then(r => Array.isArray(r) ? r : db.select(`places?select=id,name,kind,description,lat,lng,radius_m&org_id=eq.${o.id}&active=eq.true&order=created_at.desc&limit=100`))
       ]);
       const rooms = [...new Set(tg.map(t => String(t.value).toLowerCase()))].map(v => '"' + v.replace(/[\\"]/g, '\\$&') + '"');
       out.chat = rooms.length ? list(await db.select(`chat_messages?select=id,room,nick,body,created_at&hidden=eq.false&room=in.(${rooms.join(',')})&order=created_at.desc&limit=30`)) : [];

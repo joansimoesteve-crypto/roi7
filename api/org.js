@@ -1,5 +1,5 @@
 // POST /api/org · acciones de una organización con plan completo (cabecera Authorization: Bearer <token>).
-//   {action:'update', title, body, target}      publica una novedad («Tú dijiste, nosotros hicimos»)
+//   {action:'update', title, body, target, status}      publica una novedad («Tú dijiste, nosotros hicimos»)
 //   {action:'delete_update', id}                la retira
 //   {action:'pulse', question, subject, type, location}   crea una pregunta puntual (devuelve su id)
 //   {action:'close_pulse', id}                  la cierra
@@ -20,7 +20,9 @@ module.exports = async (req, res) => {
     const oid = a.org.id;
     if (b.action === 'update') {
       const title = db.clip(b.title, 120); if (!title) return res.status(400).json({ ok: false, error: 'title' });
-      const r = await db.insert('org_updates', { org_id: oid, title, body: db.clip(b.body, 600), target: db.clip(b.target, 160) });
+      const row = { org_id: oid, title, body: db.clip(b.body, 600), target: db.clip(b.target, 160) };
+      let r = await db.insert('org_updates', { ...row, status: ['estudio', 'marcha', 'hecho'].includes(b.status) ? b.status : 'hecho' });
+      if (!r.ok && r.status >= 400 && r.status < 500) r = await db.insert('org_updates', row); // v8 sin ejecutar
       return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
     }
     if (b.action === 'delete_update' && ID.test(String(b.id))) {
@@ -36,12 +38,18 @@ module.exports = async (req, res) => {
       const r = await db.patch(`pulses?id=eq.${b.id}&org_id=eq.${oid}`, { active: false }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
     }
     if (b.action === 'place') {
-      const name = db.clip(b.name, 120), lat = db.num(b.lat, -90, 90), lng = db.num(b.lng, -180, 180);
+      const name = db.clip(b.name, 120);
+      let shape = Array.isArray(b.shape) ? b.shape.slice(0, 60).map(p => Array.isArray(p) ? [db.num(p[0], -90, 90), db.num(p[1], -180, 180)] : null) : null;
+      if (shape && (shape.length < 3 || shape.some(p => !p || p[0] == null || p[1] == null))) shape = null;
+      let lat = db.num(b.lat, -90, 90), lng = db.num(b.lng, -180, 180);
+      if (shape) { lat = shape.reduce((t, p) => t + p[0], 0) / shape.length; lng = shape.reduce((t, p) => t + p[1], 0) / shape.length }
       if (!name || lat == null || lng == null) return res.status(400).json({ ok: false, error: 'datos' });
-      const row = await db.insertRet('places', { org_id: oid, name, kind: b.kind === 'project' ? 'project' : 'place', description: db.clip(b.description, 160), lat, lng, radius_m: Math.round(db.num(b.radius_m, 30, 1000) || 150) });
-      if (!row) return res.status(500).json({ ok: false });
+      const row = { org_id: oid, name, kind: b.kind === 'project' ? 'project' : 'place', description: db.clip(b.description, 160), lat, lng, radius_m: Math.round(db.num(b.radius_m, 30, 1000) || 150) };
+      let ins = await db.insertRet('places', { ...row, shape, info: db.clip(b.info, 500) });
+      if (!ins) ins = await db.insertRet('places', row); // v8 sin ejecutar: lo guarda como punto con radio
+      if (!ins) return res.status(500).json({ ok: false });
       await db.insert('org_targets', { org_id: oid, kind: 'subject', value: name }); // sus votos pasan solos al panel
-      return res.status(200).json({ ok: true, id: row.id });
+      return res.status(200).json({ ok: true, id: ins.id });
     }
     if (b.action === 'delete_place' && ID.test(String(b.id))) {
       const r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, { active: false }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
