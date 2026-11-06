@@ -121,6 +121,10 @@ h2::after{content:"";display:block;height:5px;width:0;border-radius:9px;margin-t
 .sbox{display:flex;gap:8px;max-width:560px;margin:22px auto 14px;background:#fff;border:1px solid var(--line,#cfd6c2);border-radius:99px;padding:6px 6px 6px 20px;box-shadow:0 6px 24px #3f5a3a1f}
 .sbox input{flex:1;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:17px;color:inherit}.sbox:focus-within{box-shadow:0 0 0 3px #26331f}
 .hero .acts{justify-content:center}.hero .trust{justify-content:center}
+/* v7 · instalar */
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.hc{background:#fff;border:1px solid var(--line);border-radius:26px;padding:22px;display:flex;flex-direction:column;gap:6px}.hc h3{margin:0}.hc p{margin:0;color:var(--mut)}.hc ol{margin:4px 0;padding-left:20px}.hc li{margin:6px 0}.hc .btn,.hc .row{margin-top:auto}.hi{font-size:30px}.hc .row{display:flex;gap:8px;flex-wrap:wrap}.hc .note{font-size:14px}
+.hc .try{display:flex;gap:8px;margin-top:auto}.hc .try input{flex:1;min-width:0}.appq{text-align:center;color:var(--mut);margin:18px 0 0}
+@media(max-width:860px){.how{grid-template-columns:1fr}}
 </style>
 </head><body>
 <script>document.documentElement.classList.add('js')</script>
@@ -133,7 +137,7 @@ h2::after{content:"";display:block;height:5px;width:0;border-radius:9px;margin-t
 <h1><span class="l"><span class="d" style="--i:0">Valora.</span></span><span class="l"><span class="d" style="--i:1">Comparte.</span></span><span class="l"><span class="d" style="--i:2"><mark>TU</mark></span> <span class="d" style="--i:3"><span class="bw">bienestar</span><i class="bwf" id="bwf" aria-hidden="true"></i></span> <span class="d" style="--i:4">importa.</span></span></h1>
 <p class="lead">Roi te acompaña mientras navegas, te pregunta cómo te sientes y convierte tu opinión en conocimiento para mejores webs, lugares, ciudades y organizaciones.</p>
 <div class="strip" id="strip" role="group" aria-label="Elige tu carita para probar Roi" hidden></div>
-<form class="sbox" id="sbox" action="/v" method="get" role="search"><input id="sq" name="q" type="text" inputmode="url" autocomplete="off" placeholder="Una web o un lugar…" aria-label="Qué quieres valorar"><button class="btn" type="submit">Valorar</button></form>
+<form class="sbox" id="sbox" action="/v" method="get" role="search"><input id="sq" name="q" type="text" inputmode="url" autocomplete="off" placeholder="Una web o un lugar…" aria-label="Qué quieres valorar"><button class="btn" type="submit">Valorar</button></form><p class="hint" id="sfb" aria-live="polite" style="text-align:center;margin:0 0 10px"></p>
 <div class="acts"><a class="btn g" href="/mapa">📍 Cerca de ti</a><a class="btn g" href="#instalar">Tener a Roi siempre</a></div>
 <ul class="trust"><li>Sin cuentas</li><li>Gratis</li><li>20 segundos</li></ul></div>
 <div class="demo" id="demo" aria-label="Ejemplo de conversación con Roi"><div class="dh"><img id="dimg" alt="">Roi<span class="dbadge"></span></div><div class="dbody" aria-hidden="true"></div></div></header>
@@ -167,18 +171,12 @@ h2::after{content:"";display:block;height:5px;width:0;border-radius:9px;margin-t
 <div class="qrbox"><div id="qr"><div class="qrph">Aquí aparecerá tu QR</div></div><p>Escanea y cuéntame cómo te sientes</p></div></div></section>
 
 <section class="rv" id="instalar"><h2>Roi, donde tú estés</h2><p class="sub">Para votar no hace falta instalar nada. Elige cómo quieres usarlo.</p>
-<div class="seg" role="tablist" aria-label="Opciones"><button role="tab" id="t1" aria-selected="true" aria-controls="p1">🔗 Con un enlace</button><button role="tab" id="t2" aria-selected="false" aria-controls="p2">📱 En el móvil</button><button role="tab" id="t3" aria-selected="false" aria-controls="p3">⭐ Marcador</button></div>
-<div class="pane" id="p1" role="tabpanel" aria-labelledby="t1"><h3>Pega la dirección de cualquier web</h3><p style="margin-top:0">Roi se abre a pantalla completa, sin instalar nada. Sirve en el ordenador y en el móvil. Y si alguien te comparte un enlace o un QR de Roi, ábrelo y vota.</p>
-<form class="try" id="tryf"><input id="tu" type="text" inputmode="url" aria-label="Dirección de la web" placeholder="ejemplo.com" autocomplete="off"><button class="btn">Valorar esta web</button></form></div>
-<div class="pane" id="p2" role="tabpanel" aria-labelledby="t2" hidden><h3>Roi en tu móvil, en un toque</h3>
-<details id="dA"><summary>🤖 Android (Chrome, Edge, Samsung Internet)</summary><ol><li>Instala Avatar ROI como app. <button class="btn s" id="pwa" hidden>Instalar app</button> Si no ves el botón: menú ⋮ → <em>Instalar app</em> o <em>Añadir a pantalla de inicio</em>.</li><li>En cualquier web o app: <b>Compartir → Avatar ROI</b>.</li><li>Se abre Roi con esa web ya puesta. Carita, emoción y listo.</li></ol></details>
-<details id="dI"><summary>🍎 iPhone y iPad (Safari)</summary><ol><li><a class="btn s" id="sc" href="#" aria-disabled="true">Atajo «Valorar con Roi» · próximamente</a></li><li>Con el atajo añadido, en cualquier web: <b>Compartir → Valorar con Roi</b>. Se abre Roi con esa web ya puesta.</li><li>Sin atajo: copia la dirección de la web, abre Roi en <b>citizenvoice.es/v</b> y toca <em>Valorar lo que he copiado</em>.</li></ol><p style="margin:0;color:var(--mut);font-size:14px">Para tenerlo siempre a mano: <b>Compartir → Añadir a pantalla de inicio</b>. iOS no permite «Compartir → app» en webs, por eso usamos un atajo.</p></details>
-<details id="dQ"><summary>📷 Si te comparten un QR o un enlace</summary><p style="margin:6px 0 0">Escanea o toca. Se abre Roi a pantalla completa y votas en 20 segundos, sin instalar nada.</p></details></div>
-<div class="pane" id="p3" role="tabpanel" aria-labelledby="t3" hidden><h3>Un marcador que invoca a Roi en cualquier web</h3>
-<p style="margin-top:0"><b>Ordenador:</b> arrastra este botón a tu barra de marcadores y púlsalo en la web que quieras valorar.</p><a class="bm" id="bm" href="#">⭐ Roi</a><button class="btn s g" id="cpb">Copiar código</button>
-<p><b>Móvil:</b> guarda cualquier página como favorito, edítalo (nombre «Roi»), pega el código como dirección y ábrelo desde tus favoritos. En Chrome Android, escribe «Roi» en la barra de direcciones y elígelo.</p>
-<p class="note">No funciona en webs que bloquean scripts externos (algunos bancos o GitHub). En esas, usa «Con un enlace».</p></div>
-<div class="ext"><div><h3>Extensión completa (Chrome, Edge, Brave)</h3><p id="extp">Valora sin salir de la página, con tu historial y tu ánimo del día.</p></div><a class="btn" id="extb" href="#" aria-disabled="true">Próximamente en Chrome Web Store</a></div></section>
+<div class="how">
+<article class="hc"><span class="hi" aria-hidden="true">💻</span><h3>En el ordenador</h3><p>Extensión para Chrome, Edge y Brave: valoras sin salir de la página.</p><a class="btn" id="extb" href="#" aria-disabled="true">Próximamente en Chrome</a></article>
+<article class="hc"><span class="hi" aria-hidden="true">📱</span><h3>En el móvil</h3><ol><li>Abre <b>citizenvoice.es/v</b> en tu navegador.</li><li><b>Android:</b> menú ⋮ → <em>Instalar app</em>. <b>iPhone:</b> Compartir → <em>Añadir a pantalla de inicio</em>.</li><li>Para valorar: abre Roi, pega la dirección y toca la carita.</li></ol><p class="note">En Android también: <b>Compartir → Avatar ROI</b> desde cualquier web.</p><div class="row"><a class="btn" href="/v">Abrir Roi ahora</a><button class="btn g" id="pwa" hidden>Instalar app</button></div></article>
+<article class="hc"><span class="hi" aria-hidden="true">🔗</span><h3>Sin instalar nada</h3><p>Pega una dirección y valora. Si te comparten un QR o enlace de Roi, ábrelo y vota.</p><form class="try" id="tryf"><input id="tu" type="text" inputmode="url" aria-label="Dirección de la web" placeholder="ejemplo.com" autocomplete="off"><button class="btn">Valorar</button></form></article>
+</div>
+<p class="appq">¿Te gustaría una app para iPhone y Android? Si hay interés, la creamos. <button class="btn s g" id="appb">Me interesa</button></p></section>
 
 <section id="empresas" class="rv"><h2>Hablemos de tu organización</h2><p class="sub">Panel de resultados, Roi en tu web, QR para tus locales y proyectos ciudadanos. Déjanos tu teléfono y te contactamos.</p><p><a class="btn s g" href="/panel?demo">Ver un panel de muestra</a> <a class="btn s g" href="/panel">Acceso para organizaciones</a></p>
 <form class="card" id="lead"><div class="two"><div><label for="ln">Tu nombre</label><input id="ln" required maxlength="100" autocomplete="name"></div><div><label for="lo">Organización</label><input id="lo" required maxlength="120" autocomplete="organization"></div>
@@ -224,7 +222,7 @@ const sp='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach
 /* ===== Las tres opciones, con pregunta y respuesta ===== */
 const THREE=[
  {i:3,q:'¿Esa web te ha hecho perder la paciencia, o te ha encantado?',f:'Universidades · Empresas · Creadores',h:'Valora cualquier web',p:'Una carita, una emoción y, si quieres, un comentario. Todo en una conversación corta. Puedes señalar un botón o un texto concreto de la página.'},
- {i:4,q:'¿Qué te parece esa iniciativa, obra o campaña de la que todos hablan?',f:'Ciudades · Ayuntamientos · Universidades',h:'Valora una iniciativa o proyecto',p:'Dile a Roi cómo te sientes con una propuesta, una obra o una campaña. Una carita, una emoción y tu comentario. Quien decide ve cómo se siente su gente.'},
+ {i:4,q:'¿Qué te parece esa iniciativa, obra o campaña de la que todos hablan?',f:'Ciudades · Ayuntamientos · Universidades',h:'Valora una iniciativa o proyecto',p:'Dile a Roi cómo te sientes ante una propuesta, obra o campaña. Quien decide ve cómo se siente su gente.'},
  {i:2,q:'¿Cómo te has sentido en ese parque, esa tienda o esa oficina?',f:'Comercios · Campus · Oficinas públicas',h:'Valora un lugar o establecimiento',p:'Usa tu ubicación o escribe el sitio. Una carita, una emoción y, si quieres, un comentario. Parques, tiendas, estaciones, restaurantes.'}];
 $('three').innerHTML=THREE.map(x=>`<article class="qa"><p class="q">${face(x.i)}<span>${x.q}</span></p><div class="a"><h3>${x.h}</h3><p>${x.p}</p></div><p class="ideal">Ideal para: <b>${x.f}</b></p></article>`).join('');
 
@@ -302,19 +300,12 @@ $('cp').onclick=()=>{navigator.clipboard.writeText($('lk').value);flash($('cp'),
 $('sh').onclick=()=>{const l=$('lk').value,n=$('nm').value.trim();navigator.share?navigator.share({title:'Valora '+n,url:l}).catch(()=>{}):window.open('https://wa.me/?text='+encodeURIComponent('Valora '+n+': '+l))};
 $('dl').onclick=()=>qr&&qr.download({name:'qr-avatar-roi',extension:'png'});
 
-/* ===== Sin instalar: pestañas, móvil, marcador, extensión ===== */
-const tabsEl=['t1','t2','t3'];
-function showTab(id){tabsEl.forEach((t,i)=>{const on=t===id;$(t).setAttribute('aria-selected',on);$('p'+(i+1)).hidden=!on})}
-tabsEl.forEach(t=>$(t).onclick=()=>showTab(t));
-const UA=navigator.userAgent,IOS=/iPhone|iPad|iPod/.test(UA)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),AND=/Android/.test(UA);
-if(IOS||AND){showTab('t2');(IOS?$('dI'):$('dA')).open=true}else $('dA').open=false;
+/* ===== Instalar: móvil, enlace, extensión ===== */
 let dp=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('pwa').hidden=false});$('pwa').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('pwa').hidden=true};
 $('tryf').onsubmit=e=>{e.preventDefault();const v=$('tu').value.trim();if(!v){$('tu').focus();return}location.href='/v?u='+encodeURIComponent(v)+'&s=link'};
-const BM="javascript:(function(){var s=document.createElement('script');s.src='"+location.origin+"/avatar.js';document.body.appendChild(s)})()";
-$('bm').href=BM;$('bm').onclick=e=>e.preventDefault();$('cpb').onclick=()=>{navigator.clipboard.writeText(BM);flash($('cpb'),'Copiado')};
+$('appb').onclick=()=>{location.href='mailto:'+CE+'?subject='+encodeURIComponent('Quiero la app de Roi')+'&body='+encodeURIComponent('Me interesa una app para: iPhone / Android (borra lo que no).')};
 if(CHROME_URL){const b=$('extb');b.href=CHROME_URL;b.target='_blank';b.rel='noopener';b.removeAttribute('aria-disabled');b.textContent='Añadir a Chrome';document.querySelectorAll('a[href="#instalar"].g').forEach(a=>{a.textContent='Añadir a Chrome'})}
 else $('extb').onclick=e=>e.preventDefault();
-if(SHORTCUT_URL){const a=$('sc');a.href=SHORTCUT_URL;a.removeAttribute('aria-disabled');a.textContent='Añadir el atajo «Valorar con Roi»'}else $('sc').onclick=e=>e.preventDefault();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 
 /* ===== Contacto de empresas ===== */
@@ -352,7 +343,15 @@ $('lead').onsubmit=async e=>{e.preventDefault();const b={name:$('ln').value,org:
  if(matchMedia('(hover:hover)').matches&&!RMO)document.querySelectorAll('.qa').forEach(c=>{c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.setProperty('--ry',(x*10)+'deg');c.style.setProperty('--rx',(-y*10)+'deg');c.classList.add('tl')});c.addEventListener('pointerleave',()=>{c.classList.remove('tl')})});
 })();
 </script><script>
-(function(){var f=document.getElementById('sbox');if(!f)return;f.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('sq').value.trim();if(!v){location.href='/v';return}
-var isUrl=!/\s/.test(v)&&/\.[a-z]{2,}/i.test(v);location.href='/v?'+(isUrl?'u=':'t=place&n=')+encodeURIComponent(v)})})();
+(function(){var f=document.getElementById('sbox');if(!f)return;var fb=document.getElementById('sfb');
+function say(t,go){fb.textContent=t+' ';if(go){var b=document.createElement('button');b.type='button';b.className='btn s g';b.textContent='Valorar igualmente';b.onclick=go;fb.appendChild(b)}}
+f.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('sq').value.trim();if(!v){location.href='/v';return}
+ var isUrl=!/\s/.test(v)&&/\.[a-z]{2,}/i.test(v),btn=f.querySelector('button');btn.disabled=true;say('Comprobando…');
+ var done=function(u){btn.disabled=false;location.href=u};
+ if(isUrl){var raw=v.replace(/^https?:\/\//i,'');fetch('/api/check?h='+encodeURIComponent(raw)).then(function(r){return r.json()}).then(function(j){
+   if(!j||j.valid!==false)done('/v?u='+encodeURIComponent(v));else{btn.disabled=false;say('No encuentro esa web. ¿Está bien escrita?',function(){done('/v?u='+encodeURIComponent(v))})}}).catch(function(){done('/v?u='+encodeURIComponent(v))})}
+ else{fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=es&q='+encodeURIComponent(v)).then(function(r){return r.json()}).then(function(a){
+   var base='/v?t=place&n='+encodeURIComponent(v);if(a&&a[0])done(base+'&g='+(+a[0].lat).toFixed(5)+','+(+a[0].lon).toFixed(5));else{btn.disabled=false;say('No lo encuentro en el mapa. Prueba con la ciudad (p. ej. «Café Central, Madrid»).',function(){done(base)})}}).catch(function(){done('/v?t=place&n='+encodeURIComponent(v))})}
+})})();
 </script>
 </body></html>

@@ -29,7 +29,7 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 <div class="top"><a class="brand" href="/"><img src="logo.png" alt="" width="40" height="40"><span>Avatar <b>ROI</b></span></a><a class="btn g" href="/v" style="min-height:40px;padding:6px 16px">Valorar otra cosa</a></div>
 <h1>Cerca de ti</h1><p class="sub">Bibliotecas, parques, aulas, proyectos de tu ciudad… Elige un lugar y cuenta cómo estuvo.</p>
 <button class="btn" id="loc">📍 Ver lo que tengo cerca</button>
-<div class="here" id="here" hidden><p id="ht"></p><a class="btn" id="hb" href="#">Opinar ahora</a></div>
+<div class="here" id="here" hidden><p id="ht"></p><a class="btn" id="hb" href="#">Opinar ahora</a> <a class="btn g" id="hr" href="#">💬 Sala</a></div>
 <div id="map" role="img" aria-label="Mapa de lugares"></div>
 <ul class="list" id="list"></ul>
 <p class="note">Tu ubicación se usa solo en este móvil para ordenar los lugares y comprobar que estás allí. No se envía ni se guarda.</p>
@@ -49,7 +49,7 @@ function draw(){
     a.firstChild.textContent=p.kind==='project'?'🏗️':'📍';a.querySelector('b').textContent=p.name;a.querySelector('small').textContent=p.description||(p.kind==='project'?'Proyecto':'Lugar');
     a.querySelector('.d').textContent=d!=null?fmt(d):'Opinar';const li=document.createElement('li');li.append(a);ul.append(li)});
   const near=L.find(x=>x.d!=null&&x.d<=x.p.radius_m);
-  $('here').hidden=!near;if(near){$('ht').textContent='Estás en «'+near.p.name+'». ¿Cómo ha ido?';$('hb').href=href(near.p,true)}
+  $('here').hidden=!near;if(near){$('ht').textContent='Estás en «'+near.p.name+'». ¿Cómo ha ido?';$('hb').href=href(near.p,true);$('hr').href='/sala?t='+near.p.kind+'&n='+encodeURIComponent(near.p.name)}
   if(window.L&&map){layer.clearLayers();const pts=[];PL.forEach(p=>{pts.push([p.lat,p.lng]);L2.marker([p.lat,p.lng]).addTo(layer).bindPopup('<b></b>').getPopup().setContent(Object.assign(document.createElement('a'),{href:href(p,false),textContent:p.name}))});
     if(me){L2.circleMarker(me,{radius:8,color:'#3f5a3a',fillOpacity:.9}).addTo(layer);pts.push(me)}if(pts.length)map.fitBounds(pts,{padding:[30,30],maxZoom:16})}
 }

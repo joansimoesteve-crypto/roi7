@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sala — Avatar ROI</title><meta name="robots" content="noindex"><meta name="theme-color" content="#3f5a3a">
+<link rel="icon" href="favicon.png" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#26331f;--moss:#3f5a3a;--sage:#e9efdc;--paper:#fbf7ec;--mut:#4d5c43;--line:#cfd6c2}
+*{box-sizing:border-box}[hidden]{display:none!important}html,body{height:100%}
+body{margin:0;font:17px/1.45 "Bricolage Grotesque",system-ui,sans-serif;color:var(--ink);background:var(--paper)}
+.app{max-width:640px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;padding:0 16px}
+.top{padding:calc(10px + env(safe-area-inset-top)) 0 8px;display:flex;align-items:center;gap:10px;justify-content:space-between}
+.top a{color:var(--ink);text-decoration:none;font-weight:600}.top h1{font-size:20px;margin:0;letter-spacing:-.02em;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.here{display:inline-flex;align-items:center;gap:6px;background:var(--sage);color:var(--moss);font-weight:600;font-size:14px;border-radius:99px;padding:4px 12px;white-space:nowrap}
+.here i{width:8px;height:8px;border-radius:50%;background:#3f8f45;animation:p 1.6s infinite}@keyframes p{50%{opacity:.35}}
+.log{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0}
+.m{max-width:86%;background:#fff;border:1px solid var(--line);border-radius:18px 18px 18px 6px;padding:8px 14px;overflow-wrap:anywhere}.m small{display:block;color:var(--mut);font-size:12px}
+.m.me{align-self:flex-end;background:var(--moss);color:#fff;border-color:var(--moss);border-radius:18px 18px 6px 18px}.m.me small{color:#dfe8d6}
+.empty{margin:auto;text-align:center;color:var(--mut);max-width:30ch}
+.note{font-size:12px;color:var(--mut);margin:0 0 6px}
+form{display:flex;gap:8px;padding:6px 0 calc(12px + env(safe-area-inset-bottom))}
+input{font:inherit;border:1px solid var(--line);border-radius:99px;padding:12px 16px;background:#fff;min-width:0}#b{flex:1}#nk{width:7.5em}
+.btn{border:0;border-radius:99px;background:var(--moss);color:#fff;font:inherit;font-weight:600;padding:0 20px;min-height:48px;cursor:pointer}.btn:disabled{opacity:.6}
+#er{color:#a33;font-size:14px;margin:0 0 4px}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+</style></head><body><div class="app">
+<div class="top"><a href="javascript:history.length>1?history.back():location.href='/'" aria-label="Volver">←</a><h1 id="ti">Sala</h1><span class="here"><i></i><span id="hn">1</span> aquí</span></div>
+<div class="log" id="log" aria-live="polite"></div>
+<p class="note">Mensajes públicos en esta sala, visibles 30 días. Sin enlaces ni datos personales; la IA oculta spam y ofensas.</p>
+<p id="er" hidden></p>
+<form id="f"><input id="nk" maxlength="24" placeholder="Tu apodo" aria-label="Tu apodo" autocomplete="nickname"><input id="b" maxlength="280" placeholder="Escribe algo…" aria-label="Mensaje" autocomplete="off"><button class="btn" id="s">Enviar</button></form>
+</div>
+<script>
+const $=id=>document.getElementById(id),q=new URLSearchParams(location.search);
+const clean=s=>(s||'').replace(/\s+/g,' ').trim();
+let n=clean(q.get('n')).slice(0,80),u=clean(q.get('u')),t=q.get('t')||'place',room='';
+try{if(u){room=new URL(/^https?:\/\//i.test(u)?u:'https://'+u).hostname.replace(/^www\./,'')}}catch(e){}
+if(t==='web'&&!room&&n)room=n.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0];
+if(!room)room=n;room=room.toLowerCase();
+$('ti').textContent=n||room||'Sala';document.title='Sala de '+(n||room)+' — Avatar ROI';
+let anon='';try{anon=localStorage.getItem('roi_anon')||'';if(!anon){anon=crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);localStorage.setItem('roi_anon',anon)}}catch(e){anon='a'+Math.random().toString(36).slice(2)}
+try{$('nk').value=localStorage.getItem('roi_nick')||''}catch(e){}
+const mine=new Set();let timer=null,last=null;
+function render(a,here){$('hn').textContent=Math.max(1,here||1);const log=$('log'),atEnd=log.scrollHeight-log.scrollTop-log.clientHeight<80;log.textContent='';
+ if(!a.length){const e=document.createElement('p');e.className='empty';e.textContent='Aún no ha escrito nadie. Sé la primera persona en decir algo sobre '+(n||room)+'.';log.append(e);return}
+ a.forEach(m=>{const d=document.createElement('div');d.className='m'+(mine.has(m.nick+'|'+m.body)?' me':'');const s=document.createElement('small');s.textContent=m.nick+' · '+new Date(m.ts).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});const p=document.createElement('span');p.textContent=m.body;d.append(s,p);log.append(d)});
+ if(atEnd||!last)log.scrollTop=log.scrollHeight;last=a}
+async function poll(){if(document.hidden||!room)return;try{const r=await fetch('/api/chat?room='+encodeURIComponent(room)+'&a='+encodeURIComponent(anon));if(r.ok){const j=await r.json();render(j.messages,j.here)}}catch(e){}}
+$('f').onsubmit=async e=>{e.preventDefault();const body=$('b').value.trim();if(!body)return;const nick=$('nk').value.trim();try{localStorage.setItem('roi_nick',nick)}catch(x){}
+ $('s').disabled=true;$('er').hidden=true;
+ try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({room,anon_id:anon,nick,body})});const j=await r.json().catch(()=>({}));
+  if(r.ok){mine.add((nick||'Anónimo')+'|'+body);$('b').value='';if(j.hidden){$('er').textContent='Tu mensaje no se ha publicado porque parece spam u ofensivo.';$('er').hidden=false}}
+  else{$('er').textContent=j.error==='contacto'?'No se admiten enlaces, correos ni teléfonos.':r.status===429?'Vas muy rápido. Espera unos segundos.':'No se pudo enviar. Inténtalo de nuevo.';$('er').hidden=false}}
+ catch(x){$('er').textContent='Sin conexión.';$('er').hidden=false}
+ $('s').disabled=false;await poll();$('b').focus()};
+poll();timer=setInterval(poll,4000);document.addEventListener('visibilitychange',poll);
+if(!room){$('log').innerHTML='<p class="empty">Abre una sala desde «Hablar con quien valora esto».</p>';$('f').hidden=true}
+</script></body></html>

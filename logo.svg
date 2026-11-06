@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Avatar ROI">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f7a45"/><stop offset="1" stop-color="#2f4a2c"/></linearGradient></defs>
+<path d="M256 40c120 0 216 86 216 192s-96 192-216 192c-28 0-55-5-79-14-26 20-60 34-100 38 18-20 30-42 34-66C58 354 40 296 40 232 40 126 136 40 256 40z" fill="url(#g)"/>
+<circle cx="256" cy="228" r="132" fill="#fbf7ec"/>
+<circle cx="208" cy="204" r="16" fill="#2f4a2c"/><circle cx="304" cy="204" r="16" fill="#2f4a2c"/>
+<path d="M190 262c18 36 114 36 132 0" fill="none" stroke="#3f8f45" stroke-width="22" stroke-linecap="round"/>
+<circle cx="408" cy="92" r="22" fill="#e8b84a"/>
+</svg>
