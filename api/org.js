@@ -4,10 +4,12 @@
 //   {action:'pulse', question, subject, type, location}   crea una pregunta puntual (devuelve su id)
 //   {action:'close_pulse', id}                  la cierra
 //   {action:'place', name, kind, description, lat, lng, radius_m}  añade un lugar/proyecto geolocalizado (sale en /mapa)
+//   {action:'update_place', id, ...}            edita una zona (forma, textos, botón de acción cta_label + cta_url https)
 //   {action:'delete_place', id}                 lo retira
 //   {action:'hide_msg', id}                     oculta un mensaje de la charla de sus salas
 const db = require('./_db'), org = require('./_org');
 const ID = /^[0-9a-f-]{32,40}$/i;
+const ctaOf = b => { const l = db.clip(b.cta_label, 40), u = String(b.cta_url || '').trim().slice(0, 300); return l && /^https:\/\/[^\s]+$/i.test(u) ? { cta_label: l, cta_url: u } : { cta_label: null, cta_url: null } };
 module.exports = async (req, res) => {
   if (db.cors(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ ok: false });
@@ -45,11 +47,25 @@ module.exports = async (req, res) => {
       if (shape) { lat = shape.reduce((t, p) => t + p[0], 0) / shape.length; lng = shape.reduce((t, p) => t + p[1], 0) / shape.length }
       if (!name || lat == null || lng == null) return res.status(400).json({ ok: false, error: 'datos' });
       const row = { org_id: oid, name, kind: b.kind === 'project' ? 'project' : 'place', description: db.clip(b.description, 160), lat, lng, radius_m: Math.round(db.num(b.radius_m, 30, 1000) || 150) };
-      let ins = await db.insertRet('places', { ...row, shape, info: db.clip(b.info, 500) });
+      const cta = ctaOf(b);
+      let ins = await db.insertRet('places', { ...row, shape, info: db.clip(b.info, 500), ...cta });
+      if (!ins) ins = await db.insertRet('places', { ...row, shape, info: db.clip(b.info, 500) }); // v9 sin ejecutar
       if (!ins) ins = await db.insertRet('places', row); // v8 sin ejecutar: lo guarda como punto con radio
       if (!ins) return res.status(500).json({ ok: false });
       await db.insert('org_targets', { org_id: oid, kind: 'subject', value: name }); // sus votos pasan solos al panel
       return res.status(200).json({ ok: true, id: ins.id });
+    }
+    if (b.action === 'update_place' && ID.test(String(b.id))) { // edita una zona suya (forma, textos, botón)
+      let shape = Array.isArray(b.shape) ? b.shape.slice(0, 60).map(p => Array.isArray(p) ? [db.num(p[0], -90, 90), db.num(p[1], -180, 180)] : null) : null;
+      if (shape && (shape.length < 3 || shape.some(p => !p || p[0] == null || p[1] == null))) shape = null;
+      const cur = (await db.select(`places?select=name&id=eq.${b.id}&org_id=eq.${oid}&limit=1`))[0]; if (!cur) return res.status(404).json({ ok: false });
+      const name = db.clip(b.name, 120) || cur.name, patch = { name, kind: b.kind === 'project' ? 'project' : 'place', description: db.clip(b.description, 160), info: db.clip(b.info, 500), ...ctaOf(b) };
+      if (shape) { patch.shape = shape; patch.lat = shape.reduce((t, p) => t + p[0], 0) / shape.length; patch.lng = shape.reduce((t, p) => t + p[1], 0) / shape.length }
+      else if (b.lat != null && b.lng != null && db.num(b.lat, -90, 90) != null) { patch.lat = db.num(b.lat, -90, 90); patch.lng = db.num(b.lng, -180, 180); patch.shape = null; patch.radius_m = Math.round(db.num(b.radius_m, 30, 1000) || 150) }
+      let r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, patch);
+      if (!r.ok) { delete patch.cta_label; delete patch.cta_url; r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, patch) }
+      if (r.ok && name !== cur.name) await db.insert('org_targets', { org_id: oid, kind: 'subject', value: name });
+      return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
     }
     if (b.action === 'delete_place' && ID.test(String(b.id))) {
       const r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, { active: false }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });

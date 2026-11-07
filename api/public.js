@@ -9,7 +9,8 @@ module.exports = async (req, res) => {
   try {
     if (places) { // lugares geolocalizados de las organizaciones (para /mapa)
       const base = 'id,name,kind,description,lat,lng,radius_m';
-      let pl = await db.select(`places?select=${base},shape,info&active=eq.true&limit=500`);
+      let pl = await db.select(`places?select=${base},shape,info,cta_label,cta_url&active=eq.true&limit=500`);
+      if (!Array.isArray(pl)) pl = await db.select(`places?select=${base},shape,info&active=eq.true&limit=500`);
       if (!Array.isArray(pl)) pl = await db.select(`places?select=${base}&active=eq.true&limit=500`);
       res.setHeader('Cache-Control', 's-maxage=60'); return res.status(200).json({ ok: true, places: Array.isArray(pl) ? pl : [] });
     }
@@ -22,14 +23,16 @@ module.exports = async (req, res) => {
     const name = db.clip(n, 160); if (!name) return res.status(400).json({ ok: false });
     const qn = '"' + name.replace(/[\\"]/g, '\\$&') + '"';
     const updQ = cols => db.select(`org_updates?select=${cols}&published=eq.true&target=eq.` + encodeURIComponent(name) + '&order=created_at.desc&limit=3');
-    const [u0, rs, pls] = await Promise.all([
+    const placeQ = async () => { const q = c => db.select(`places?select=${c}&active=eq.true&name=eq.${encodeURIComponent(name)}&limit=1`); let r = await q('info,cta_label,cta_url'); if (!Array.isArray(r)) r = await q('info'); return Array.isArray(r) && r[0] ? r[0] : null };
+    const [u0, rs, pls, plc] = await Promise.all([
       updQ('title,body,created_at,status'),
       db.select('ratings?select=rating&type=neq.person&or=' + encodeURIComponent(`(subject.eq.${qn},site.eq.${qn})`) + '&created_at=gte.' + new Date(Date.now() - 864e5).toISOString() + '&limit=2000'),
-      db.select('pulses?select=id,question&active=eq.true&subject=eq.' + encodeURIComponent(name) + '&order=created_at.desc&limit=1')
+      db.select('pulses?select=id,question&active=eq.true&subject=eq.' + encodeURIComponent(name) + '&order=created_at.desc&limit=1'),
+      placeQ()
     ]);
     const u = Array.isArray(u0) ? u0 : await updQ('title,body,created_at');
     // «Hoy han valorado N personas»: solo se enseña a partir de 3 votos, para no señalar a nadie
     const today = Array.isArray(rs) && rs.length >= 3 ? { n: rs.length, avg: Math.round(rs.reduce((s, r) => s + r.rating, 0) / rs.length * 10) / 10 } : null;
-    res.setHeader('Cache-Control', 's-maxage=60'); res.status(200).json({ ok: true, updates: Array.isArray(u) ? u : [], today, pulse: Array.isArray(pls) && pls[0] ? pls[0] : null });
+    res.setHeader('Cache-Control', 's-maxage=60'); res.status(200).json({ ok: true, updates: Array.isArray(u) ? u : [], today, pulse: Array.isArray(pls) && pls[0] ? pls[0] : null, place: plc });
   } catch (e) { res.status(500).json({ ok: false }) }
 };
