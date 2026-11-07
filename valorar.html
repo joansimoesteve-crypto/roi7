@@ -75,7 +75,7 @@ input[type=text],input[type=url],textarea{width:100%;padding:13px 15px;border:1p
 </section>
 <section class="done" id="done" hidden>
   <div class="f" id="df"></div><h1>¡Gracias!</h1><p id="ds">Tu valoración ya cuenta 💚</p><p id="tdy" class="tdy" hidden></p><div id="upd" class="upd" hidden></div>
-  <div class="row"><a class="btn" id="again" href="/v">Valorar otra cosa</a><a class="btn g" href="/#pide">Pedir que me valoren (QR)</a><a class="btn g" href="/#instalar">Tener a Roi siempre a mano</a><a class="btn g" id="room">💬 Hablar con quien valora esto</a><a class="btn g" id="visit" hidden>Ir a la web</a></div>
+  <div class="row"><a class="btn" id="room">💬 Hablar con quien valora esto</a><a class="btn" id="cta" hidden target="_blank" rel="noopener"></a><a class="btn g" id="again" href="/v">✍️ Valorar otra cosa</a><a class="btn g" href="/#instalar">📲 Tener a Roi en el móvil</a><a class="btn g" href="/#pide">🔳 Pedir que me valoren (QR)</a><a class="btn g" id="visit" hidden>Ir a la web</a></div>
 </section>
 </main></div>
 <script>
@@ -161,8 +161,9 @@ function finish(){
   if(u){const v=$('visit');v.hidden=false;v.href=u;v.rel='noopener';v.textContent='Ir a '+(hostOf(u)||'la web')}
   if(!RM){const c=document.createElement('div');c.className='conf';for(let i=0;i<26;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'vw';e.style.background=COL[i%5];e.style.animationDelay=Math.random()*.5+'s';e.style.animationDuration=1.4+Math.random()*1.2+'s';c.append(e)}document.body.append(c);setTimeout(()=>c.remove(),3500)}
   loadUpdates();scrollTo({top:0})}
-async function loadUpdates(){const names=[...new Set([n,u?hostOf(u):''].filter(Boolean))];let all=[],today=null;
-  try{for(const x of names){const r=await fetch('/api/public?n='+encodeURIComponent(x));if(r.ok){const j=await r.json();all=all.concat(j.updates||[]);if(!today&&j.today)today=j.today}}}catch(e){}
+async function loadUpdates(){const names=[...new Set([n,u?hostOf(u):''].filter(Boolean))];let all=[],today=null,plc=null;
+  try{for(const x of names){const r=await fetch('/api/public?n='+encodeURIComponent(x));if(r.ok){const j=await r.json();all=all.concat(j.updates||[]);if(!today&&j.today)today=j.today;if(!plc&&j.place)plc=j.place}}}catch(e){}
+  if(plc){if(plc.cta_url&&/^https:\/\//.test(plc.cta_url)){const c=$('cta');c.hidden=false;c.href=plc.cta_url;c.textContent=(plc.cta_label||'Abrir')+' ↗'}if(plc.info){const d=$('ds');d.textContent='Tu valoración ya cuenta 💚 · ℹ️ '+plc.info}}
   if(today){const t=$('tdy');t.hidden=false;t.textContent='👥 En las últimas 24 h han valorado '+n+' '+today.n+' personas · ánimo medio '+String(today.avg).replace('.',',')+'/5'}
   all=all.slice(0,3);if(!all.length)return;const el=$('upd');el.hidden=false;
   el.innerHTML='<b>💬 Tú dijiste, nosotros hicimos</b>'+all.map(x=>'<p><strong></strong><span></span></p>').join('');

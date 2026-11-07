@@ -25,15 +25,17 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 .it .d{font-size:14px;font-weight:600;color:var(--moss);white-space:nowrap}
 .k{width:40px;height:40px;border-radius:12px;background:var(--sage);display:grid;place-items:center;font-size:20px}
 .hi{background:var(--sage);border-radius:14px;padding:10px 12px;margin:0 0 10px;font-weight:400!important}.hu{margin:0 0 10px;font-size:15px}.hu p{margin:4px 0;font-weight:400!important}.hu .st{display:inline-block;font-size:12px;font-weight:600;background:#dfe9cf;border-radius:99px;padding:1px 9px;margin-right:6px}.hp{margin:0 0 10px}.hp a{color:var(--moss);font-weight:600}.hr{display:flex;gap:8px;flex-wrap:wrap}
+.cta{display:inline-flex;margin:6px 0 0 8px;padding:6px 16px;border-radius:99px;background:var(--sage);color:var(--moss);font-weight:600;font-size:15px;text-decoration:none}
 .note{font-size:14px;color:var(--mut);margin-top:16px}.empty{background:var(--sage);border-radius:18px;padding:18px;text-align:center;color:var(--mut)}
 </style></head><body><div class="app">
 <div class="top"><a class="brand" href="/"><img src="logo.png" alt="" width="40" height="40"><span>Avatar <b>ROI</b></span></a><a class="btn g" href="/v" style="min-height:40px;padding:6px 16px">Valorar otra cosa</a></div>
 <h1>Cerca de ti</h1><p class="sub">Bibliotecas, parques, aulas, proyectos de tu ciudad… Elige un lugar y cuenta cómo estuvo.</p>
 <button class="btn" id="loc">📍 Ver lo que tengo cerca</button>
-<div class="here" id="here" hidden><p id="ht"></p><p id="hi" class="hi" hidden></p><div id="hu" class="hu" hidden></div><div id="hp" class="hp" hidden></div><div class="hr"><a class="btn" id="hb" href="#">Opinar ahora</a> <a class="btn g" id="hr" href="#">💬 Sala</a></div></div>
+<div class="here" id="here" hidden><p id="ht"></p><p id="hi" class="hi" hidden></p><div id="hu" class="hu" hidden></div><div id="hp" class="hp" hidden></div><div class="hr"><a class="btn" id="hb" href="#">Opinar ahora</a> <a class="btn g" id="hr" href="#">💬 Sala</a> <a class="btn g" id="hc" hidden target="_blank" rel="noopener"></a></div></div>
 <div id="map" role="img" aria-label="Mapa de lugares"></div>
 <ul class="list" id="list"></ul>
-<p class="note">Tu ubicación se usa solo en este móvil, mientras tengas esta página abierta, para avisarte de los lugares donde estás. No se envía ni se guarda.</p>
+<h2 id="oh" hidden style="font-size:20px;margin:22px 0 8px">Otros sitios cerca</h2><ul class="list" id="osm"></ul>
+<p class="note">Tu ubicación se usa solo en este móvil, mientras tengas esta página abierta, para avisarte de los lugares donde estás. No se guarda. Para listar sitios cercanos se consulta OpenStreetMap con una zona aproximada de unos 500 m.</p>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
@@ -46,7 +48,7 @@ const href=(p,v)=>'/v?t='+p.kind+'&n='+encodeURIComponent(p.name)+'&s=qr&g='+p.l
 const ST={estudio:'En estudio',marcha:'En marcha',hecho:'Hecho'};
 async function info(p){if(INF[p.id])return INF[p.id];try{const r=await fetch('/api/public?n='+encodeURIComponent(p.name));INF[p.id]=r.ok?await r.json():{}}catch(e){INF[p.id]={}}return INF[p.id]}
 async function banner(p){$('ht').textContent='Estás en «'+p.name+'». ¿Cómo ha ido?';$('hb').href=href(p,true);$('hr').href='/sala?t='+p.kind+'&n='+encodeURIComponent(p.name);
- const hi=$('hi');hi.hidden=!p.info;hi.textContent=p.info?'ℹ️ '+p.info:'';$('here').hidden=false;
+ const hi=$('hi');hi.hidden=!p.info;hi.textContent=p.info?'ℹ️ '+p.info:'';$('here').hidden=false;const hc=$('hc'),ok=p.cta_url&&/^https:\/\//.test(p.cta_url);hc.hidden=!ok;if(ok){hc.href=p.cta_url;hc.textContent=(p.cta_label||'Abrir')+' ↗'}
  const j=await info(p);if(!cur||cur.id!==p.id)return;
  const hu=$('hu');hu.textContent='';const ups=(j.updates||[]);hu.hidden=!ups.length;
  if(ups.length){const b=document.createElement('b');b.textContent='Tú dijiste, nosotros hicimos';hu.append(b);ups.forEach(u=>{const q=document.createElement('p');if(u.status){const s=document.createElement('span');s.className='st';s.textContent=ST[u.status]||'';q.append(s)}const t=document.createElement('strong');t.textContent=u.title;q.append(t);if(u.body)q.append(' — '+u.body);hu.append(q)})}
@@ -58,7 +60,7 @@ function draw(){
   L.forEach(({p,d})=>{const ins=inside(p,me),a=document.createElement('a');a.className='it';a.href=href(p,ins);
     a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';
     a.firstChild.textContent=p.kind==='project'?'🏗️':'📍';a.querySelector('b').textContent=p.name;a.querySelector('small').textContent=p.description||(p.kind==='project'?'Proyecto':'Lugar');
-    a.querySelector('.d').textContent=ins?'Estás aquí':d!=null?fmt(d):'Opinar';const li=document.createElement('li');li.append(a);ul.append(li)});
+    a.querySelector('.d').textContent=ins?'Estás aquí':d!=null?fmt(d):'Opinar';const li=document.createElement('li');li.append(a);if(p.cta_url&&/^https:\/\//.test(p.cta_url)){const c=document.createElement('a');c.className='cta';c.href=p.cta_url;c.target='_blank';c.rel='noopener';c.textContent=(p.cta_label||'Abrir')+' ↗';li.append(c)}ul.append(li)});
   const near=L.find(x=>inside(x.p,me));const np=near?near.p:null;
   if(!np){cur=null;$('here').hidden=true}else if(!cur||cur.id!==np.id){cur=np;banner(np);if(navigator.vibrate)try{navigator.vibrate(150)}catch(e){}}
   if(L2&&map){layer.clearLayers();const pts=[];PL.forEach(p=>{const sh=Array.isArray(p.shape)&&p.shape.length>=3;
@@ -66,9 +68,21 @@ function draw(){
       m.bindPopup(Object.assign(document.createElement('a'),{href:href(p,false),textContent:p.name}));(sh?p.shape:[[p.lat,p.lng]]).forEach(x=>pts.push(x))});
     if(me){L2.circleMarker(me,{radius:8,color:'#3f5a3a',fillOpacity:.9}).addTo(layer);pts.push(me)}if(!window.__fit&&pts.length){window.__fit=1;map.fitBounds(pts,{padding:[30,30],maxZoom:17})}}
 }
+
+let lastQ=null;
+const OT={restaurant:['🍽️','Restaurante'],cafe:['☕','Cafetería'],bar:['🍺','Bar'],fast_food:['🍔','Comida rápida'],library:['📚','Biblioteca'],pharmacy:['💊','Farmacia'],park:['🌳','Parque'],university:['🎓','Universidad'],school:['🏫','Colegio'],townhall:['🏛️','Ayuntamiento'],museum:['🖼️','Museo'],supermarket:['🛒','Supermercado']};
+async function osm(){if(!me)return;if(lastQ&&km(me[0],me[1],lastQ[0],lastQ[1])<150)return;lastQ=me.slice();
+  const q='[out:json][timeout:12];(nwr(around:500,'+me[0]+','+me[1]+')["name"]["amenity"~"^(restaurant|cafe|bar|fast_food|library|pharmacy|university|school|townhall)$"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["leisure"="park"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["tourism"="museum"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["shop"="supermarket"];);out center 40;';
+  try{const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});if(!r.ok)return;const j=await r.json();
+   const known=new Set(PL.map(p=>p.name.toLowerCase()));const seen=new Set();
+   const A=(j.elements||[]).map(e=>{const t=e.tags||{},la=e.lat??(e.center&&e.center.lat),lo=e.lon??(e.center&&e.center.lon),k=t.amenity||(t.leisure==='park'?'park':t.tourism==='museum'?'museum':'supermarket');return{name:t.name,la,lo,k,d:km(me[0],me[1],la,lo)}}).filter(x=>x.la!=null&&!known.has(x.name.toLowerCase())&&!seen.has(x.name.toLowerCase())&&seen.add(x.name.toLowerCase())).sort((a,b)=>a.d-b.d).slice(0,15);
+   const ul=$('osm');ul.textContent='';$('oh').hidden=!A.length;
+   A.forEach(x=>{const o=OT[x.k]||['📍','Lugar'],a=document.createElement('a');a.className='it';a.href='/v?t=place&n='+encodeURIComponent(x.name)+'&s=qr&g='+x.la.toFixed(5)+','+x.lo.toFixed(5)+(x.d<=60?'&v=1':'');
+    a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';a.firstChild.textContent=o[0];a.querySelector('b').textContent=x.name;a.querySelector('small').textContent=o[1];a.querySelector('.d').textContent=fmt(x.d);
+    const li=document.createElement('li');li.append(a);ul.append(li)})}catch(e){}}
 try{if(window.L){L2=window.L;map=L2.map('map',{scrollWheelZoom:false}).setView([40.4,-3.7],5);L2.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);layer=L2.layerGroup().addTo(map)}else $('map').hidden=true}catch(e){$('map').hidden=true}
 fetch('/api/public?places=1').then(r=>r.json()).then(j=>{PL=(j&&j.places)||[];draw()}).catch(()=>draw());
 $('loc').onclick=()=>{if(!navigator.geolocation){$('loc').textContent='Tu navegador no da la ubicación';return}
   $('loc').textContent='Buscando…';let first=true;
-  wid=navigator.geolocation.watchPosition(p=>{me=[p.coords.latitude,p.coords.longitude];if(first){first=false;$('loc').textContent='📍 Siguiendo tu posición mientras esta página esté abierta';$('loc').disabled=true}draw()},()=>{$('loc').textContent='No pude ver tu ubicación · elige un lugar de la lista'},{enableHighAccuracy:true,timeout:15000,maximumAge:10000})};
+  wid=navigator.geolocation.watchPosition(p=>{me=[p.coords.latitude,p.coords.longitude];if(first){first=false;$('loc').textContent='📍 Siguiendo tu posición mientras esta página esté abierta';$('loc').disabled=true}draw();osm()},()=>{$('loc').textContent='No pude ver tu ubicación · elige un lugar de la lista'},{enableHighAccuracy:true,timeout:15000,maximumAge:10000})};
 </script></script></body></html>

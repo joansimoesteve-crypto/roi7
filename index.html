@@ -125,6 +125,12 @@ h2::after{content:"";display:block;height:5px;width:0;border-radius:9px;margin-t
 .how{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.hc{background:#fff;border:1px solid var(--line);border-radius:26px;padding:22px;display:flex;flex-direction:column;gap:6px}.hc h3{margin:0}.hc p{margin:0;color:var(--mut)}.hc ol{margin:4px 0;padding-left:20px}.hc li{margin:6px 0}.hc .btn,.hc .row{margin-top:auto}.hi{font-size:30px}.hc .row{display:flex;gap:8px;flex-wrap:wrap}.hc .note{font-size:14px}
 .hc .try{display:flex;gap:8px;margin-top:auto}.hc .try input{flex:1;min-width:0}.appq{text-align:center;color:var(--mut);margin:18px 0 0}
 @media(max-width:860px){.how{grid-template-columns:1fr}}
+/* v9 · tres botones, tarjetas */
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:760px;margin:6px auto 14px;text-align:left}
+.tri a{display:flex;flex-direction:column;gap:2px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px 18px;color:inherit;text-decoration:none;transition:transform .2s,box-shadow .2s,border-color .2s}
+.tri a:hover{transform:translateY(-2px);box-shadow:0 8px 22px #3f5a3a22;border-color:var(--moss)}.tri b{font-size:18px}.tri span{color:var(--mut);font-size:14px;line-height:1.35}
+@media(max-width:820px){.tri{grid-template-columns:repeat(3,1fr);gap:8px}.tri a{padding:12px 6px;text-align:center;align-items:center;border-radius:18px}.tri b{font-size:14px;line-height:1.25}.tri b::first-line{font-size:24px}.tri span{display:none}.aud{display:grid!important;grid-template-columns:1fr!important}.aud article{width:auto!important;min-width:0!important}}
+.hc .btn{width:100%;justify-content:center;text-align:center}.hc .row .btn{flex:1 1 100%}
 </style>
 </head><body>
 <script>document.documentElement.classList.add('js')</script>
@@ -138,7 +144,8 @@ h2::after{content:"";display:block;height:5px;width:0;border-radius:9px;margin-t
 <p class="lead">Roi te acompaña mientras navegas, te pregunta cómo te sientes y convierte tu opinión en conocimiento para mejores webs, lugares, ciudades y organizaciones.</p>
 <div class="strip" id="strip" role="group" aria-label="Elige tu carita para probar Roi" hidden></div>
 <form class="sbox" id="sbox" action="/v" method="get" role="search"><input id="sq" name="q" type="text" inputmode="url" autocomplete="off" placeholder="Una web o un lugar…" aria-label="Qué quieres valorar"><button class="btn" type="submit">Valorar</button></form><p class="hint" id="sfb" aria-live="polite" style="text-align:center;margin:0 0 10px"></p>
-<div class="acts"><a class="btn g" href="/mapa">📍 Cerca de ti</a><a class="btn g" href="#instalar">Tener a Roi siempre</a></div>
+<div class="tri" id="tri"><a href="/mapa"><b>📍<br>Espacio físico</b><span>Restaurante, parque, biblioteca, aula</span></a><a href="/v?t=web"><b>🌐<br>Espacio digital</b><span>Una web, un servicio online, contenido</span></a><a href="/v?t=project"><b>🏗️<br>Proyecto</b><span>Obra, propuesta, campaña, iniciativa</span></a></div>
+<div class="acts"><a class="btn g" href="#instalar">Añadir a Chrome</a></div>
 <ul class="trust"><li>Sin cuentas</li><li>Gratis</li><li>20 segundos</li></ul></div>
 <div class="demo" id="demo" aria-label="Ejemplo de conversación con Roi"><div class="dh"><img id="dimg" alt="">Roi<span class="dbadge"></span></div><div class="dbody" aria-hidden="true"></div></div></header>
 
@@ -162,10 +169,10 @@ h2::after{content:"";display:block;height:5px;width:0;border-radius:9px;margin-t
 <section id="pide" class="rv"><div class="card gen"><div><h2>Pide que te valoren</h2><p class="sub">Crea un enlace y un QR para tu perfil de LinkedIn o Facebook, tu restaurante, tu proyecto, tu empresa o tu web. Quien lo abra valora desde el móvil, sin instalar nada.</p>
 <label for="ur">Pega un enlace (opcional)</label><input id="ur" type="url" inputmode="url" placeholder="linkedin.com/in/tu-nombre, facebook.com/…, Google Maps, tu web…" autocomplete="off"><p class="hint" id="det">Detectamos el nombre y el tipo solos.</p>
 <label for="nm">Nombre</label><input id="nm" placeholder="Ej. Ana García, Café Central, Peatonalización calle Mayor…" maxlength="80">
-<label for="loc">Ubicación dentro del sitio (opcional)</label><input id="loc" placeholder="Ej. Planta 2, Aula 3.04, Recepción" maxlength="80"><p class="hint">Si tienes varios espacios, crea un QR para cada uno y compara cuál va mejor.</p><label for="ty">Qué es</label><select id="ty"><option value="person">Persona o perfil (LinkedIn, Facebook…)</option><option value="place">Local, restaurante o lugar</option><option value="project">Proyecto o iniciativa</option><option value="org">Empresa o institución</option><option value="web">Web</option></select>
+<label for="loc">Ubicación dentro del sitio (opcional)</label><input id="loc" placeholder="Ej. Planta 2, Aula 3.04, Recepción" maxlength="80"><p class="hint">Si tienes varios espacios, crea un QR para cada uno y compara cuál va mejor.</p><label for="ty">Qué es</label><select id="ty"><option value="place">Espacio físico (local, parque, oficina…)</option><option value="web">Espacio digital (web, servicio online)</option><option value="project">Proyecto o iniciativa</option><option value="person">Mi perfil (LinkedIn, redes)</option></select>
 <button class="btn" id="gen">Crear enlace y QR</button>
 <div id="out" hidden><label for="lk">Enlace para compartir</label><input id="lk" readonly>
-<div class="row"><button class="btn s" id="cp">Copiar</button><button class="btn s g" id="sh">Compartir</button><button class="btn s g" id="dl">Descargar QR</button><a class="btn s g" id="tryit" target="_blank" rel="noopener">Probarlo</a></div>
+<div class="row"><button class="btn s" id="cp">Copiar</button><button class="btn s g" id="sh">Compartir</button><button class="btn s g" id="dl">Descargar QR</button><button class="btn s" id="dc">Descargar tarjeta con avatar</button><a class="btn s g" id="tryit" target="_blank" rel="noopener">Probarlo</a></div>
 <div class="share" id="soc" aria-label="Compartir en"></div>
 <label for="em">Para tu web: pega este código</label><textarea id="em" readonly></textarea><button class="btn s" id="cp2">Copiar código</button></div></div>
 <div class="qrbox"><div id="qr"><div class="qrph">Aquí aparecerá tu QR</div></div><p>Escanea y cuéntame cómo te sientes</p></div></div></section>
@@ -221,9 +228,9 @@ const sp='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach
 
 /* ===== Las tres opciones, con pregunta y respuesta ===== */
 const THREE=[
- {i:3,q:'¿Esa web te ha hecho perder la paciencia, o te ha encantado?',f:'Universidades · Empresas · Creadores',h:'Valora cualquier web',p:'Una carita, una emoción y, si quieres, un comentario. Todo en una conversación corta. Puedes señalar un botón o un texto concreto de la página.'},
- {i:4,q:'¿Qué te parece esa iniciativa, obra o campaña de la que todos hablan?',f:'Ciudades · Ayuntamientos · Universidades',h:'Valora una iniciativa o proyecto',p:'Dile a Roi cómo te sientes ante una propuesta, obra o campaña. Quien decide ve cómo se siente su gente.'},
- {i:2,q:'¿Cómo te has sentido en ese parque, esa tienda o esa oficina?',f:'Comercios · Campus · Oficinas públicas',h:'Valora un lugar o establecimiento',p:'Usa tu ubicación o escribe el sitio. Una carita, una emoción y, si quieres, un comentario. Parques, tiendas, estaciones, restaurantes.'}];
+ {i:3,q:'¿Esa web te ha hecho perder la paciencia, o te ha encantado?',f:'Universidades · Empresas · Creadores',h:'Espacio digital: valora una web o un servicio',p:'Una carita, una emoción y, si quieres, un comentario. Todo en una conversación corta. Puedes señalar un botón o un texto concreto de la página.'},
+ {i:4,q:'¿Qué te parece esa iniciativa, obra o campaña de la que todos hablan?',f:'Ciudades · Ayuntamientos · Universidades',h:'Proyecto: valora una iniciativa',p:'Dile a Roi cómo te sientes ante una propuesta, obra o campaña. Quien decide ve cómo se siente su gente.'},
+ {i:2,q:'¿Cómo te has sentido en ese parque, esa tienda o esa oficina?',f:'Comercios · Campus · Oficinas públicas',h:'Espacio físico: valora un lugar',p:'Usa tu ubicación o escribe el sitio. Una carita, una emoción y, si quieres, un comentario. Parques, tiendas, estaciones, restaurantes.'}];
 $('three').innerHTML=THREE.map(x=>`<article class="qa"><p class="q">${face(x.i)}<span>${x.q}</span></p><div class="a"><h3>${x.h}</h3><p>${x.p}</p></div><p class="ideal">Ideal para: <b>${x.f}</b></p></article>`).join('');
 
 /* ===== Conversación de ejemplo en vivo ===== */
@@ -299,6 +306,7 @@ const flash=(b,t)=>{const o=b.textContent;b.textContent=t;setTimeout(()=>b.textC
 $('cp').onclick=()=>{navigator.clipboard.writeText($('lk').value);flash($('cp'),'Copiado')};$('cp2').onclick=()=>{navigator.clipboard.writeText($('em').value);flash($('cp2'),'Copiado')};
 $('sh').onclick=()=>{const l=$('lk').value,n=$('nm').value.trim();navigator.share?navigator.share({title:'Valora '+n,url:l}).catch(()=>{}):window.open('https://wa.me/?text='+encodeURIComponent('Valora '+n+': '+l))};
 $('dl').onclick=()=>qr&&qr.download({name:'qr-avatar-roi',extension:'png'});
+$('dc').onclick=async()=>{const n=$('nm').value.trim(),b=$('dc'),o=b.textContent;b.textContent='Preparando…';try{await RoiCard.download({name:n,link:$('lk').value.replace(/&s=link$/,'&s=qr'),filename:'tarjeta-'+n.toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,30)})}catch(e){b.textContent='No se pudo';setTimeout(()=>b.textContent=o,1500);return}b.textContent=o};
 
 /* ===== Instalar: móvil, enlace, extensión ===== */
 let dp=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('pwa').hidden=false});$('pwa').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('pwa').hidden=true};
@@ -354,4 +362,5 @@ f.addEventListener('submit',function(e){e.preventDefault();var v=document.getEle
    var base='/v?t=place&n='+encodeURIComponent(v);if(a&&a[0])done(base+'&g='+(+a[0].lat).toFixed(5)+','+(+a[0].lon).toFixed(5));else{btn.disabled=false;say('No lo encuentro en el mapa. Prueba con la ciudad (p. ej. «Café Central, Madrid»).',function(){done(base)})}}).catch(function(){done('/v?t=place&n='+encodeURIComponent(v))})}
 })})();
 </script>
+<script src="/card.js"></script>
 </body></html>

@@ -60,6 +60,12 @@ Una sola base de datos (Supabase) recibe las valoraciones de la extensión, de `
 3. Zonas: se dibujan tocando las esquinas en el mapa. En `/mapa`, al tocar «Ver lo que tengo cerca», la página sigue la posición mientras esté abierta y avisa al entrar en una zona con su información, sus novedades y su pregunta activa. Con el móvil bloqueado no avisa (limitación de las webs).
 4. Novedades con estado (En estudio, En marcha, Hecho) y «Responder públicamente» desde cada comentario.
 
+## v9: tres botones, módulos y tarjetas
+1. Ejecuta `supabase_v6.sql` y después `supabase_v7.sql` (si aún no lo hiciste): zonas dibujadas, información, estado de novedades y botón de acción por zona.
+2. Panel: dos bloques. «Lo que dicen tus usuarios» (datos) y «Lo que puedes poner en marcha» (módulos que se abren al pulsarlos).
+3. Zonas: polígono, rectángulo o círculo, vértices arrastrables, satélite, varias zonas, editar tocando una zona. Cada zona puede llevar un botón de acción (https), por ejemplo «Reservar pista».
+4. `card.js`: tarjeta descargable con el avatar arriba y el QR debajo (portada y panel).
+
 ## Endpoints
 - `POST /api/ratings` valoración (rate limit, honeypot, Gemini opcional; se guarda aunque la IA falle)
 - `GET /api/rankings` rankings, totales y últimas valoraciones (las de tipo persona no salen)
