@@ -34,20 +34,27 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 .acts.info .act{cursor:default}.acts.info .act:hover{background:#fff;border-color:var(--line)}
 #asf{display:flex;gap:8px;margin:0 0 10px}#asf input{flex:1;min-width:0;min-height:48px;padding:10px 16px;border-radius:99px;border:1px solid var(--line);font:inherit}
 @keyframes rp{0%{r:10;opacity:.7}100%{r:40;opacity:0}}@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.hero .rp{animation:rp 2.4s ease-out infinite}.hero .rp2{animation-delay:1.2s}.hero .bob{animation:bob 2.4s ease-in-out infinite}@media(prefers-reduced-motion:reduce){.hero *{animation:none!important}}
+.sbar{margin:0 0 12px}.sin{position:relative;display:flex;align-items:center}.sin input{width:100%;min-height:52px;padding:10px 18px 10px 48px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:inherit;font-size:16px}.sin input:focus{outline:none;border-color:var(--moss);box-shadow:0 0 0 4px rgba(63,90,58,.12)}.sico{position:absolute;left:16px;color:var(--moss);display:flex;pointer-events:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0}.chp{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--moss);font:inherit;font-weight:700;font-size:14px;cursor:pointer}.chp.on{background:var(--moss);color:#fff;border-color:var(--moss)}.chp:hover:not(.on){background:var(--sage)}
+.sech{display:flex;align-items:center;gap:8px;font-size:18px;margin:24px 0 8px;color:var(--ink)}.sech .ri{color:var(--moss)}.sech small{margin-left:auto;font-weight:400;color:var(--mut);font-size:13px}
+.it .k{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--sage);color:var(--moss)}.pp{background:var(--moss);color:#fff;border:2px solid #fff;border-radius:50%;width:30px;height:30px;display:grid!important;place-items:center;font-weight:700;font-size:13px;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.tog{display:flex;align-items:center;gap:10px;margin:10px 0 0;font-size:14px;color:var(--mut)}.tog input{width:20px;height:20px;accent-color:var(--moss)}
 </style></head><body><div class="app">
 <div class="top"><a class="brand" href="/"><img src="logo.png" alt="" width="40" height="40"><span>Avatar <b>ROI</b></span></a><a class="btn g" href="/v" style="min-height:40px;padding:6px 16px">Valorar otra cosa</a></div>
-<div class="tabs2" role="tablist"><a href="/mapa" id="tp">📍 Lugares</a><a href="/mapa?k=project" id="tj">💡 Proyectos</a></div><div class="hero"><svg viewBox="0 0 92 92" aria-hidden="true" id="hsv"></svg><div><h1 id="h1t">Un lugar</h1><p class="sub" id="sub1">Elige cómo encontrarlo.</p></div></div>
-<div class="acts" id="acts"></div>
-<form id="asf" hidden><label for="asq" style="position:absolute;left:-9999px">Dirección</label><input id="asq" placeholder="Calle, ciudad o nombre del sitio" autocomplete="street-address"><button class="btn">Buscar</button></form><p class="sub" id="asm" hidden></p>
-<button class="btn" id="loc" hidden>📍 Ver lo que tengo cerca</button>
-<div class="here" id="here" hidden><p id="ht"></p><p id="hi" class="hi" hidden></p><div id="hu" class="hu" hidden></div><div id="hp" class="hp" hidden></div><div class="hr"><a class="btn" id="hb" href="#">Opinar ahora</a> <a class="btn g" id="hr" href="#">💬 Sala</a> <a class="btn g" id="hc" hidden target="_blank" rel="noopener"></a></div></div>
+<div id="nav"></div>
+<ol class="stp" id="stp"></ol>
+<div class="sbar"><div class="sin" id="sw"><span class="sico" id="sico"></span><input id="asq" type="search" enterkeyhint="search" aria-label="Buscar dirección o sitio" placeholder="Busca una calle, un parque, un sitio…"></div><div class="chips" id="chp"></div><p class="sub" id="asm" hidden></p></div>
+<button class="btn" id="loc" hidden></button>
+<div class="here" id="here" hidden><p id="ht"></p><p id="hi" class="hi" hidden></p><div id="hu" class="hu" hidden></div><div id="hp" class="hp" hidden></div><div class="hr"><a class="btn" id="hb" href="#">Opinar ahora</a> <a class="btn g" id="hr" href="#">Sala</a> <a class="btn g" id="hc" hidden target="_blank" rel="noopener"></a></div></div>
 <div id="map" role="img" aria-label="Mapa de lugares"></div>
-<ul class="list" id="list"></ul>
-<h2 id="rh" hidden style="font-size:20px;margin:22px 0 8px">🧭 Rutas</h2><ul class="list" id="rts"></ul>
-<h2 id="oh" hidden style="font-size:20px;margin:22px 0 8px">Otros sitios cerca</h2><ul class="list" id="osm"></ul>
+<label class="tog" id="shl" hidden><input type="checkbox" id="shw"><span>Mostrar mi avatar a otras personas cerca (zona aproximada, nunca tu punto exacto)</span></label><p class="sub" id="pn" hidden></p>
+<h2 class="sech" id="zh"></h2><ul class="list" id="list"></ul>
+<h2 class="sech" id="rh" hidden></h2><ul class="list" id="rts"></ul>
+<h2 class="sech" id="oh" hidden></h2><ul class="list" id="osm"></ul>
 <p class="note">Tu ubicación se usa solo en este móvil, mientras tengas esta página abierta, para avisarte de los lugares donde estás. No se guarda. Para listar sitios cercanos se consulta OpenStreetMap con una zona aproximada de unos 500 m.</p>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="/ic.js"></script><script src="/ac.js"></script>
 <script>
 const $=id=>document.getElementById(id);const K=new URLSearchParams(location.search).get('k')==='project'?'project':'place';let sp=null,ALL=[],RT=[],PL=[],me=null,map=null,layer=null,L2=null,cur=null,wid=null;const INF={};
 const km=(a,b,c,d)=>{const R=6371e3,r=x=>x*Math.PI/180,h=Math.sin(r(c-a)/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(r(d-b)/2)**2;return 2*R*Math.asin(Math.sqrt(h))};
@@ -60,18 +67,18 @@ const CPK='roi_cp',cpGet=()=>{try{return JSON.parse(localStorage.getItem(CPK)||'
 const ST={estudio:'En estudio',marcha:'En marcha',hecho:'Hecho'};
 async function info(p){if(INF[p.id])return INF[p.id];try{const r=await fetch('/api/public?n='+encodeURIComponent(p.name));INF[p.id]=r.ok?await r.json():{}}catch(e){INF[p.id]={}}return INF[p.id]}
 async function banner(p){$('ht').textContent='Estás en «'+p.name+'». ¿Cómo ha ido?';$('hb').href=href(p,true);$('hr').href='/sala?t='+p.kind+'&n='+encodeURIComponent(p.name);
- const hi=$('hi');hi.hidden=!p.info;hi.textContent=p.info?'ℹ️ '+p.info:'';$('here').hidden=false;const hc=$('hc'),ok=p.cta_url&&/^https:\/\//.test(p.cta_url);hc.hidden=!ok;if(ok){hc.href=p.cta_url;hc.textContent=(p.cta_label||'Abrir')+' ↗'}
+ const hi=$('hi');hi.hidden=!p.info;hi.textContent=p.info||'';$('here').hidden=false;const hc=$('hc'),ok=p.cta_url&&/^https:\/\//.test(p.cta_url);hc.hidden=!ok;if(ok){hc.href=p.cta_url;hc.textContent=(p.cta_label||'Abrir')+' ↗'}
  const j=await info(p);if(!cur||cur.id!==p.id)return;
  const hu=$('hu');hu.textContent='';const ups=(j.updates||[]);hu.hidden=!ups.length;
  if(ups.length){const b=document.createElement('b');b.textContent='Tú dijiste, nosotros hicimos';hu.append(b);ups.forEach(u=>{const q=document.createElement('p');if(u.status){const s=document.createElement('span');s.className='st';s.textContent=ST[u.status]||'';q.append(s)}const t=document.createElement('strong');t.textContent=u.title;q.append(t);if(u.body)q.append(' — '+u.body);hu.append(q)})}
- const hp=$('hp');hp.textContent='';hp.hidden=!j.pulse;if(j.pulse){const a=document.createElement('a');a.href='/v?p='+encodeURIComponent(j.pulse.id);a.textContent='❓ '+j.pulse.question;hp.append(a)}}
+ const hp=$('hp');hp.textContent='';hp.hidden=!j.pulse;if(j.pulse){const a=document.createElement('a');a.href='/v?p='+encodeURIComponent(j.pulse.id);a.textContent='Pregunta rápida: '+j.pulse.question;hp.append(a)}}
 function draw(){
   const oc=me||sp,L=PL.map(p=>({p,d:oc&&hasG(p)?km(oc[0],oc[1],p.lat,p.lng):null})).sort((a,b)=>(a.d==null)-(b.d==null)||(a.d!=null&&b.d!=null?a.d-b.d:a.p.name.localeCompare(b.p.name,'es')));
   const ul=$('list');ul.textContent='';
   if(!L.length){const e=document.createElement('li');e.className='empty';e.textContent=K==='project'?'Aún no hay iniciativas publicadas. Las organizaciones las añaden desde su panel.':'Aún no hay lugares en el mapa. Las organizaciones los añaden desde su panel.';ul.append(e)}
   L.forEach(({p,d})=>{const ins=inside(p,me),a=document.createElement('a');a.className='it';a.href=href(p,ins);
     a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';
-    a.firstChild.textContent=p.kind==='project'?'🏗️':'📍';a.querySelector('b').textContent=p.name;const hh=Array.isArray(p.hitos)?p.hitos:[],dn=hh.filter(x=>x.s==='hecho').length;a.querySelector('small').textContent=[p.org,p.description||(p.kind==='project'?'Iniciativa':'Lugar'),hh.length?dn+' de '+hh.length+' hitos':''].filter(Boolean).join(' · ');
+    a.firstChild.innerHTML=IC(p.kind==='project'?'spark':'zone',22);a.querySelector('b').textContent=p.name;const hh=Array.isArray(p.hitos)?p.hitos:[],dn=hh.filter(x=>x.s==='hecho').length;a.querySelector('small').textContent=[p.org,p.description||(p.kind==='project'?'Iniciativa':'Lugar'),hh.length?dn+' de '+hh.length+' hitos':''].filter(Boolean).join(' · ');
     a.querySelector('.d').textContent=ins?'Estás aquí':d!=null?fmt(d):'Opinar';a.dataset.id=p.id;const li=document.createElement('li');li.append(a);if(p.cta_url&&/^https:\/\//.test(p.cta_url)){const c=document.createElement('a');c.className='cta';c.href=p.cta_url;c.target='_blank';c.rel='noopener';c.textContent=(p.cta_label||'Abrir')+' ↗';li.append(c)}ul.append(li)});
   const near=L.find(x=>inside(x.p,me));const np=near?near.p:null;
   if(np)cpSet(np.id);routes();
@@ -87,8 +94,17 @@ function routes(){const ul=$('rts');if(!ul)return;const v=cpGet();ul.textContent
  R.forEach(r=>{const pts=r.place_ids.map(id=>ALL.find(p=>p.id===id)).filter(Boolean),dn=pts.filter(p=>v[p.id]).length,li=document.createElement('li'),d=document.createElement('div');d.className='rt';
   const b=document.createElement('b');b.textContent=r.name;const sm=document.createElement('small');sm.textContent=(r.description?r.description+' · ':'')+dn+' de '+pts.length+' puntos';const cp=document.createElement('div');cp.className='cp';
   pts.forEach((p,i)=>{const sp=document.createElement('span');sp.className=v[p.id]?'ok':'';sp.textContent=(v[p.id]?'✓ ':(i+1)+'. ')+p.name;cp.append(sp)});d.append(b,sm,cp);
-  if(dn===pts.length&&r.reward){const rw=document.createElement('p');rw.className='rw';rw.textContent='🎉 '+r.reward;d.append(rw)}li.append(d);ul.append(li)})}
-let lastQ=null;
+  if(dn===pts.length&&r.reward){const rw=document.createElement('p');rw.className='rw';rw.textContent='Premio: '+r.reward;d.append(rw)}li.append(d);ul.append(li)})}
+let lastQ=null,plL=null;
+const anonId=()=>{let a='';try{a=localStorage.getItem('roi_anon')||'';if(!a){a=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));localStorage.setItem('roi_anon',a)}}catch(e){}return a};
+async function near(){const c=window.__me||sp;if(!c||!L2||!map||K!=='place')return;try{const r=await fetch('/api/near?lat='+c[0]+'&lng='+c[1]+'&a='+encodeURIComponent(anonId())),j=await r.json();if(!plL)plL=L2.layerGroup().addTo(map);plL.clearLayers();const P=j.people||[];
+  P.forEach(x=>L2.marker([x.lat,x.lng],{icon:L2.divIcon({className:'',html:'<div class="pp"></div>',iconSize:[30,30]})}).bindPopup((x.nick||'Anónimo')+' · cerca').addTo(plL));
+  document.querySelectorAll('.pp').forEach((e,i)=>{if(P[i])e.textContent=(P[i].nick||'A').trim().charAt(0).toUpperCase()});
+  const pn=$('pn');pn.hidden=!P.length;pn.textContent=P.length?(P.length===1?'1 persona':P.length+' personas')+' con Roi por esta zona ahora mismo.':''}catch(e){}}
+function beat(){if(!$('shw')||!$('shw').checked||!window.__me)return;let nk='';try{nk=localStorage.getItem('roi_nick')||''}catch(e){}fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),nick:nk,lat:window.__me[0],lng:window.__me[1]})}).catch(()=>{})}
+if(K==='place'){$('shl').hidden=false;try{$('shw').checked=localStorage.getItem('roi_show')==='1'}catch(e){}
+ $('shw').onchange=()=>{try{localStorage.setItem('roi_show',$('shw').checked?'1':'0')}catch(e){}if($('shw').checked){if(!window.__me)$('loc').click();beat()}else fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),off:true})}).catch(()=>{})};
+ setInterval(()=>{beat();near()},60000)}
 const OT={restaurant:['🍽️','Restaurante'],cafe:['☕','Cafetería'],bar:['🍺','Bar'],fast_food:['🍔','Comida rápida'],library:['📚','Biblioteca'],pharmacy:['💊','Farmacia'],park:['🌳','Parque'],university:['🎓','Universidad'],school:['🏫','Colegio'],townhall:['🏛️','Ayuntamiento'],museum:['🖼️','Museo'],supermarket:['🛒','Supermercado']};
 async function osm(){const me=window.__me||sp;if(!me||K!=='place')return;if(lastQ&&km(me[0],me[1],lastQ[0],lastQ[1])<150)return;lastQ=me.slice();
   const q='[out:json][timeout:12];(nwr(around:500,'+me[0]+','+me[1]+')["name"]["amenity"~"^(restaurant|cafe|bar|fast_food|library|pharmacy|university|school|townhall)$"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["leisure"="park"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["tourism"="museum"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["shop"="supermarket"];);out center 40;';
@@ -97,21 +113,25 @@ async function osm(){const me=window.__me||sp;if(!me||K!=='place')return;if(last
    const A=(j.elements||[]).map(e=>{const t=e.tags||{},la=e.lat??(e.center&&e.center.lat),lo=e.lon??(e.center&&e.center.lon),k=t.amenity||(t.leisure==='park'?'park':t.tourism==='museum'?'museum':'supermarket');return{name:t.name,la,lo,k,d:km(me[0],me[1],la,lo)}}).filter(x=>x.la!=null&&!known.has(x.name.toLowerCase())&&!seen.has(x.name.toLowerCase())&&seen.add(x.name.toLowerCase())).sort((a,b)=>a.d-b.d).slice(0,15);
    const ul=$('osm');ul.textContent='';$('oh').hidden=!A.length;
    A.forEach(x=>{const o=OT[x.k]||['📍','Lugar'],a=document.createElement('a');a.className='it';a.href='/v?t=place&n='+encodeURIComponent(x.name)+'&s=qr&g='+x.la.toFixed(5)+','+x.lo.toFixed(5)+(x.d<=60?'&v=1':'');
-    a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';a.firstChild.textContent=o[0];a.querySelector('b').textContent=x.name;a.querySelector('small').textContent=o[1];a.querySelector('.d').textContent=fmt(x.d);
+    a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';a.firstChild.innerHTML=IC('pin',22);a.querySelector('b').textContent=x.name;a.querySelector('small').textContent=o[1];a.querySelector('.d').textContent=fmt(x.d);
     const li=document.createElement('li');li.append(a);ul.append(li)})}catch(e){}}
-const SV={place:'<circle class="rp" cx="46" cy="40" r="10" fill="none" stroke="#3f5a3a" stroke-width="3"/><circle class="rp rp2" cx="46" cy="40" r="10" fill="none" stroke="#3f5a3a" stroke-width="3"/><g class="bob"><path d="M46 14c-11 0-19 8-19 18 0 14 19 38 19 38s19-24 19-38c0-10-8-18-19-18z" fill="#3f5a3a"/><circle cx="46" cy="32" r="8" fill="#fbf7ec"/></g><ellipse cx="46" cy="82" rx="14" ry="3.5" fill="#26331f" opacity=".18"/>',
-project:'<g class="bob"><rect x="14" y="20" width="64" height="40" rx="14" fill="#3f5a3a"/><path d="M30 60l-4 14 18-14z" fill="#3f5a3a"/><circle cx="34" cy="40" r="5" fill="#fbf7ec"/><circle cx="48" cy="40" r="5" fill="#fbf7ec"/><circle cx="62" cy="40" r="5" fill="#fbf7ec"/></g><circle class="rp" cx="46" cy="40" r="10" fill="none" stroke="#3f5a3a" stroke-width="3"/>'};
-$('hsv').innerHTML=SV[K];
-const A=$('acts');const act=(ic,t,sm,fn)=>{const e=document.createElement(fn?'button':'div');e.className='act';e.type='button';e.innerHTML='<i></i><span></span><small></small>';e.children[0].textContent=ic;e.children[1].textContent=t;e.children[2].textContent=sm;if(fn)e.onclick=fn;A.append(e)};
-if(K==='project'){$('tj').classList.add('on');$("h1t").textContent="Proyectos";$('sub1').textContent='Tu opinión cuenta, y te contestan.';A.className='acts info';act('💬','Opina','y puntúa cómo va');act('💚','Bienestar','cómo te afecta');act('📣','Novedades','y chat con otros');$('loc').hidden=false;$('loc').textContent='📍 Ver las que tengo cerca'}
-else{$('tp').classList.add('on');$('h1t').textContent='Un lugar';$('sub1').textContent='Encuéntralo y cuenta cómo estuvo.';
- act('🔎','Dirección','busca una calle',()=>{$('asf').hidden=false;$('asq').focus()});act('📍','Cerca de mí','por proximidad',()=>$('loc').click());act('🏷️','Zonas Roi','con aviso al llegar',()=>$('list').scrollIntoView({behavior:'smooth'}));
- $('asf').onsubmit=async e=>{e.preventDefault();const v=$('asq').value.trim();if(!v)return;const m=$('asm');m.hidden=false;m.textContent='Buscando…';
-  try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(v));const j=await r.json();if(!j.length){m.textContent='No encuentro esa dirección. Prueba con ciudad y calle.';return}
-   sp=[+j[0].lat,+j[0].lon];m.textContent='Cerca de: '+j[0].display_name.split(',').slice(0,3).join(',');window.__fit=0;if(map)map.setView(sp,16);draw();osm()}catch(x){m.textContent='No pude buscar ahora. Inténtalo en un momento.'}}}
-try{if(window.L){L2=window.L;map=L2.map('map',{scrollWheelZoom:false}).setView([40.4,-3.7],5);L2.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);layer=L2.layerGroup().addTo(map)}else $('map').hidden=true}catch(e){$('map').hidden=true}
+$('nav').innerHTML=ROI_NAV(K);$('zh').innerHTML=IC(K==='project'?'spark':'zone',22)+(K==='project'?'Proyectos <small>de organizaciones</small>':'Zonas Roi <small>aviso al llegar</small>');$('rh').innerHTML=IC('route',22)+'Rutas <small>puntos de control</small>';$('oh').innerHTML=IC('users',22)+'Otros lugares cerca <small>del mapa abierto</small>';$('sico').innerHTML=IC('search',22);
+const ST3={place:[['search','Busca o toca el mapa'],['heart','Valora cómo estuvo'],['users','Habla con quien está cerca']],project:[['locate','Encuentra uno cerca o de tu organización'],['heart','Opina y cuenta tu bienestar'],['chat','Sigue las novedades y chatea']]};
+$('stp').innerHTML=ST3[K].map(x=>'<li>'+IC(x[0],30)+'<span>'+x[1]+'</span></li>').join('');
+const CH=$('chp');let FILT='all';
+const chip=(ic,t,fn,on)=>{const b=document.createElement('button');b.type='button';b.className='chp'+(on?' on':'');b.innerHTML=IC(ic,18)+'<span></span>';b.lastChild.textContent=t;b.onclick=()=>fn(b);CH.append(b);return b};
+const segOf=p=>/ayuntamient|diputaci|generalitat|consell|junta|gobierno|municip|concejal/i.test(p.org||'')?'muni':/universi|campus|facultad|colegio|instituto/i.test(p.org||'')?'uni':'emp';
+const locBtn=chip('locate',K==='project'?'Cerca de mí':'Cerca de mí',()=>$('loc').click());
+if(K==='place'){chip('zone','Zonas Roi',()=>$('zh').scrollIntoView({behavior:'smooth',block:'start'}));const tb=chip('tap','Tocar el mapa',b=>{TAP=!TAP;b.classList.toggle('on',TAP);$('asm').hidden=false;$('asm').textContent=TAP?'Toca un punto del mapa para ver lo que hay y valorarlo.':'';if(TAP&&$('map').scrollIntoView)$('map').scrollIntoView({behavior:'smooth',block:'center'})})}
+else{[['all','Todos'],['muni','Municipales'],['emp','Empresas'],['uni','Universidades']].forEach(([k,t])=>{const b=chip(k==='muni'?'build':k==='uni'?'spark':k==='emp'?'users':'globe',t,x=>{FILT=k;[...CH.querySelectorAll('.chp')].forEach(c=>c.classList.toggle('on',c===x||c===locBtn&&false));PL=ALL.filter(p=>p.kind===K&&(k==='all'||segOf(p)===k));draw()},k==='all')})}
+let TAP=false;
+RoiAC($('asq'),{t:'place',bias:()=>(window.__me||sp)||null,pick:it=>{$('asq').value=it.name;pickPoint([it.lat,it.lng],it.name+(it.sub?' · '+it.sub:''))}});
+$('asq').addEventListener('keydown',e=>{if(e.key==='Enter'&&!document.querySelector('.acl li.on'))searchFirst($('asq').value.trim())});
+async function searchFirst(v){if(!v)return;const m=$('asm');m.hidden=false;m.textContent='Buscando…';try{const r=await fetch('/api/search?t=place&q='+encodeURIComponent(v)),j=await r.json(),it=(j.results||[])[0];if(!it){m.textContent='No encuentro eso. Prueba con calle y ciudad.';return}pickPoint([it.lat,it.lng],it.name+(it.sub?' · '+it.sub:''))}catch(x){m.textContent='No pude buscar ahora. Inténtalo en un momento.'}}
+function pickPoint(pt,label){sp=pt;lastQ=null;const m=$('asm');m.hidden=false;m.textContent=label?'Cerca de: '+label:'Punto elegido en el mapa';window.__fit=0;if(map)map.setView(sp,16);draw();osm();near()}
+try{if(window.L){L2=window.L;map=L2.map('map',{scrollWheelZoom:false}).setView([40.4,-3.7],5);L2.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);layer=L2.layerGroup().addTo(map);map.on('click',e=>{if(TAP||K==='place'){TAP=false;[...CH.querySelectorAll('.chp')].forEach(c=>{if(c.textContent==='Tocar el mapa')c.classList.remove('on')});pickPoint([e.latlng.lat,e.latlng.lng],'')}})}else $('map').hidden=true}catch(e){$('map').hidden=true}
 fetch('/api/public?places=1').then(r=>r.json()).then(j=>{ALL=(j&&j.places)||[];RT=(j&&j.routes)||[];PL=ALL.filter(p=>p.kind===K);draw()}).catch(()=>draw());
-$('loc').onclick=()=>{$('loc').hidden=false;if(!navigator.geolocation){$('loc').textContent='Tu navegador no da la ubicación';return}
-  $('loc').textContent='Buscando…';let first=true;
-  wid=navigator.geolocation.watchPosition(p=>{me=[p.coords.latitude,p.coords.longitude];window.__me=me;if(first){first=false;$('loc').textContent='📍 Siguiendo tu posición mientras esta página esté abierta';$('loc').disabled=true}draw();osm()},()=>{$('loc').textContent='No pude ver tu ubicación · elige un lugar de la lista'},{enableHighAccuracy:true,timeout:15000,maximumAge:10000})};
+$('loc').onclick=()=>{$('loc').hidden=false;$('loc').disabled=false;if(!navigator.geolocation){$('loc').textContent='Tu navegador no da la ubicación';return}
+  $('loc').textContent='Buscando…';let first=true,first2=true;
+  wid=navigator.geolocation.watchPosition(p=>{me=[p.coords.latitude,p.coords.longitude];window.__me=me;if(first){first=false;$('loc').textContent='Siguiendo tu posición mientras esta página esté abierta';$('loc').disabled=true}draw();osm();near();if(first2){first2=false;beat()}},()=>{$('loc').textContent='No pude ver tu ubicación · elige un lugar de la lista'},{enableHighAccuracy:true,timeout:15000,maximumAge:10000})};
 </script></script></body></html>
