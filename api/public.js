@@ -7,12 +7,15 @@ module.exports = async (req, res) => {
   if (db.limited(req, 60)) return res.status(429).json({ ok: false });
   const { pulse, n, places } = req.query || {};
   try {
-    if (places) { // lugares geolocalizados de las organizaciones (para /mapa)
-      const base = 'id,name,kind,description,lat,lng,radius_m';
-      let pl = await db.select(`places?select=${base},shape,info,cta_label,cta_url&active=eq.true&limit=500`);
-      if (!Array.isArray(pl)) pl = await db.select(`places?select=${base},shape,info&active=eq.true&limit=500`);
-      if (!Array.isArray(pl)) pl = await db.select(`places?select=${base}&active=eq.true&limit=500`);
-      res.setHeader('Cache-Control', 's-maxage=60'); return res.status(200).json({ ok: true, places: Array.isArray(pl) ? pl : [] });
+    if (places) { // lugares, iniciativas y rutas de las organizaciones (para /mapa)
+      const base = 'id,org_id,name,kind,description,lat,lng,radius_m';
+      let pl = null;
+      for (const cols of [`${base},shape,info,cta_label,cta_url,hitos,organizations(name)`, `${base},shape,info,cta_label,cta_url,hitos`, `${base},shape,info,cta_label,cta_url`, `${base},shape,info`, base]) {
+        pl = await db.select(`places?select=${cols}&active=eq.true&limit=500`); if (Array.isArray(pl)) break;
+      }
+      pl = (Array.isArray(pl) ? pl : []).map(p => { const o = p.organizations; delete p.organizations; delete p.org_id; if (o && o.name) p.org = o.name; return p });
+      let rt = await db.select('routes?select=id,name,description,reward,place_ids&active=eq.true&limit=100');
+      res.setHeader('Cache-Control', 's-maxage=60'); return res.status(200).json({ ok: true, places: pl, routes: Array.isArray(rt) ? rt : [] });
     }
     if (pulse) {
       if (!/^[0-9a-f-]{32,40}$/i.test(String(pulse))) return res.status(400).json({ ok: false });
@@ -23,7 +26,7 @@ module.exports = async (req, res) => {
     const name = db.clip(n, 160); if (!name) return res.status(400).json({ ok: false });
     const qn = '"' + name.replace(/[\\"]/g, '\\$&') + '"';
     const updQ = cols => db.select(`org_updates?select=${cols}&published=eq.true&target=eq.` + encodeURIComponent(name) + '&order=created_at.desc&limit=3');
-    const placeQ = async () => { const q = c => db.select(`places?select=${c}&active=eq.true&name=eq.${encodeURIComponent(name)}&limit=1`); let r = await q('info,cta_label,cta_url'); if (!Array.isArray(r)) r = await q('info'); return Array.isArray(r) && r[0] ? r[0] : null };
+    const placeQ = async () => { const q = c => db.select(`places?select=${c}&active=eq.true&name=eq.${encodeURIComponent(name)}&limit=1`); let r = await q('info,cta_label,cta_url,hitos'); if (!Array.isArray(r)) r = await q('info,cta_label,cta_url'); if (!Array.isArray(r)) r = await q('info'); return Array.isArray(r) && r[0] ? r[0] : null };
     const [u0, rs, pls, plc] = await Promise.all([
       updQ('title,body,created_at,status'),
       db.select('ratings?select=rating&type=neq.person&or=' + encodeURIComponent(`(subject.eq.${qn},site.eq.${qn})`) + '&created_at=gte.' + new Date(Date.now() - 864e5).toISOString() + '&limit=2000'),

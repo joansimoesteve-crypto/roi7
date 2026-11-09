@@ -5,10 +5,14 @@
 //   {action:'close_pulse', id}                  la cierra
 //   {action:'place', name, kind, description, lat, lng, radius_m}  añade un lugar/proyecto geolocalizado (sale en /mapa)
 //   {action:'update_place', id, ...}            edita una zona (forma, textos, botón de acción cta_label + cta_url https)
+//   {action:'route', name, description, reward, place_ids:[…]}  ruta con puntos de control (≥2 zonas)
+//   {action:'delete_route', id}
+//   (place y update_place admiten hitos:[{t,s:'hecho'|'curso'|'pendiente'}]; un proyecto puede ir sin ubicación)
 //   {action:'delete_place', id}                 lo retira
 //   {action:'hide_msg', id}                     oculta un mensaje de la charla de sus salas
 const db = require('./_db'), org = require('./_org');
 const ID = /^[0-9a-f-]{32,40}$/i;
+const hitosOf = b => Array.isArray(b.hitos) ? b.hitos.slice(0, 12).map(h => ({ t: db.clip(h && h.t, 100), s: ['hecho', 'curso', 'pendiente'].includes(h && h.s) ? h.s : 'pendiente' })).filter(h => h.t) : null;
 const ctaOf = b => { const l = db.clip(b.cta_label, 40), u = String(b.cta_url || '').trim().slice(0, 300); return l && /^https:\/\/[^\s]+$/i.test(u) ? { cta_label: l, cta_url: u } : { cta_label: null, cta_url: null } };
 module.exports = async (req, res) => {
   if (db.cors(req, res)) return;
@@ -45,11 +49,14 @@ module.exports = async (req, res) => {
       if (shape && (shape.length < 3 || shape.some(p => !p || p[0] == null || p[1] == null))) shape = null;
       let lat = db.num(b.lat, -90, 90), lng = db.num(b.lng, -180, 180);
       if (shape) { lat = shape.reduce((t, p) => t + p[0], 0) / shape.length; lng = shape.reduce((t, p) => t + p[1], 0) / shape.length }
-      if (!name || lat == null || lng == null) return res.status(400).json({ ok: false, error: 'datos' });
+      const proj = b.kind === 'project', hasGeo = lat != null && lng != null;
+      if (!name || (!hasGeo && !proj)) return res.status(400).json({ ok: false, error: 'datos' });
+      if (!hasGeo) { lat = null; lng = null }
       const row = { org_id: oid, name, kind: b.kind === 'project' ? 'project' : 'place', description: db.clip(b.description, 160), lat, lng, radius_m: Math.round(db.num(b.radius_m, 30, 1000) || 150) };
       const cta = ctaOf(b);
-      let ins = await db.insertRet('places', { ...row, shape, info: db.clip(b.info, 500), ...cta });
-      if (!ins) ins = await db.insertRet('places', { ...row, shape, info: db.clip(b.info, 500) }); // v9 sin ejecutar
+      let ins = await db.insertRet('places', { ...row, shape, info: db.clip(b.info, 500), hitos: hitosOf(b), ...cta });
+      if (!ins) ins = await db.insertRet('places', { ...row, shape, info: db.clip(b.info, 500), ...cta });
+      if (!ins) ins = await db.insertRet('places', { ...row, shape, info: db.clip(b.info, 500) }); // SQL nuevo sin ejecutar
       if (!ins) ins = await db.insertRet('places', row); // v8 sin ejecutar: lo guarda como punto con radio
       if (!ins) return res.status(500).json({ ok: false });
       await db.insert('org_targets', { org_id: oid, kind: 'subject', value: name }); // sus votos pasan solos al panel
@@ -60,12 +67,26 @@ module.exports = async (req, res) => {
       if (shape && (shape.length < 3 || shape.some(p => !p || p[0] == null || p[1] == null))) shape = null;
       const cur = (await db.select(`places?select=name&id=eq.${b.id}&org_id=eq.${oid}&limit=1`))[0]; if (!cur) return res.status(404).json({ ok: false });
       const name = db.clip(b.name, 120) || cur.name, patch = { name, kind: b.kind === 'project' ? 'project' : 'place', description: db.clip(b.description, 160), info: db.clip(b.info, 500), ...ctaOf(b) };
+      const hh = hitosOf(b); if (hh) patch.hitos = hh;
       if (shape) { patch.shape = shape; patch.lat = shape.reduce((t, p) => t + p[0], 0) / shape.length; patch.lng = shape.reduce((t, p) => t + p[1], 0) / shape.length }
       else if (b.lat != null && b.lng != null && db.num(b.lat, -90, 90) != null) { patch.lat = db.num(b.lat, -90, 90); patch.lng = db.num(b.lng, -180, 180); patch.shape = null; patch.radius_m = Math.round(db.num(b.radius_m, 30, 1000) || 150) }
       let r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, patch);
+      if (!r.ok) { delete patch.hitos; r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, patch) }
       if (!r.ok) { delete patch.cta_label; delete patch.cta_url; r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, patch) }
       if (r.ok && name !== cur.name) await db.insert('org_targets', { org_id: oid, kind: 'subject', value: name });
       return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
+    }
+    if (b.action === 'route') { // ruta = lista ordenada de zonas (puntos de control)
+      const name = db.clip(b.name, 100), ids = Array.isArray(b.place_ids) ? b.place_ids.filter(x => ID.test(String(x))).slice(0, 12) : [];
+      if (!name || ids.length < 2) return res.status(400).json({ ok: false, error: 'datos' });
+      const own = await db.select(`places?select=id&org_id=eq.${oid}&id=in.(${ids.join(',')})`);
+      const okIds = ids.filter(x => Array.isArray(own) && own.some(p => p.id === x));
+      if (okIds.length < 2) return res.status(400).json({ ok: false, error: 'zonas' });
+      const r = await db.insert('routes', { org_id: oid, name, description: db.clip(b.description, 160), reward: db.clip(b.reward, 200), place_ids: okIds });
+      return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
+    }
+    if (b.action === 'delete_route' && ID.test(String(b.id))) {
+      const r = await db.patch(`routes?id=eq.${b.id}&org_id=eq.${oid}`, { active: false }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
     }
     if (b.action === 'delete_place' && ID.test(String(b.id))) {
       const r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, { active: false }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
