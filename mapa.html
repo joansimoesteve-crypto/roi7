@@ -26,25 +26,37 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 .k{width:40px;height:40px;border-radius:12px;background:var(--sage);display:grid;place-items:center;font-size:20px}
 .hi{background:var(--sage);border-radius:14px;padding:10px 12px;margin:0 0 10px;font-weight:400!important}.hu{margin:0 0 10px;font-size:15px}.hu p{margin:4px 0;font-weight:400!important}.hu .st{display:inline-block;font-size:12px;font-weight:600;background:#dfe9cf;border-radius:99px;padding:1px 9px;margin-right:6px}.hp{margin:0 0 10px}.hp a{color:var(--moss);font-weight:600}.hr{display:flex;gap:8px;flex-wrap:wrap}
 .cta{display:inline-flex;margin:6px 0 0 8px;padding:6px 16px;border-radius:99px;background:var(--sage);color:var(--moss);font-weight:600;font-size:15px;text-decoration:none}
+.tabs2{display:flex;gap:8px;margin:6px 0 4px}.tabs2 a{flex:1;text-align:center;padding:10px 12px;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;font-weight:600}.tabs2 a.on{background:var(--moss);color:#fff;border-color:var(--moss)}
+.rt{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px}.rt b{display:block}.rt small{color:var(--mut)}.rt .cp{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0}.rt .cp span{font-size:13px;border-radius:99px;padding:3px 10px;background:var(--sage)}.rt .cp span.ok{background:var(--moss);color:#fff}.rt .rw{margin:8px 0 0;font-weight:600;color:var(--moss)}
 .note{font-size:14px;color:var(--mut);margin-top:16px}.empty{background:var(--sage);border-radius:18px;padding:18px;text-align:center;color:var(--mut)}
+.hero{display:flex;align-items:center;gap:14px;margin:6px 0 10px}.hero svg{flex:none;width:92px;height:92px}.hero h1{margin:0;font-size:28px;line-height:1.1}.hero .sub{margin:4px 0 0}
+.acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 12px}.act{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border-radius:18px;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:600;font-size:14px;text-align:center;cursor:pointer;text-decoration:none;line-height:1.15}.act i{font-style:normal;font-size:28px;line-height:1}.act small{font-weight:400;color:var(--mut);font-size:12px}.act:hover,.act:focus-visible{border-color:var(--moss);background:var(--sage)}
+.acts.info .act{cursor:default}.acts.info .act:hover{background:#fff;border-color:var(--line)}
+#asf{display:flex;gap:8px;margin:0 0 10px}#asf input{flex:1;min-width:0;min-height:48px;padding:10px 16px;border-radius:99px;border:1px solid var(--line);font:inherit}
+@keyframes rp{0%{r:10;opacity:.7}100%{r:40;opacity:0}}@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.hero .rp{animation:rp 2.4s ease-out infinite}.hero .rp2{animation-delay:1.2s}.hero .bob{animation:bob 2.4s ease-in-out infinite}@media(prefers-reduced-motion:reduce){.hero *{animation:none!important}}
 </style></head><body><div class="app">
 <div class="top"><a class="brand" href="/"><img src="logo.png" alt="" width="40" height="40"><span>Avatar <b>ROI</b></span></a><a class="btn g" href="/v" style="min-height:40px;padding:6px 16px">Valorar otra cosa</a></div>
-<h1>Cerca de ti</h1><p class="sub">Bibliotecas, parques, aulas, proyectos de tu ciudad… Elige un lugar y cuenta cómo estuvo.</p>
-<button class="btn" id="loc">📍 Ver lo que tengo cerca</button>
+<div class="tabs2" role="tablist"><a href="/mapa" id="tp">📍 Lugares</a><a href="/mapa?k=project" id="tj">🏗️ Iniciativas</a></div><div class="hero"><svg viewBox="0 0 92 92" aria-hidden="true" id="hsv"></svg><div><h1 id="h1t">Un lugar</h1><p class="sub" id="sub1">Elige cómo encontrarlo.</p></div></div>
+<div class="acts" id="acts"></div>
+<form id="asf" hidden><label for="asq" style="position:absolute;left:-9999px">Dirección</label><input id="asq" placeholder="Calle, ciudad o nombre del sitio" autocomplete="street-address"><button class="btn">Buscar</button></form><p class="sub" id="asm" hidden></p>
+<button class="btn" id="loc" hidden>📍 Ver lo que tengo cerca</button>
 <div class="here" id="here" hidden><p id="ht"></p><p id="hi" class="hi" hidden></p><div id="hu" class="hu" hidden></div><div id="hp" class="hp" hidden></div><div class="hr"><a class="btn" id="hb" href="#">Opinar ahora</a> <a class="btn g" id="hr" href="#">💬 Sala</a> <a class="btn g" id="hc" hidden target="_blank" rel="noopener"></a></div></div>
 <div id="map" role="img" aria-label="Mapa de lugares"></div>
 <ul class="list" id="list"></ul>
+<h2 id="rh" hidden style="font-size:20px;margin:22px 0 8px">🧭 Rutas</h2><ul class="list" id="rts"></ul>
 <h2 id="oh" hidden style="font-size:20px;margin:22px 0 8px">Otros sitios cerca</h2><ul class="list" id="osm"></ul>
 <p class="note">Tu ubicación se usa solo en este móvil, mientras tengas esta página abierta, para avisarte de los lugares donde estás. No se guarda. Para listar sitios cercanos se consulta OpenStreetMap con una zona aproximada de unos 500 m.</p>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-const $=id=>document.getElementById(id);let PL=[],me=null,map=null,layer=null,L2=null,cur=null,wid=null;const INF={};
+const $=id=>document.getElementById(id);const K=new URLSearchParams(location.search).get('k')==='project'?'project':'place';let sp=null,ALL=[],RT=[],PL=[],me=null,map=null,layer=null,L2=null,cur=null,wid=null;const INF={};
 const km=(a,b,c,d)=>{const R=6371e3,r=x=>x*Math.PI/180,h=Math.sin(r(c-a)/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(r(d-b)/2)**2;return 2*R*Math.asin(Math.sqrt(h))};
 const fmt=m=>m<1000?Math.round(m/10)*10+' m':(m/1000).toFixed(1).replace('.',',')+' km';
 const inPoly=(pt,sh)=>{let c=false;for(let i=0,j=sh.length-1;i<sh.length;j=i++){const[yi,xi]=sh[i],[yj,xj]=sh[j];if((xi>pt[1])!==(xj>pt[1])&&pt[0]<(yj-yi)*(pt[1]-xi)/(xj-xi)+yi)c=!c}return c};
-const inside=(p,pos)=>!!pos&&(Array.isArray(p.shape)&&p.shape.length>=3?inPoly(pos,p.shape):km(pos[0],pos[1],p.lat,p.lng)<=p.radius_m);
-const href=(p,v)=>'/v?t='+p.kind+'&n='+encodeURIComponent(p.name)+'&s=qr&g='+p.lat+','+p.lng+(v?'&v=1':'');
+const hasG=p=>p.lat!=null&&p.lng!=null;
+const inside=(p,pos)=>!!pos&&hasG(p)&&(Array.isArray(p.shape)&&p.shape.length>=3?inPoly(pos,p.shape):km(pos[0],pos[1],p.lat,p.lng)<=p.radius_m);
+const href=(p,v)=>'/v?t='+p.kind+'&n='+encodeURIComponent(p.name)+'&s=qr&pl='+encodeURIComponent(p.id||'')+(hasG(p)?'&g='+p.lat+','+p.lng+(v?'&v=1':''):'');
+const CPK='roi_cp',cpGet=()=>{try{return JSON.parse(localStorage.getItem(CPK)||'{}')}catch(e){return{}}},cpSet=id=>{try{const o=cpGet();if(!o[id]){o[id]=1;localStorage.setItem(CPK,JSON.stringify(o))}}catch(e){}};
 const ST={estudio:'En estudio',marcha:'En marcha',hecho:'Hecho'};
 async function info(p){if(INF[p.id])return INF[p.id];try{const r=await fetch('/api/public?n='+encodeURIComponent(p.name));INF[p.id]=r.ok?await r.json():{}}catch(e){INF[p.id]={}}return INF[p.id]}
 async function banner(p){$('ht').textContent='Estás en «'+p.name+'». ¿Cómo ha ido?';$('hb').href=href(p,true);$('hr').href='/sala?t='+p.kind+'&n='+encodeURIComponent(p.name);
@@ -54,24 +66,31 @@ async function banner(p){$('ht').textContent='Estás en «'+p.name+'». ¿Cómo 
  if(ups.length){const b=document.createElement('b');b.textContent='Tú dijiste, nosotros hicimos';hu.append(b);ups.forEach(u=>{const q=document.createElement('p');if(u.status){const s=document.createElement('span');s.className='st';s.textContent=ST[u.status]||'';q.append(s)}const t=document.createElement('strong');t.textContent=u.title;q.append(t);if(u.body)q.append(' — '+u.body);hu.append(q)})}
  const hp=$('hp');hp.textContent='';hp.hidden=!j.pulse;if(j.pulse){const a=document.createElement('a');a.href='/v?p='+encodeURIComponent(j.pulse.id);a.textContent='❓ '+j.pulse.question;hp.append(a)}}
 function draw(){
-  const L=PL.map(p=>({p,d:me?km(me[0],me[1],p.lat,p.lng):null})).sort((a,b)=>me?a.d-b.d:a.p.name.localeCompare(b.p.name,'es'));
+  const oc=me||sp,L=PL.map(p=>({p,d:oc&&hasG(p)?km(oc[0],oc[1],p.lat,p.lng):null})).sort((a,b)=>(a.d==null)-(b.d==null)||(a.d!=null&&b.d!=null?a.d-b.d:a.p.name.localeCompare(b.p.name,'es')));
   const ul=$('list');ul.textContent='';
-  if(!L.length){const e=document.createElement('li');e.className='empty';e.textContent='Aún no hay lugares en el mapa. Las organizaciones los añaden desde su panel.';ul.append(e)}
+  if(!L.length){const e=document.createElement('li');e.className='empty';e.textContent=K==='project'?'Aún no hay iniciativas publicadas. Las organizaciones las añaden desde su panel.':'Aún no hay lugares en el mapa. Las organizaciones los añaden desde su panel.';ul.append(e)}
   L.forEach(({p,d})=>{const ins=inside(p,me),a=document.createElement('a');a.className='it';a.href=href(p,ins);
     a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';
-    a.firstChild.textContent=p.kind==='project'?'🏗️':'📍';a.querySelector('b').textContent=p.name;a.querySelector('small').textContent=p.description||(p.kind==='project'?'Proyecto':'Lugar');
-    a.querySelector('.d').textContent=ins?'Estás aquí':d!=null?fmt(d):'Opinar';const li=document.createElement('li');li.append(a);if(p.cta_url&&/^https:\/\//.test(p.cta_url)){const c=document.createElement('a');c.className='cta';c.href=p.cta_url;c.target='_blank';c.rel='noopener';c.textContent=(p.cta_label||'Abrir')+' ↗';li.append(c)}ul.append(li)});
+    a.firstChild.textContent=p.kind==='project'?'🏗️':'📍';a.querySelector('b').textContent=p.name;const hh=Array.isArray(p.hitos)?p.hitos:[],dn=hh.filter(x=>x.s==='hecho').length;a.querySelector('small').textContent=[p.org,p.description||(p.kind==='project'?'Iniciativa':'Lugar'),hh.length?dn+' de '+hh.length+' hitos':''].filter(Boolean).join(' · ');
+    a.querySelector('.d').textContent=ins?'Estás aquí':d!=null?fmt(d):'Opinar';a.dataset.id=p.id;const li=document.createElement('li');li.append(a);if(p.cta_url&&/^https:\/\//.test(p.cta_url)){const c=document.createElement('a');c.className='cta';c.href=p.cta_url;c.target='_blank';c.rel='noopener';c.textContent=(p.cta_label||'Abrir')+' ↗';li.append(c)}ul.append(li)});
   const near=L.find(x=>inside(x.p,me));const np=near?near.p:null;
+  if(np)cpSet(np.id);routes();
   if(!np){cur=null;$('here').hidden=true}else if(!cur||cur.id!==np.id){cur=np;banner(np);if(navigator.vibrate)try{navigator.vibrate(150)}catch(e){}}
-  if(L2&&map){layer.clearLayers();const pts=[];PL.forEach(p=>{const sh=Array.isArray(p.shape)&&p.shape.length>=3;
+  if(L2&&map){layer.clearLayers();const pts=[];PL.filter(hasG).forEach(p=>{const sh=Array.isArray(p.shape)&&p.shape.length>=3;
       const m=(sh?L2.polygon(p.shape,{color:'#3f5a3a',fillOpacity:.2}):L2.circle([p.lat,p.lng],{radius:p.radius_m,color:'#3f5a3a',fillOpacity:.15})).addTo(layer);
       m.bindPopup(Object.assign(document.createElement('a'),{href:href(p,false),textContent:p.name}));(sh?p.shape:[[p.lat,p.lng]]).forEach(x=>pts.push(x))});
-    if(me){L2.circleMarker(me,{radius:8,color:'#3f5a3a',fillOpacity:.9}).addTo(layer);pts.push(me)}if(!window.__fit&&pts.length){window.__fit=1;map.fitBounds(pts,{padding:[30,30],maxZoom:17})}}
+    if(me||sp){L2.circleMarker(me||sp,{radius:8,color:'#3f5a3a',fillOpacity:.9}).addTo(layer);pts.push(me||sp)}if(!window.__fit&&pts.length){window.__fit=1;map.fitBounds(pts,{padding:[30,30],maxZoom:17})}}
 }
 
+
+function routes(){const ul=$('rts');if(!ul)return;const v=cpGet();ul.textContent='';const R=K==='place'?RT.filter(r=>Array.isArray(r.place_ids)&&r.place_ids.some(id=>ALL.find(p=>p.id===id))):[];$('rh').hidden=!R.length;
+ R.forEach(r=>{const pts=r.place_ids.map(id=>ALL.find(p=>p.id===id)).filter(Boolean),dn=pts.filter(p=>v[p.id]).length,li=document.createElement('li'),d=document.createElement('div');d.className='rt';
+  const b=document.createElement('b');b.textContent=r.name;const sm=document.createElement('small');sm.textContent=(r.description?r.description+' · ':'')+dn+' de '+pts.length+' puntos';const cp=document.createElement('div');cp.className='cp';
+  pts.forEach((p,i)=>{const sp=document.createElement('span');sp.className=v[p.id]?'ok':'';sp.textContent=(v[p.id]?'✓ ':(i+1)+'. ')+p.name;cp.append(sp)});d.append(b,sm,cp);
+  if(dn===pts.length&&r.reward){const rw=document.createElement('p');rw.className='rw';rw.textContent='🎉 '+r.reward;d.append(rw)}li.append(d);ul.append(li)})}
 let lastQ=null;
 const OT={restaurant:['🍽️','Restaurante'],cafe:['☕','Cafetería'],bar:['🍺','Bar'],fast_food:['🍔','Comida rápida'],library:['📚','Biblioteca'],pharmacy:['💊','Farmacia'],park:['🌳','Parque'],university:['🎓','Universidad'],school:['🏫','Colegio'],townhall:['🏛️','Ayuntamiento'],museum:['🖼️','Museo'],supermarket:['🛒','Supermercado']};
-async function osm(){if(!me)return;if(lastQ&&km(me[0],me[1],lastQ[0],lastQ[1])<150)return;lastQ=me.slice();
+async function osm(){const me=window.__me||sp;if(!me||K!=='place')return;if(lastQ&&km(me[0],me[1],lastQ[0],lastQ[1])<150)return;lastQ=me.slice();
   const q='[out:json][timeout:12];(nwr(around:500,'+me[0]+','+me[1]+')["name"]["amenity"~"^(restaurant|cafe|bar|fast_food|library|pharmacy|university|school|townhall)$"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["leisure"="park"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["tourism"="museum"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["shop"="supermarket"];);out center 40;';
   try{const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});if(!r.ok)return;const j=await r.json();
    const known=new Set(PL.map(p=>p.name.toLowerCase()));const seen=new Set();
@@ -80,9 +99,19 @@ async function osm(){if(!me)return;if(lastQ&&km(me[0],me[1],lastQ[0],lastQ[1])<1
    A.forEach(x=>{const o=OT[x.k]||['📍','Lugar'],a=document.createElement('a');a.className='it';a.href='/v?t=place&n='+encodeURIComponent(x.name)+'&s=qr&g='+x.la.toFixed(5)+','+x.lo.toFixed(5)+(x.d<=60?'&v=1':'');
     a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';a.firstChild.textContent=o[0];a.querySelector('b').textContent=x.name;a.querySelector('small').textContent=o[1];a.querySelector('.d').textContent=fmt(x.d);
     const li=document.createElement('li');li.append(a);ul.append(li)})}catch(e){}}
+const SV={place:'<circle class="rp" cx="46" cy="40" r="10" fill="none" stroke="#3f5a3a" stroke-width="3"/><circle class="rp rp2" cx="46" cy="40" r="10" fill="none" stroke="#3f5a3a" stroke-width="3"/><g class="bob"><path d="M46 14c-11 0-19 8-19 18 0 14 19 38 19 38s19-24 19-38c0-10-8-18-19-18z" fill="#3f5a3a"/><circle cx="46" cy="32" r="8" fill="#fbf7ec"/></g><ellipse cx="46" cy="82" rx="14" ry="3.5" fill="#26331f" opacity=".18"/>',
+project:'<g class="bob"><rect x="14" y="20" width="64" height="40" rx="14" fill="#3f5a3a"/><path d="M30 60l-4 14 18-14z" fill="#3f5a3a"/><circle cx="34" cy="40" r="5" fill="#fbf7ec"/><circle cx="48" cy="40" r="5" fill="#fbf7ec"/><circle cx="62" cy="40" r="5" fill="#fbf7ec"/></g><circle class="rp" cx="46" cy="40" r="10" fill="none" stroke="#3f5a3a" stroke-width="3"/>'};
+$('hsv').innerHTML=SV[K];
+const A=$('acts');const act=(ic,t,sm,fn)=>{const e=document.createElement(fn?'button':'div');e.className='act';e.type='button';e.innerHTML='<i></i><span></span><small></small>';e.children[0].textContent=ic;e.children[1].textContent=t;e.children[2].textContent=sm;if(fn)e.onclick=fn;A.append(e)};
+if(K==='project'){$('tj').classList.add('on');$('h1t').textContent='Iniciativas';$('sub1').textContent='Tu opinión cuenta, y te contestan.';A.className='acts info';act('💬','Opina','y puntúa cómo va');act('💚','Bienestar','cómo te afecta');act('📣','Novedades','y chat con otros');$('loc').hidden=false;$('loc').textContent='📍 Ver las que tengo cerca'}
+else{$('tp').classList.add('on');$('h1t').textContent='Un lugar';$('sub1').textContent='Encuéntralo y cuenta cómo estuvo.';
+ act('🔎','Dirección','busca una calle',()=>{$('asf').hidden=false;$('asq').focus()});act('📍','Cerca de mí','por proximidad',()=>$('loc').click());act('🏷️','Zonas Roi','con aviso al llegar',()=>$('list').scrollIntoView({behavior:'smooth'}));
+ $('asf').onsubmit=async e=>{e.preventDefault();const v=$('asq').value.trim();if(!v)return;const m=$('asm');m.hidden=false;m.textContent='Buscando…';
+  try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(v));const j=await r.json();if(!j.length){m.textContent='No encuentro esa dirección. Prueba con ciudad y calle.';return}
+   sp=[+j[0].lat,+j[0].lon];m.textContent='Cerca de: '+j[0].display_name.split(',').slice(0,3).join(',');window.__fit=0;if(map)map.setView(sp,16);draw();osm()}catch(x){m.textContent='No pude buscar ahora. Inténtalo en un momento.'}}}
 try{if(window.L){L2=window.L;map=L2.map('map',{scrollWheelZoom:false}).setView([40.4,-3.7],5);L2.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);layer=L2.layerGroup().addTo(map)}else $('map').hidden=true}catch(e){$('map').hidden=true}
-fetch('/api/public?places=1').then(r=>r.json()).then(j=>{PL=(j&&j.places)||[];draw()}).catch(()=>draw());
-$('loc').onclick=()=>{if(!navigator.geolocation){$('loc').textContent='Tu navegador no da la ubicación';return}
+fetch('/api/public?places=1').then(r=>r.json()).then(j=>{ALL=(j&&j.places)||[];RT=(j&&j.routes)||[];PL=ALL.filter(p=>p.kind===K);draw()}).catch(()=>draw());
+$('loc').onclick=()=>{$('loc').hidden=false;if(!navigator.geolocation){$('loc').textContent='Tu navegador no da la ubicación';return}
   $('loc').textContent='Buscando…';let first=true;
-  wid=navigator.geolocation.watchPosition(p=>{me=[p.coords.latitude,p.coords.longitude];if(first){first=false;$('loc').textContent='📍 Siguiendo tu posición mientras esta página esté abierta';$('loc').disabled=true}draw();osm()},()=>{$('loc').textContent='No pude ver tu ubicación · elige un lugar de la lista'},{enableHighAccuracy:true,timeout:15000,maximumAge:10000})};
+  wid=navigator.geolocation.watchPosition(p=>{me=[p.coords.latitude,p.coords.longitude];window.__me=me;if(first){first=false;$('loc').textContent='📍 Siguiendo tu posición mientras esta página esté abierta';$('loc').disabled=true}draw();osm()},()=>{$('loc').textContent='No pude ver tu ubicación · elige un lugar de la lista'},{enableHighAccuracy:true,timeout:15000,maximumAge:10000})};
 </script></script></body></html>

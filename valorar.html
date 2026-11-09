@@ -57,14 +57,17 @@ input[type=text],input[type=url],textarea{width:100%;padding:13px 15px;border:1p
 @media(min-width:700px){.app{margin:24px auto;min-height:calc(100dvh - 48px);background:rgba(255,255,255,.55);border-radius:32px;box-shadow:0 30px 80px #3f5a3a29;padding:0 28px 28px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .tdy{max-width:420px;margin:14px auto 0;font-weight:700;color:var(--moss);font-size:15px}.upd{max-width:420px;margin:18px auto 0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;text-align:left;font-size:15px}.upd p{margin:8px 0 0}.upd span{color:var(--mut)}
+@keyframes cur{0%,100%{transform:translate(0,0)}50%{transform:translate(8px,6px)}}@keyframes st{0%,100%{opacity:.25}50%{opacity:1}}.dg{display:none;margin:0 0 6px}.dg svg{width:110px;height:92px}.dg .cu{animation:cur 2.2s ease-in-out infinite}.dg .s1{animation:st 1.6s infinite}.dg .s2{animation:st 1.6s .3s infinite}.dg .s3{animation:st 1.6s .6s infinite}.dga{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 10px;width:100%}.dga div{border:1px solid var(--line);background:#fff;border-radius:18px;padding:10px 4px;font-size:14px;font-weight:600;text-align:center;line-height:1.15}.dga i{display:block;font-style:normal;font-size:26px}.dga small{display:block;font-weight:400;font-size:12px;color:var(--mut)}@media(prefers-reduced-motion:reduce){.dg *{animation:none!important}}
 </style></head><body>
 <div class="app">
 <header class="top"><a class="brand" href="/"><img src="logo.png" alt=""><span>Avatar <b>ROI</b></span></a><button class="ic" id="vb" aria-pressed="true" aria-label="Voz de Roi" title="Voz de Roi">🔊</button></header>
 <main>
 <section class="start" id="start">
   <button class="big" id="go" aria-label="Tocar a Roi para empezar"><img src="roi.png" alt="Roi"></button>
+  <div class="dg" id="dg"><svg viewBox="0 0 110 92" aria-hidden="true"><rect x="8" y="10" width="94" height="66" rx="10" fill="#fff" stroke="#3f5a3a" stroke-width="3"/><path d="M8 28h94" stroke="#3f5a3a" stroke-width="3"/><circle cx="19" cy="19" r="3" fill="#3f5a3a"/><circle cx="29" cy="19" r="3" fill="#3f5a3a"/><g fill="#e0a526"><path class="s1" d="M30 52l4 0-3 3 1 4-3-2-3 2 1-4-3-3 4 0 1-4z" transform="translate(0 -4)"/><path class="s2" d="M52 52l4 0-3 3 1 4-3-2-3 2 1-4-3-3 4 0 1-4z" transform="translate(0 -4)"/><path class="s3" d="M74 52l4 0-3 3 1 4-3-2-3 2 1-4-3-3 4 0 1-4z" transform="translate(0 -4)"/></g><path class="cu" d="M70 56l0 22 6-5 5 10 4-2-5-10 8 0z" fill="#26331f"/></svg></div>
   <h1 id="h">Valora lo que quieras</h1>
   <p class="sub" id="sb">Toca a Roi y cuéntame cómo te sientes. Son 20 segundos y no necesitas instalar nada.</p>
+  <div class="dga" id="dga" hidden><div><i>🔗</i>Pega una web<small>o su nombre</small></div><div><i>🧩</i>Con la extensión<small>valora al navegar</small></div><div><i>🙋</i>Empresa o persona<small>también</small></div></div>
   <span class="chip" id="tg" hidden></span>
   <button class="btn" id="go2">Empezar</button>
   <a class="chip" id="nearl" href="/mapa" style="margin-top:6px">📍 Ver lo que tengo cerca</a>
@@ -74,7 +77,7 @@ input[type=text],input[type=url],textarea{width:100%;padding:13px 15px;border:1p
   <div class="log" id="log" aria-live="polite"></div>
 </section>
 <section class="done" id="done" hidden>
-  <div class="f" id="df"></div><h1>¡Gracias!</h1><p id="ds">Tu valoración ya cuenta 💚</p><p id="tdy" class="tdy" hidden></p><div id="upd" class="upd" hidden></div>
+  <div class="f" id="df"></div><h1>¡Gracias!</h1><p id="ds">Tu valoración ya cuenta 💚</p><p id="tdy" class="tdy" hidden></p><div id="upd" class="upd" hidden></div><div id="hit" class="upd" hidden></div>
   <div class="row"><a class="btn" id="room">💬 Hablar con quien valora esto</a><a class="btn" id="cta" hidden target="_blank" rel="noopener"></a><a class="btn g" id="again" href="/v">✍️ Valorar otra cosa</a><a class="btn g" href="/#instalar">📲 Tener a Roi en el móvil</a><a class="btn g" href="/#pide">🔳 Pedir que me valoren (QR)</a><a class="btn g" id="visit" hidden>Ir a la web</a></div>
 </section>
 </main></div>
@@ -94,10 +97,11 @@ let loc=clean(q.get('l')).slice(0,80),t=TY.includes(q.get('t'))?q.get('t'):null,
 if(!u&&(q.get('url')||q.get('text'))){const m=(q.get('text')||'').match(/https?:\/\/\S+/);u=asUrl(q.get('url')||(m&&m[0])||'');if(u){src='share';t=t||'web';n=n||clean(q.get('title')).slice(0,80)}}
 if(u&&!n)n=hostOf(u);if(!t&&(n||u))t=u?'web':'place';
 const subj=()=>t==='person'?'a '+n:n;
+if(!q.get('n')&&!q.get('u')&&!q.get('p')&&!q.get('text')&&!q.get('url')){if(q.get('t')==='place'){location.replace('/mapa');}else if(q.get('t')==='project'){location.replace('/mapa?k=project');}}
 const G=(q.get('g')||'').split(',').map(Number),geo=G.length===2&&G.every(isFinite)&&Math.abs(G[0])<=90&&Math.abs(G[1])<=180?G:null,verified=q.get('v')==='1'&&!!geo;
 const S={mood:null,feel:'',comment:''};
 /* pregunta puntual de una organización: /v?p=<id> */
-const P=/^[0-9a-f-]{32,40}$/i.test(q.get('p')||'')?q.get('p'):'';let Q='',pulseP=null;
+const P=/^[0-9a-f-]{32,40}$/i.test(q.get('p')||'')?q.get('p'):'';let Q='',pulseP=null,autoP='';
 if(P)pulseP=fetch('/api/public?pulse='+P).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.ok){Q=j.question;n=j.subject;t=j.type;loc=j.location||'';cover()}}).catch(()=>{});
 
 /* ---- voz ---- */
@@ -116,12 +120,13 @@ const setMood=i=>{document.documentElement.style.setProperty('--mood',COL[i]);$(
 
 async function begin(){
   if(pulseP)await pulseP;
+  if(!P&&n&&!Q){try{const j=await fetch('/api/public?n='+encodeURIComponent(n)).then(r=>r.ok?r.json():null);if(j&&j.pulse){Q=j.pulse.question;autoP=j.pulse.id}}catch(e){}}
   $('start').hidden=true;$('chat').hidden=false;$('who').textContent=n||'Valora lo que quieras';
   if(n){const x=`¡Hola! Soy Roi 👋 ${Q||'¿Cómo valoras '+subj()+'?'}`;add('b').textContent=x;speak(x);rate()}
   else{const x='¡Hola! Soy Roi 👋 ¿Qué quieres valorar?';add('b').textContent=x;speak(x);what()}
 }
-function what(){
-  block('opts','<button data-t="web">🌐 Una web o experiencia digital</button><button data-t="project">💡 Una iniciativa o proyecto</button><button data-t="place">📍 Un lugar o establecimiento</button><button data-t="org">🏢 Una empresa o institución</button><button data-t="person">🙋 Una persona</button>',(b,d)=>{lock(d);t=b.dataset.t;me(b.textContent);name()})}
+function what(){const dig=t==='web';
+  block('opts',dig?'<button data-t="web">🌐 Una web o servicio online</button><button data-t="org">🏢 Una empresa o institución</button><button data-t="person">🙋 Una persona o perfil</button>':'<button data-t="web">🌐 Una web o experiencia digital</button><button data-t="project">💡 Una iniciativa o proyecto</button><button data-t="place">📍 Un lugar o establecimiento</button><button data-t="org">🏢 Una empresa o institución</button><button data-t="person">🙋 Una persona</button>',(b,d)=>{lock(d);t=b.dataset.t;me(b.textContent);name()})}
 function name(){
   bot(t==='web'?'Pega la dirección de la web o escribe su nombre.':'Escribe el nombre.');
   const d=add('blk','<input type="text" id="nm" maxlength="120" autocomplete="off" autocapitalize="sentences" aria-label="Qué valoras" placeholder="'+(t==='web'?'ejemplo.com':t==='place'?'Café Central, Madrid':t==='person'?'Nombre y apellidos':'Nombre')+'"><button class="btn w send">Continuar</button>');
@@ -149,7 +154,7 @@ let anon='';try{anon=localStorage.getItem('roi_anon')||'';if(!anon){anon=crypto.
 const cid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 async function send(){
   let site=u?hostOf(u):null,url=null;try{if(u){const x=new URL(u);url=x.origin+x.pathname}}catch(e){}
-  const body={client_id:cid,anon_id:anon,source:src,type:t,subject:n,site,url,rating:S.mood+1,feeling:S.feel,comment:S.comment||null,place_name:t==='place'?n:null,location:loc||null,lat:geo?geo[0]:null,lng:geo?geo[1]:null,place_verified:verified,pulse_id:P&&Q?P:null,lang:'es',created_at:new Date().toISOString(),website:''};
+  const body={client_id:cid,anon_id:anon,source:src,type:t,subject:n,site,url,rating:S.mood+1,feeling:S.feel,comment:S.comment||null,place_name:t==='place'?n:null,location:loc||null,lat:geo?geo[0]:null,lng:geo?geo[1]:null,place_verified:verified,pulse_id:Q?(P||autoP||null):null,lang:'es',created_at:new Date().toISOString(),website:''};
   const go=async()=>{try{const r=await fetch('/api/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return r.ok}catch(e){return false}};
   const w=add('b','Guardando tu valoración…');
   if(await go()||await new Promise(r=>setTimeout(r,1500)).then(go)){w.remove();finish()}
@@ -160,9 +165,11 @@ function finish(){
   $('ds').textContent=`${NAMES[S.mood]} · ${S.feel} · ${n}. Tu valoración ya cuenta 💚`;speak('¡Gracias! Tu valoración ya cuenta.');
   if(u){const v=$('visit');v.hidden=false;v.href=u;v.rel='noopener';v.textContent='Ir a '+(hostOf(u)||'la web')}
   if(!RM){const c=document.createElement('div');c.className='conf';for(let i=0;i<26;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'vw';e.style.background=COL[i%5];e.style.animationDelay=Math.random()*.5+'s';e.style.animationDuration=1.4+Math.random()*1.2+'s';c.append(e)}document.body.append(c);setTimeout(()=>c.remove(),3500)}
+  if(verified&&q.get('pl')){try{const k='roi_cp',o=JSON.parse(localStorage.getItem(k)||'{}');o[q.get('pl')]=1;localStorage.setItem(k,JSON.stringify(o))}catch(e){}}
   loadUpdates();scrollTo({top:0})}
 async function loadUpdates(){const names=[...new Set([n,u?hostOf(u):''].filter(Boolean))];let all=[],today=null,plc=null;
   try{for(const x of names){const r=await fetch('/api/public?n='+encodeURIComponent(x));if(r.ok){const j=await r.json();all=all.concat(j.updates||[]);if(!today&&j.today)today=j.today;if(!plc&&j.place)plc=j.place}}}catch(e){}
+  if(plc&&Array.isArray(plc.hitos)&&plc.hitos.length){const el=$('hit');el.hidden=false;el.textContent='';const b=document.createElement('b');b.textContent='🧭 Cómo va';el.append(b);plc.hitos.forEach(h=>{const p=document.createElement('p');p.textContent=({hecho:'✅ ',curso:'🔄 ',pendiente:'⏳ '}[h.s]||'⏳ ')+h.t;el.append(p)})}
   if(plc){if(plc.cta_url&&/^https:\/\//.test(plc.cta_url)){const c=$('cta');c.hidden=false;c.href=plc.cta_url;c.textContent=(plc.cta_label||'Abrir')+' ↗'}if(plc.info){const d=$('ds');d.textContent='Tu valoración ya cuenta 💚 · ℹ️ '+plc.info}}
   if(today){const t=$('tdy');t.hidden=false;t.textContent='👥 En las últimas 24 h han valorado '+n+' '+today.n+' personas · ánimo medio '+String(today.avg).replace('.',',')+'/5'}
   all=all.slice(0,3);if(!all.length)return;const el=$('upd');el.hidden=false;
@@ -171,6 +178,7 @@ async function loadUpdates(){const names=[...new Set([n,u?hostOf(u):''].filter(B
 
 /* ---- portada de la página ---- */
 function cover(){if(n){const nl=$('nearl');if(nl)nl.hidden=true;document.title='Valora '+n+' — Avatar ROI';$('h').textContent=Q||'¿Cómo valoras '+subj()+'?';const tg=$('tg');tg.hidden=false;tg.textContent={web:'🌐',project:'💡',place:'📍',org:'🏢',person:'🙋'}[t]+' '+n+(loc?' · '+loc:'')}}
+if(t==='web'&&!n){$('dg').style.display='block';$('dga').hidden=false;$('nearl').hidden=true;$('h').textContent='Valora una web';$('sb').textContent='Toca a Roi, pega la dirección y cuéntame qué tal.'}
 cover();
 $('go').onclick=$('go2').onclick=begin;
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
