@@ -19,7 +19,12 @@ module.exports = async (req, res) => {
     const o = a.org, full = o.plan === 'completo', days = full ? 90 : 7;
     const { rows, tg, sites } = await org.load(o.id, days, !!o.all_data);
     const out = org.compute(rows, tg, sites, days, full);
-    out.org = { name: o.name, plan: o.plan, all: !!o.all_data }; out.email = a.email;
+    out.org = { name: o.name, plan: o.plan, all: !!o.all_data };
+    if (o.all_data) { // escaparate: qué webs, lugares y proyectos salen en los rankings de la landing
+      const hid = await db.select('landing_hide?select=value'), H = new Set(Array.isArray(hid) ? hid.map(x => String(x.value).toLowerCase()) : []), M = {};
+      for (const r of rows) { const nm = r.type === 'web' ? (r.site || r.subject) : r.subject; if (!nm) continue; const k = r.type + '|' + nm.toLowerCase(), g = M[k] || (M[k] = { name: nm, kind: r.type, n: 0, s: 0 }); g.n++; g.s += r.rating; }
+      out.showcase = Object.values(M).sort((a, b) => b.n - a.n).slice(0, 60).map(g => ({ name: g.name, kind: g.kind, n: g.n, avg: +(g.s / g.n).toFixed(1), hidden: H.has(g.name.toLowerCase()) }));
+    } out.email = a.email;
     out.targetList = tg.map(t => ({ kind: t.kind, value: t.value }));
     if (full) {
       const [ups, pls, pcs, rts] = await Promise.all([

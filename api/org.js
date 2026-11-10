@@ -91,6 +91,12 @@ module.exports = async (req, res) => {
     if (b.action === 'delete_place' && ID.test(String(b.id))) {
       const r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, { active: false }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
     }
+    if (b.action === 'showcase') { // solo la cuenta «todo Roi» decide qué sale en la landing
+      if (!a.org.all_data) return res.status(403).json({ ok: false });
+      const v = db.clip(String(b.value || ''), 120).toLowerCase(); if (!v) return res.status(400).json({ ok: false });
+      const r = b.hide ? await db.upsert('landing_hide', { value: v }, 'value') : await db.del('landing_hide?value=eq.' + encodeURIComponent(v));
+      return res.status(r && r.ok === false ? 500 : 200).json({ ok: !(r && r.ok === false) });
+    }
     if (b.action === 'hide_rating' && ID.test(String(b.id))) { // oculta un comentario (de verdad: deja de salir en todos los paneles)
       const me = a.org, rt = (await db.select(`ratings?select=site,subject&id=eq.${b.id}&limit=1`))[0];
       const tg = await db.select('org_targets?select=value&org_id=eq.' + oid);
