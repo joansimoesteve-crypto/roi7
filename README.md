@@ -78,3 +78,17 @@ Una sola base de datos (Supabase) recibe las valoraciones de la extensión, de `
 
 ## Móvil
 `/v?t=place&n=Café%20Central&u=https://…&s=qr` abre Roi a pantalla completa. La web es instalable (PWA) y en Android aparece en *Compartir → Avatar ROI*.
+
+
+## Versión final · orden de SQL en Supabase
+v2_v3 → v4 → v5 → v6 → v7 → v8 → v9 → v10 → v11 (todos idempotentes).
+
+## Variables opcionales (Vercel)
+- `GEOAPIFY_KEY` (mejora buscador de municipios), `SEARXNG_URL` (webs).
+
+## Demos para ayuntamientos (sin login, datos ficticios)
+`/panel?demo=picassent`, `/panel?demo=torrent`, `/panel?demo=mislata`.
+Escudo: sube `demo/<slug>.png` si tienes permiso; si no, sale un escudo genérico.
+
+## Escaparate (super-admin)
+Entra con joansimoesteve@gmail.com en `/panel`: bloque «Escaparate de la portada» para mostrar/ocultar entradas.
