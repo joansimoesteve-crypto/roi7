@@ -17,9 +17,9 @@ module.exports = async (req, res) => {
     const a = await org.auth(req);
     if (!a.org) return res.status(a.status).json({ error: a.error, email: a.email });
     const o = a.org, full = o.plan === 'completo', days = full ? 90 : 7;
-    const { rows, tg, sites } = await org.load(o.id, days);
+    const { rows, tg, sites } = await org.load(o.id, days, !!o.all_data);
     const out = org.compute(rows, tg, sites, days, full);
-    out.org = { name: o.name, plan: o.plan }; out.email = a.email;
+    out.org = { name: o.name, plan: o.plan, all: !!o.all_data }; out.email = a.email;
     out.targetList = tg.map(t => ({ kind: t.kind, value: t.value }));
     if (full) {
       const [ups, pls, pcs, rts] = await Promise.all([

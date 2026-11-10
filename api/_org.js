@@ -11,23 +11,27 @@ const top = (m, k) => Object.entries(m).sort((a, b) => b[1].n - a[1].n).slice(0,
 const score = r => 100 * (r.feeling in FEEL ? .5 * (r.rating - 1) / 4 + .5 * FEEL[r.feeling] : (r.rating - 1) / 4);
 exports.score = score;
 
-exports.load = async (orgId, days) => {
+exports.load = async (orgId, days, allData) => {
   const tg = await db.select('org_targets?select=kind,value&org_id=eq.' + orgId);
   if (!Array.isArray(tg)) throw new Error('targets');
   const since = new Date(Date.now() - days * 864e5).toISOString();
   const sites = tg.filter(t => t.kind === 'site').map(t => q(t.value)), subs = tg.filter(t => t.kind === 'subject').map(t => q(t.value));
+  const c0 = 'id,type,site,subject,location,rating,feeling,comment,created_at,ai_sentiment,ai_topics,ai_summary,ai_flags';
+  // cuenta «todo Roi» (all_data): ve todas las valoraciones (menos personas y demos). El resto, solo las de sus webs y lugares.
   const run = async cols => {
-    const base = `ratings?select=${cols}&type=neq.person&order=created_at.desc&limit=5000`;
+    const base = `ratings?select=${cols}&type=neq.person&client_id=not.like.demo-*&order=created_at.desc&limit=5000`;
+    if (allData) return [await db.select(`${base}&created_at=gte.${since}`)];
     return Promise.all([
       sites.length ? db.select(`${base}&site=in.(${sites.join(',')})&created_at=gte.${since}`) : [],
       subs.length ? db.select(`${base}&subject=in.(${subs.join(',')})&created_at=gte.${since}`) : []
     ]);
   };
-  const c0 = 'id,type,site,subject,location,rating,feeling,comment,created_at,ai_sentiment,ai_topics,ai_summary,ai_flags';
-  let parts = await run(c0 + ',ai_kind,ai_urgency');
-  if (parts.some(p => !Array.isArray(p))) parts = await run(c0); // v4 sin ejecutar: funciona igual, sin tipo/urgencia
+  let parts = await run(c0 + ',ai_kind,ai_urgency,hidden,client_id');
+  if (parts.some(p => !Array.isArray(p))) parts = await run(c0 + ',ai_kind,ai_urgency,hidden');
+  if (parts.some(p => !Array.isArray(p))) parts = await run(c0 + ',ai_kind,ai_urgency'); // v4/v10 sin ejecutar: funciona igual
+  if (parts.some(p => !Array.isArray(p))) parts = await run(c0);
   const seen = new Set();
-  const rows = [].concat(...parts.map(p => Array.isArray(p) ? p : [])).filter(r => !seen.has(r.id) && seen.add(r.id)).sort((a, b) => b.created_at.localeCompare(a.created_at));
+  const rows = [].concat(...parts.map(p => Array.isArray(p) ? p : [])).filter(r => !r.hidden && !seen.has(r.id) && seen.add(r.id)).sort((a, b) => b.created_at.localeCompare(a.created_at));
   return { rows, tg, sites };
 };
 
@@ -64,7 +68,7 @@ exports.compute = (rows, tg, sites, days, full) => {
     attention: full ? rows.filter(r => r.ai_urgency >= 1 && r.comment && Date.parse(r.created_at) >= T14).slice(0, 5).map(r => ({ kind: r.ai_kind, urgency: r.ai_urgency, summary: r.ai_summary || r.comment, name: r.site || r.subject, location: r.location, ts: r.created_at })) : null,
     topics: full ? top(T, 12).map(([name, v]) => ({ name, n: v.n })) : null,
     comments: full ? rows.filter(r => r.comment && !(r.ai_flags || []).some(f => BAD.includes(f))).slice(0, 40).map(r => ({
-      kind: r.ai_kind, urgency: r.ai_urgency, rating: r.rating, feeling: r.feeling, comment: r.comment, summary: r.ai_summary, sentiment: r.ai_sentiment, topics: r.ai_topics, name: r.site || r.subject, location: r.location, ts: r.created_at })) : null,
+      id: r.id, kind: r.ai_kind, urgency: r.ai_urgency, rating: r.rating, feeling: r.feeling, comment: r.comment, summary: r.ai_summary, sentiment: r.ai_sentiment, topics: r.ai_topics, name: r.site || r.subject, location: r.location, ts: r.created_at })) : null,
     locked: full ? undefined : { comments: rows.filter(r => r.comment).length }
   };
 };
@@ -80,6 +84,6 @@ exports.auth = async req => {
   if (!email) return { status: 401, error: 'auth' };
   const mem = await db.select('org_members?select=org_id&email=eq.' + encodeURIComponent(email) + '&limit=1');
   if (!Array.isArray(mem) || !mem.length) return { status: 403, error: 'sin organización', email };
-  const o = (await db.select('organizations?select=id,name,plan&id=eq.' + mem[0].org_id))[0];
+  const o = (await db.select('organizations?select=id,name,plan,all_data&id=eq.' + mem[0].org_id))[0] || (await db.select('organizations?select=id,name,plan&id=eq.' + mem[0].org_id))[0];
   return o ? { email, org: o } : { status: 500, error: 'org' };
 };

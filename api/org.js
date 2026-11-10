@@ -91,6 +91,13 @@ module.exports = async (req, res) => {
     if (b.action === 'delete_place' && ID.test(String(b.id))) {
       const r = await db.patch(`places?id=eq.${b.id}&org_id=eq.${oid}`, { active: false }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
     }
+    if (b.action === 'hide_rating' && ID.test(String(b.id))) { // oculta un comentario (de verdad: deja de salir en todos los paneles)
+      const me = a.org, rt = (await db.select(`ratings?select=site,subject&id=eq.${b.id}&limit=1`))[0];
+      const tg = await db.select('org_targets?select=value&org_id=eq.' + oid);
+      const mine = rt && Array.isArray(tg) && tg.some(t => [rt.site, rt.subject].some(v => v && String(v).toLowerCase() === String(t.value).toLowerCase()));
+      if (!rt || !(me.all_data || mine)) return res.status(403).json({ ok: false });
+      const r = await db.patch(`ratings?id=eq.${b.id}`, { hidden: true }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
+    }
     if (b.action === 'hide_msg' && ID.test(String(b.id))) { // oculta un mensaje de la charla de una sala suya
       const m = (await db.select(`chat_messages?select=room&id=eq.${b.id}&limit=1`))[0];
       const tg = await db.select('org_targets?select=value&org_id=eq.' + oid);

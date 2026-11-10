@@ -12,23 +12,45 @@ const J = async (url, ms = 3500) => {
 const clip = (s, n) => String(s || '').slice(0, n);
 const domainOf = q => { const m = String(q).trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split(/[/?#\s]/)[0]; return /^([a-z0-9-]{1,63}\.)+[a-z]{2,24}$/.test(m) ? m : null; };
 
+const hav = (a, b, c, d) => { const r = x => x * Math.PI / 180, h = Math.sin(r(c - a) / 2) ** 2 + Math.cos(r(a)) * Math.cos(r(c)) * Math.sin(r(d - b) / 2) ** 2; return 12742 * Math.asin(Math.sqrt(h)); };
+const fromPhoton = j => (j.features || []).map(f => {
+  const p = f.properties || {}, c = (f.geometry || {}).coordinates || [];
+  const street = [p.street, p.housenumber].filter(Boolean).join(' '), name = p.name || street || p.city || '';
+  const sub = [p.name && street ? street : '', p.district, p.city || p.town || p.village, p.state, p.country].filter(Boolean).filter((x, i, a) => a.indexOf(x) === i && x !== name).slice(0, 3).join(', ');
+  return { name: clip(name, 80), sub: clip(sub, 120), lat: c[1], lng: c[0], src: 'osm', kind: p.osm_value || p.type || '' };
+});
+const fromNominatim = j => (Array.isArray(j) ? j : []).map(x => { const parts = String(x.display_name || '').split(','); return { name: clip(x.name || parts[0], 80), sub: clip(parts.slice(1, 4).join(',').trim(), 120), lat: +x.lat, lng: +x.lon, src: 'osm', kind: x.type || '' }; });
+const fromGeoapify = j => (j.results || []).map(p => ({ name: clip(p.name || p.address_line1 || p.street || '', 80), sub: clip([p.name ? p.address_line1 : '', p.city || p.suburb, p.country].filter(Boolean).filter((x, i, a) => a.indexOf(x) === i).slice(0, 3).join(', '), 120), lat: p.lat, lng: p.lon, src: 'osm', kind: (p.result_type || p.category || '') }));
+
+// Direcciones y sitios: se lanzan varios motores a la vez y se juntan (así si uno falla o no conoce el sitio, otro lo trae).
 async function places(q, lat, lng) {
-  const bias = isFinite(lat) && isFinite(lng) ? `&lat=${lat}&lon=${lng}` : '';
+  const has = isFinite(lat) && isFinite(lng), bias = has ? `&lat=${lat}&lon=${lng}` : '';
+  const vb = has ? `&viewbox=${lng - .5},${lat + .5},${lng + .5},${lat - .5}` : '';
+  const key = process.env.GEOAPIFY_KEY; // opcional y gratis: geoapify.com → mucho mejor con comercios y sitios concretos
+  const jobs = [
+    J(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=8&lang=es${bias}`).then(fromPhoton),
+    J(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=8&accept-language=es&addressdetails=0&q=${encodeURIComponent(q)}${vb}`).then(fromNominatim)
+  ];
+  if (key) jobs.push(J(`https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(q)}&lang=es&limit=8&format=json&apiKey=${encodeURIComponent(key)}${has ? `&bias=proximity:${lng},${lat}` : ''}`).then(fromGeoapify));
+  const all = (await Promise.allSettled(jobs)).flatMap(r => r.status === 'fulfilled' ? r.value : []).filter(x => x.name && isFinite(x.lat) && isFinite(x.lng));
+  const out = [], seen = [];
+  for (const x of all) { // quita duplicados: mismo nombre a menos de 150 m
+    if (seen.some(y => y.name.toLowerCase() === x.name.toLowerCase() && hav(y.lat, y.lng, x.lat, x.lng) < .15)) continue;
+    seen.push(x); out.push(x);
+  }
+  if (has) out.sort((a, b) => hav(lat, lng, a.lat, a.lng) - hav(lat, lng, b.lat, b.lng));
+  return out.slice(0, 8);
+}
+async function reverse(lat, lng) {
   try {
-    const j = await J(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=7&lang=es${bias}`);
-    const out = (j.features || []).map(f => {
-      const p = f.properties || {}, c = (f.geometry || {}).coordinates || [];
-      const street = [p.street, p.housenumber].filter(Boolean).join(' ');
-      const name = p.name || street || p.city || '';
-      const sub = [p.name && street ? street : '', p.district, p.city || p.town || p.village, p.state, p.country].filter(Boolean).filter((x, i, a) => a.indexOf(x) === i && x !== name).slice(0, 3).join(', ');
-      return { name: clip(name, 80), sub: clip(sub, 120), lat: c[1], lng: c[0], src: 'osm', kind: p.osm_value || p.type || '' };
-    }).filter(x => x.name && isFinite(x.lat));
-    if (out.length) return out;
-  } catch (e) { /* cae a Nominatim */ }
+    const j = await J(`https://photon.komoot.io/reverse?lon=${lng}&lat=${lat}&lang=es&limit=1`);
+    const r = fromPhoton(j)[0]; if (r) return r;
+  } catch (e) { /* prueba Nominatim */ }
   try {
-    const j = await J(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&accept-language=es&addressdetails=0&q=${encodeURIComponent(q)}`);
-    return (Array.isArray(j) ? j : []).map(x => { const parts = String(x.display_name || '').split(','); return { name: clip(x.name || parts[0], 80), sub: clip(parts.slice(1, 4).join(',').trim(), 120), lat: +x.lat, lng: +x.lon, src: 'osm', kind: x.type || '' }; }).filter(x => x.name && isFinite(x.lat));
-  } catch (e) { return []; }
+    const j = await J(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&accept-language=es&zoom=18&lat=${lat}&lon=${lng}`);
+    if (j && j.display_name) { const parts = String(j.display_name).split(','); return { name: clip(j.name || parts[0], 80), sub: clip(parts.slice(1, 4).join(',').trim(), 120), lat, lng, src: 'osm' }; }
+  } catch (e) { /* sin dirección */ }
+  return null;
 }
 
 async function wikidata(q) {
@@ -56,6 +78,7 @@ module.exports = async (req, res) => {
   if (db.cors(req, res)) return;
   if (db.limited(req, 90)) return res.status(429).json({ ok: false, results: [] });
   const Q = req.query || {}, q = clip(String(Q.q || '').replace(/[\u0000-\u001f<>]/g, ' ').trim(), 100), t = String(Q.t || 'place');
+  if (Q.rev) { const [a, b] = String(Q.rev).split(',').map(parseFloat); if (!isFinite(a) || !isFinite(b)) return res.status(200).json({ ok: true, place: null }); const p = await reverse(a, b); res.setHeader('Cache-Control', 'public, s-maxage=3600'); return res.status(200).json({ ok: true, place: p }); }
   if (q.length < 2) return res.status(200).json({ ok: true, results: [] });
   const lat = parseFloat(Q.lat), lng = parseFloat(Q.lng);
   let results = [];
