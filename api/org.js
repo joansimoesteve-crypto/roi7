@@ -97,6 +97,14 @@ module.exports = async (req, res) => {
       const r = b.hide ? await db.upsert('landing_hide', { value: v }, 'value') : await db.del('landing_hide?value=eq.' + encodeURIComponent(v));
       return res.status(r && r.ok === false ? 500 : 200).json({ ok: !(r && r.ok === false) });
     }
+    if (b.action === 'showcase_delete') { // borra de verdad las valoraciones de ese nombre (solo cuenta «todo Roi»)
+      if (!a.org.all_data) return res.status(403).json({ ok: false });
+      const v = db.clip(String(b.value || ''), 120); if (!v) return res.status(400).json({ ok: false });
+      const q = encodeURIComponent(v.replace(/[*,()]/g, ' ').trim());
+      const r1 = await db.del('ratings?site=ilike.' + q), r2 = await db.del('ratings?subject=ilike.' + q);
+      await db.del('landing_hide?value=eq.' + encodeURIComponent(v.toLowerCase()));
+      return res.status(200).json({ ok: !((r1 && r1.ok === false) || (r2 && r2.ok === false)) });
+    }
     if (b.action === 'hide_rating' && ID.test(String(b.id))) { // oculta un comentario (de verdad: deja de salir en todos los paneles)
       const me = a.org, rt = (await db.select(`ratings?select=site,subject&id=eq.${b.id}&limit=1`))[0];
       const tg = await db.select('org_targets?select=value&org_id=eq.' + oid);
