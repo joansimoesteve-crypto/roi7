@@ -41,7 +41,7 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 .btn.ac{background:var(--ac)}.rbtn{margin-top:10px;min-height:42px;padding:8px 18px;font-size:15px}.hint{color:var(--mut);font-size:14px;margin:6px 2px}
 .ld{color:var(--mut);padding:10px 4px}
 </style></head><body><div class="app">
-<div class="top"><a class="brand" href="/"><img src="logo.png" alt=""><span>Avatar <b>ROI</b></span></a><a class="btn g" href="/v" style="min-height:40px;padding:6px 16px">Valorar otra cosa</a></div>
+<div class="top"><a class="brand" href="/"><img src="logo.png" alt=""><span>Avatar <b>ROI</b></span></a><a class="btn g" href="/" style="min-height:40px;padding:6px 16px">Inicio</a></div>
 <div id="nav"></div><div id="rhero"></div>
 <ol class="stp" id="stp"></ol>
 <div class="sbar" id="sbar"><div class="sin"><span class="sico" id="sico"></span><input id="asq" type="search" enterkeyhint="search" aria-label="Buscar" placeholder="Busca una calle, un parque, un sitio…"><button class="gps" id="gps" type="button" aria-label="Usar mi ubicación" title="Usar mi ubicación"></button></div><p class="hint" id="asm" hidden></p></div>
@@ -67,7 +67,7 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 <script src="/ic.js"></script><script src="/ac.js"></script>
 <script>
 const $=id=>document.getElementById(id);const K=new URLSearchParams(location.search).get('k')==='project'?'project':'place';
-let sp=null,ALL=[],RT=[],PL=[],me=null,map=null,layer=null,L2=null,cur=null,wid=null,pickMk=null,osmL=null,plL=null,lastQ=null,SEG=new Set(),JQ='',NEARJ=false;const INF={};
+let MOT=null,sp=null,ALL=[],RT=[],PL=[],me=null,map=null,layer=null,L2=null,cur=null,wid=null,pickMk=null,osmL=null,plL=null,lastQ=null,SEG=new Set(),JQ='',NEARJ=false;const INF={};
 const km=(a,b,c,d)=>{const R=6371e3,r=x=>x*Math.PI/180,h=Math.sin(r(c-a)/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(r(d-b)/2)**2;return 2*R*Math.asin(Math.sqrt(h))};
 const fmt=m=>m<1000?Math.round(m/10)*10+' m':(m/1000).toFixed(1).replace('.',',')+' km';
 const inPoly=(pt,sh)=>{let c=false;for(let i=0,j=sh.length-1;i<sh.length;j=i++){const[yi,xi]=sh[i],[yj,xj]=sh[j];if((xi>pt[1])!==(xj>pt[1])&&pt[0]<(yj-yi)*(pt[1]-xi)/(xj-xi)+yi)c=!c}return c};
@@ -138,15 +138,21 @@ async function osm(){const c=window.__me||sp;if(!c||K!=='place')return;if(lastQ&
 /* Punto elegido: búsqueda, toque en el mapa o mi ubicación → punto geolocalizado con botón Valorar */
 async function pickPoint(pt,label,known){sp=pt;lastQ=null;window.__fit=1;
   const pk=$('pick');pk.hidden=false;$('pkn').textContent=label||'Punto elegido en el mapa';$('pks').textContent=known?'':'Buscando la dirección…';
-  const mk=(n)=>{const g=pt[0].toFixed(5)+','+pt[1].toFixed(5);$('pkb').href='/v?t=place&n='+encodeURIComponent(n)+'&s=map&g='+g+(me&&km(me[0],me[1],pt[0],pt[1])<80?'&v=1':'')};mk(label||'Punto en el mapa');
+  const mk=(n)=>{const g=pt[0].toFixed(5)+','+pt[1].toFixed(5);MOT={n,g};$('pkb').href='/v?t=place&n='+encodeURIComponent(n)+'&s=map&g='+g+(me&&km(me[0],me[1],pt[0],pt[1])<80?'&v=1':'')};mk(label||'Punto en el mapa');
   if(map){map.setView(pt,17);if(L2){if(pickMk)map.removeLayer(pickMk);pickMk=L2.marker(pt).addTo(map)}}
   if(!known){try{const r=await fetch('/api/search?rev='+pt[0]+','+pt[1]),j=await r.json();if(j.place){$('pkn').textContent=j.place.name;$('pks').textContent=j.place.sub||'';mk(j.place.name)}else $('pks').textContent='Sin dirección conocida · puedes valorarlo igualmente'}catch(e){$('pks').textContent=''}}
   else $('pks').textContent=known;
   draw();osm();near()}
 const anonId=()=>{let a='';try{a=localStorage.getItem('roi_anon')||'';if(!a){a=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));localStorage.setItem('roi_anon',a)}}catch(e){}return a};
 async function near(){const c=window.__me||sp;if(!c||!L2||!map||K!=='place')return;try{const r=await fetch('/api/near?lat='+c[0]+'&lng='+c[1]+'&a='+encodeURIComponent(anonId())),j=await r.json();if(!plL)plL=L2.layerGroup().addTo(map);plL.clearLayers();const P=j.people||[];
-  P.forEach(x=>{const a=document.createElement('a');a.href='/sala?t=zona&n='+encodeURIComponent('Zona '+x.lat.toFixed(2)+','+x.lng.toFixed(2));a.textContent=(x.nick||'Anónimo')+' · hablar en la sala de esta zona';L2.marker([x.lat,x.lng],{icon:L2.divIcon({className:'',html:'<div class="pf">'+ROI_FACE(x.mood,34)+'</div>',iconSize:[34,34]})}).bindPopup(a).addTo(plL)});
-  const pn=$('pn');pn.hidden=!P.length;pn.textContent=P.length?(P.length===1?'1 persona':P.length+' personas')+' con Roi por esta zona ahora mismo. Toca su avatar en el mapa para entrar en la sala de la zona.':''}catch(e){}}
+  P.forEach(x=>L2.marker([x.lat,x.lng],{icon:L2.divIcon({className:'',html:'<div class="pf">'+ROI_FACE(x.mood,34)+'</div>',iconSize:[34,34]})}).bindPopup(()=>talkPop(x)).addTo(plL));
+  const pn=$('pn');pn.hidden=!P.length;pn.textContent=P.length?(P.length===1?'1 persona':P.length+' personas')+' con Roi por esta zona ahora mismo. Para hablar con alguien, elige un motivo (valorar un lugar) y toca su avatar.':''}catch(e){}}
+/* Para hablar con alguien siempre hay un motivo: valorar un lugar, una zona o un punto. Después se entra en su sala. */
+function talkPop(x){const d=document.createElement('div');d.style.cssText='min-width:180px;font:15px/1.4 system-ui';const t=document.createElement('b');t.textContent=(x.nick||'Anónimo')+' está por aquí';d.append(t);
+  const mt=(cur&&{n:cur.name,g:hasG(cur)?cur.lat+','+cur.lng:''})||MOT;const p=document.createElement('p');p.style.margin='6px 0';
+  if(!mt){p.textContent='Para hablar con esta persona elige primero un motivo: toca un lugar del mapa, busca uno o elige un sitio de la lista.';d.append(p);return d}
+  p.textContent='Motivo para hablar: valorar «'+mt.n+'». Después entras en su sala.';d.append(p);
+  const a=document.createElement('a');a.className='btn ac';a.style.cssText='min-height:40px;padding:6px 14px;color:#fff;text-decoration:none';a.href='/v?t=place&n='+encodeURIComponent(mt.n)+'&s=map'+(mt.g?'&g='+mt.g:'');a.textContent='Valorar y hablar';d.append(a);return d}
 function beat(){if(!$('shw')||!$('shw').checked||!window.__me)return;let nk='';try{nk=localStorage.getItem('roi_nick')||''}catch(e){}fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),nick:nk,mood:(()=>{try{return parseInt(localStorage.getItem('roi_mood'),10)||3}catch(e){return 3}})(),lat:window.__me[0],lng:window.__me[1]})}).catch(()=>{})}
 function locate(){$('gps').classList.add('on');if(!navigator.geolocation){$('asm').hidden=false;$('asm').textContent='Tu navegador no da la ubicación.';return}
   if(wid!=null)return;let first=true;$('asm').hidden=false;$('asm').textContent='Buscando tu posición…';
