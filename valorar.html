@@ -10,7 +10,7 @@
 :root{--ink:#26331f;--moss:#3f5a3a;--sage:#e9efdc;--paper:#fbf7ec;--mut:#4d5c43;--line:#cfd6c2;--mood:#5fb760}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;min-height:100dvh;font:17px/1.5 "Bricolage Grotesque",system-ui,sans-serif;color:var(--ink);background:radial-gradient(1200px 500px at 50% -10%,#e9efdc 0,#fbf7ec 60%)}
-.app{max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:0 16px calc(28px + env(safe-area-inset-bottom))}
+.app{max-width:640px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:0 16px calc(28px + env(safe-area-inset-bottom))}
 .top{display:flex;align-items:center;justify-content:space-between;padding:calc(12px + env(safe-area-inset-top)) 0 8px}
 .brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:600;font-size:22px;letter-spacing:-.03em}.brand b{font-weight:800}.brand img{width:40px;height:40px}
 .ic{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:20px;cursor:pointer}.ic[aria-pressed=false]{opacity:.55}
@@ -58,7 +58,8 @@ input[type=text],input[type=url],textarea{width:100%;padding:13px 15px;border:1p
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .tdy{max-width:420px;margin:14px auto 0;font-weight:700;color:var(--moss);font-size:15px}.upd{max-width:420px;margin:18px auto 0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;text-align:left;font-size:15px}.upd p{margin:8px 0 0}.upd span{color:var(--mut)}
 @keyframes cur{0%,100%{transform:translate(0,0)}50%{transform:translate(8px,6px)}}@keyframes st{0%,100%{opacity:.25}50%{opacity:1}}.dg{display:none;margin:0 0 6px}.dg svg{width:110px;height:92px}.dg .cu{animation:cur 2.2s ease-in-out infinite}.dg .s1{animation:st 1.6s infinite}.dg .s2{animation:st 1.6s .3s infinite}.dg .s3{animation:st 1.6s .6s infinite}.dga{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 10px;width:100%}.dga div{border:1px solid var(--line);background:#fff;border-radius:18px;padding:10px 4px;font-size:14px;font-weight:600;text-align:center;line-height:1.15}.dga i{display:block;font-style:normal;font-size:26px}.dga small{display:block;font-weight:400;font-size:12px;color:var(--mut)}@media(prefers-reduced-motion:reduce){.dg *{animation:none!important}}
-.wnav{max-width:560px;margin:0 auto}.wl{max-width:560px;margin:18px auto 0;text-align:left}.wl h2{font-size:18px;display:flex;gap:8px;align-items:center;margin:0 0 8px}.wl ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}.wl a{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border:1px solid var(--line);border-radius:16px;color:var(--ink);text-decoration:none}.wl a span{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.wl a em{font-style:normal;font-weight:700;color:var(--moss)}.wl a .ri{color:var(--moss)}.wl .alt{display:flex;gap:8px;margin:10px 0 0}.wl .alt a{flex:1;justify-content:center;font-weight:700;color:var(--moss)}.sw{position:relative}
+.wnav{width:100%}.wl{width:100%;margin:18px 0 0;text-align:left}.wl h2{font-size:18px;display:flex;gap:8px;align-items:center;margin:0 0 8px}.wl ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}.wl a{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border:1px solid var(--line);border-radius:16px;color:var(--ink);text-decoration:none}.wl a span{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.wl a em{font-style:normal;font-weight:700;color:var(--moss)}.wl a .ri{color:var(--moss)}.wl .alt{display:flex;gap:8px;margin:10px 0 0}.wl .alt a{flex:1;justify-content:center;font-weight:700;color:var(--moss)}.sw{position:relative}
+.log>*{scroll-margin-bottom:34px}.wl a .ri{color:var(--c-web)}.btn.ac{background:var(--ac)}
 </style></head><body>
 <div class="app">
 <header class="top"><a class="brand" href="/"><img src="logo.png" alt=""><span>Avatar <b>ROI</b></span></a><button class="ic" id="vb" aria-pressed="true" aria-label="Voz de Roi" title="Voz de Roi">🔊</button></header>
@@ -115,7 +116,9 @@ vb.onclick=()=>{VOICE=!VOICE;vb.setAttribute('aria-pressed',VOICE);try{localStor
 
 /* ---- conversación ---- */
 const log=$('log');
+const ro=window.ResizeObserver?new ResizeObserver(()=>{const l=log.lastElementChild;if(l&&$('chat')&&!$('chat').hidden)l.scrollIntoView({block:'end',behavior:'auto'})}):null;
 const add=(c,h)=>{const d=document.createElement('div');d.className=c;if(h!=null)d.innerHTML=h;log.append(d);d.scrollIntoView({behavior:RM?'auto':'smooth',block:'end'});return d};
+if(ro)ro.observe(log);
 const bot=x=>{add('b').textContent=x;speak(x)},me=x=>{add('b me').textContent=x};
 const block=(c,h,on)=>{const d=add('blk '+c,h);d.onclick=e=>{const b=e.target.closest('button');if(b&&!d.classList.contains('lock'))on(b,d)};return d};
 const lock=d=>d.classList.add('lock');
@@ -132,18 +135,18 @@ function what(){const dig=t==='web';
   block('opts',dig?'<button data-t="web">🌐 Una web o servicio online</button><button data-t="org">🏢 Una empresa o institución</button><button data-t="person">🙋 Una persona o perfil</button>':'<button data-t="web">🌐 Una web o experiencia digital</button><button data-t="project">💡 Una iniciativa o proyecto</button><button data-t="place">📍 Un lugar o establecimiento</button><button data-t="org">🏢 Una empresa o institución</button><button data-t="person">🙋 Una persona</button>',(b,d)=>{lock(d);t=b.dataset.t;me(b.textContent);name()})}
 
 function webHome(){
-  $('wnav').hidden=false;$('wnav').innerHTML=ROI_NAV('web');
-  $('h').textContent='Valora una web';$('sb').textContent='Busca la web o pega el enlace.';
-  const nl=$('nearl');if(nl)nl.hidden=true;$('go').hidden=true;$('go2').hidden=true;
-  const w=$('wstp');w.hidden=false;w.innerHTML=[['search','Busca o pega el enlace'],['heart','Valora y di cómo te sientes'],['users','Habla con quien navega por ahí']].map(x=>'<li>'+IC(x[0],30)+'<span>'+x[1]+'</span></li>').join('');
-  const box=document.createElement('div');box.className='sw wnav';box.style.margin='0 auto 12px';box.innerHTML='<span style="position:absolute;left:16px;top:15px;color:var(--moss);display:flex;pointer-events:none">'+IC('search',22)+'</span><input id="wq" type="search" enterkeyhint="go" aria-label="Web o empresa" placeholder="ejemplo.com, universidad, empresa…" style="width:100%;min-height:52px;padding:10px 18px 10px 48px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:inherit;font-size:16px">';
-  $('sb').after(box);
+  const st=$('start');st.style.justifyContent='flex-start';st.style.textAlign='left';st.style.alignItems='stretch';
+  $('wnav').hidden=false;$('wnav').style.maxWidth='none';$('wnav').innerHTML=ROI_NAV('web')+ROI_HERO('web');
+  $('h').hidden=true;$('sb').hidden=true;const nl=$('nearl');if(nl)nl.hidden=true;$('go').hidden=true;$('go2').hidden=true;
+  const w=$('wstp');w.hidden=false;w.style.maxWidth='none';w.innerHTML=[['search','Busca o pega el enlace'],['heart','Valora y di cómo te sientes'],['users','Habla con quien navega por ahí']].map(x=>'<li>'+IC(x[0],30)+'<span>'+x[1]+'</span></li>').join('');
+  const box=document.createElement('div');box.className='sw';box.style.cssText='position:relative;margin:0 0 12px;width:100%';box.innerHTML='<span style="position:absolute;left:16px;top:15px;color:var(--ac);display:flex;pointer-events:none">'+IC('search',22)+'</span><input id="wq" type="search" enterkeyhint="go" aria-label="Web" placeholder="ejemplo.com o nombre de la web…" style="width:100%;min-height:52px;padding:10px 18px 10px 48px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:inherit;font-size:16px">';
+  w.after(box);
   const goW=it=>{if(it.host)location.href='/v?t=web&n='+encodeURIComponent(it.host)+'&s=web';else location.href='/v?t=org&n='+encodeURIComponent(it.name)+'&s=web'};
   RoiAC($('wq'),{t:'web',pick:goW});
   $('wq').onkeydown=e=>{if(e.key!=='Enter'||document.querySelector('.acl li.on'))return;const v=$('wq').value.trim(),d=asUrl(v);if(d)location.href='/v?t=web&n='+encodeURIComponent(hostOf(d))+'&s=web';else if(v.length>1)fetch('/api/search?t=web&q='+encodeURIComponent(v)).then(r=>r.json()).then(j=>{const it=(j.results||[])[0];if(it)goW(it);else location.href='/v?t=org&n='+encodeURIComponent(v)}).catch(()=>{})};
-  const wl=$('wl');wl.hidden=false;wl.innerHTML='<div class="alt"><a href="/v?t=org">'+IC('build',20)+'Empresa o institución</a><a href="/v?t=person">'+IC('user',20)+'Persona</a></div>';
-  fetch('/api/rankings').then(r=>r.json()).then(j=>{const W=((j&&j.webs)||[]).sort((a,b)=>b.n-a.n).slice(0,5);if(!W.length)return;
-    const h=document.createElement('h2');h.innerHTML=IC('users',22)+'Webs valoradas por otros';const ul=document.createElement('ul');
+  const wl=$('wl');wl.hidden=false;
+  fetch('/api/rankings').then(r=>r.json()).then(j=>{const W=((j&&j.webs)||[]).sort((a,b)=>b.n-a.n).slice(0,6);if(!W.length)return;
+    const h=document.createElement('h2');h.innerHTML=IC('users',22)+'Webs que se están valorando';const ul=document.createElement('ul');
     W.forEach(x=>{const a=document.createElement('a');a.href='/v?t=web&n='+encodeURIComponent(x.name)+'&s=web';a.innerHTML=IC('globe',22)+'<span></span><em></em>';a.querySelector('span').textContent=x.name;a.querySelector('em').textContent=x.avg.toFixed(1).replace('.',',')+'/5';const li=document.createElement('li');li.append(a);ul.append(li)});
     wl.prepend(ul);wl.prepend(h)}).catch(()=>{})}
 function name(){
@@ -174,6 +177,7 @@ let anon='';try{anon=localStorage.getItem('roi_anon')||'';if(!anon){anon=crypto.
 const cid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 async function send(){
   let site=u?hostOf(u):null,url=null;try{if(u){const x=new URL(u);url=x.origin+x.pathname}}catch(e){}
+  try{localStorage.setItem('roi_mood',String(S.mood))}catch(e){}
   const body={client_id:cid,anon_id:anon,source:src,type:t,subject:n,site,url,rating:S.mood+1,feeling:S.feel,comment:S.comment||null,place_name:t==='place'?n:null,location:loc||null,lat:geo?geo[0]:null,lng:geo?geo[1]:null,place_verified:verified,pulse_id:Q?(P||autoP||null):null,lang:'es',created_at:new Date().toISOString(),website:''};
   const go=async()=>{try{const r=await fetch('/api/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return r.ok}catch(e){return false}};
   const w=add('b','Guardando tu valoración…');

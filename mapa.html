@@ -29,34 +29,45 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 .tabs2{display:flex;gap:8px;margin:6px 0 4px}.tabs2 a{flex:1;text-align:center;padding:10px 12px;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;font-weight:600}.tabs2 a.on{background:var(--moss);color:#fff;border-color:var(--moss)}
 .rt{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px}.rt b{display:block}.rt small{color:var(--mut)}.rt .cp{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0}.rt .cp span{font-size:13px;border-radius:99px;padding:3px 10px;background:var(--sage)}.rt .cp span.ok{background:var(--moss);color:#fff}.rt .rw{margin:8px 0 0;font-weight:600;color:var(--moss)}
 .note{font-size:14px;color:var(--mut);margin-top:16px}.empty{background:var(--sage);border-radius:18px;padding:18px;text-align:center;color:var(--mut)}
-.hero{display:flex;align-items:center;gap:14px;margin:6px 0 10px}.hero svg{flex:none;width:92px;height:92px}.hero h1{margin:0;font-size:28px;line-height:1.1}.hero .sub{margin:4px 0 0}
-.acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 12px}.act{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border-radius:18px;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:600;font-size:14px;text-align:center;cursor:pointer;text-decoration:none;line-height:1.15}.act i{font-style:normal;font-size:28px;line-height:1}.act small{font-weight:400;color:var(--mut);font-size:12px}.act:hover,.act:focus-visible{border-color:var(--moss);background:var(--sage)}
-.acts.info .act{cursor:default}.acts.info .act:hover{background:#fff;border-color:var(--line)}
-#asf{display:flex;gap:8px;margin:0 0 10px}#asf input{flex:1;min-width:0;min-height:48px;padding:10px 16px;border-radius:99px;border:1px solid var(--line);font:inherit}
-@keyframes rp{0%{r:10;opacity:.7}100%{r:40;opacity:0}}@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.hero .rp{animation:rp 2.4s ease-out infinite}.hero .rp2{animation-delay:1.2s}.hero .bob{animation:bob 2.4s ease-in-out infinite}@media(prefers-reduced-motion:reduce){.hero *{animation:none!important}}
-.sbar{margin:0 0 12px}.sin{position:relative;display:flex;align-items:center}.sin input{width:100%;min-height:52px;padding:10px 18px 10px 48px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:inherit;font-size:16px}.sin input:focus{outline:none;border-color:var(--moss);box-shadow:0 0 0 4px rgba(63,90,58,.12)}.sico{position:absolute;left:16px;color:var(--moss);display:flex;pointer-events:none}
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0}.chp{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--moss);font:inherit;font-weight:700;font-size:14px;cursor:pointer}.chp.on{background:var(--moss);color:#fff;border-color:var(--moss)}.chp:hover:not(.on){background:var(--sage)}
-.sech{display:flex;align-items:center;gap:8px;font-size:18px;margin:24px 0 8px;color:var(--ink)}.sech .ri{color:var(--moss)}.sech small{margin-left:auto;font-weight:400;color:var(--mut);font-size:13px}
-.it .k{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--sage);color:var(--moss)}.pp{background:var(--moss);color:#fff;border:2px solid #fff;border-radius:50%;width:30px;height:30px;display:grid!important;place-items:center;font-weight:700;font-size:13px;box-shadow:0 3px 10px rgba(0,0,0,.25)}
-.tog{display:flex;align-items:center;gap:10px;margin:10px 0 0;font-size:14px;color:var(--mut)}.tog input{width:20px;height:20px;accent-color:var(--moss)}
+
+.sbar{margin:0 0 12px}.sin{position:relative;display:flex;align-items:center}.sin input{width:100%;min-height:52px;padding:10px 54px 10px 48px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font:inherit;font-size:16px}.sin input:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 4px color-mix(in srgb,var(--ac) 18%,transparent)}.sico{position:absolute;left:16px;color:var(--ac);display:flex;pointer-events:none}
+.gps{position:absolute;right:6px;width:40px;height:40px;border-radius:50%;border:0;background:var(--ac);color:#fff;display:grid;place-items:center;cursor:pointer}.gps.on{box-shadow:0 0 0 4px color-mix(in srgb,var(--ac) 25%,transparent)}
+.sech{display:flex;align-items:center;gap:8px;font-size:18px;margin:22px 0 8px;color:var(--ink)}.sech .ri{color:var(--ac)}.sech small{margin-left:auto;font-weight:400;color:var(--mut);font-size:13px}
+.k{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--sage);color:var(--moss)}
+.pick{background:#fff;border:2px solid var(--ac);border-radius:20px;padding:14px 16px;margin:12px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap}.pick .t{flex:1;min-width:180px}.pick b{display:block}.pick small{color:var(--mut)}
+.pf{width:34px;height:34px;border-radius:50%;background:#fff;border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.3)}.pf svg{display:block}.pp{background:var(--ac);color:#fff;border:2px solid #fff;border-radius:50%;width:30px;height:30px;display:grid!important;place-items:center;font-weight:700;font-size:13px;box-shadow:0 3px 10px rgba(0,0,0,.25)}.pdot{width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.tog{display:flex;align-items:center;gap:10px;margin:10px 0 0;font-size:14px;color:var(--mut)}.tog input{width:20px;height:20px;accent-color:var(--ac)}
+.flt{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px}.flt button{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:99px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:600;font-size:14px;cursor:pointer}.flt button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.btn.ac{background:var(--ac)}.rbtn{margin-top:10px;min-height:42px;padding:8px 18px;font-size:15px}.hint{color:var(--mut);font-size:14px;margin:6px 2px}
+.ld{color:var(--mut);padding:10px 4px}
 </style></head><body><div class="app">
-<div class="top"><a class="brand" href="/"><img src="logo.png" alt="" width="40" height="40"><span>Avatar <b>ROI</b></span></a><a class="btn g" href="/v" style="min-height:40px;padding:6px 16px">Valorar otra cosa</a></div>
-<div id="nav"></div>
+<div class="top"><a class="brand" href="/"><img src="logo.png" alt=""><span>Avatar <b>ROI</b></span></a><a class="btn g" href="/v" style="min-height:40px;padding:6px 16px">Valorar otra cosa</a></div>
+<div id="nav"></div><div id="rhero"></div>
 <ol class="stp" id="stp"></ol>
-<div class="sbar"><div class="sin" id="sw"><span class="sico" id="sico"></span><input id="asq" type="search" enterkeyhint="search" aria-label="Buscar dirección o sitio" placeholder="Busca una calle, un parque, un sitio…"></div><div class="chips" id="chp"></div><p class="sub" id="asm" hidden></p></div>
+<div class="sbar" id="sbar"><div class="sin"><span class="sico" id="sico"></span><input id="asq" type="search" enterkeyhint="search" aria-label="Buscar" placeholder="Busca una calle, un parque, un sitio…"><button class="gps" id="gps" type="button" aria-label="Usar mi ubicación" title="Usar mi ubicación"></button></div><p class="hint" id="asm" hidden></p></div>
 <button class="btn" id="loc" hidden></button>
-<div class="here" id="here" hidden><p id="ht"></p><p id="hi" class="hi" hidden></p><div id="hu" class="hu" hidden></div><div id="hp" class="hp" hidden></div><div class="hr"><a class="btn" id="hb" href="#">Opinar ahora</a> <a class="btn g" id="hr" href="#">Sala</a> <a class="btn g" id="hc" hidden target="_blank" rel="noopener"></a></div></div>
-<div id="map" role="img" aria-label="Mapa de lugares"></div>
-<label class="tog" id="shl" hidden><input type="checkbox" id="shw"><span>Mostrar mi avatar a otras personas cerca (zona aproximada, nunca tu punto exacto)</span></label><p class="sub" id="pn" hidden></p>
-<h2 class="sech" id="zh"></h2><ul class="list" id="list"></ul>
-<h2 class="sech" id="rh" hidden></h2><ul class="list" id="rts"></ul>
-<h2 class="sech" id="oh" hidden></h2><ul class="list" id="osm"></ul>
-<p class="note">Tu ubicación se usa solo en este móvil, mientras tengas esta página abierta, para avisarte de los lugares donde estás. No se guarda. Para listar sitios cercanos se consulta OpenStreetMap con una zona aproximada de unos 500 m.</p>
+<div class="here" id="here" hidden><p id="ht"></p><p id="hi" class="hi" hidden></p><div id="hu" class="hu" hidden></div><div id="hp" class="hp" hidden></div><div class="hr"><a class="btn ac" id="hb" href="#">Opinar ahora</a> <a class="btn g" id="hr" href="#">Sala</a> <a class="btn g" id="hc" hidden target="_blank" rel="noopener"></a></div></div>
+<div id="map" role="img" aria-label="Mapa"></div>
+<div class="pick" id="pick" hidden><div class="t"><b id="pkn"></b><small id="pks"></small></div><a class="btn ac" id="pkb" href="#">Valorar este lugar</a></div>
+<label class="tog" id="shl" hidden><input type="checkbox" id="shw"><span>Mostrar mi avatar a otras personas cerca (zona aproximada, nunca tu punto exacto)</span></label><p class="hint" id="pn" hidden></p>
+<div id="secP">
+ <h2 class="sech" id="oh"></h2><ul class="list" id="osm"></ul><p class="ld" id="ol"></p>
+ <h2 class="sech" id="zh"></h2><ul class="list" id="list"></ul>
+ <h2 class="sech" id="rh" hidden></h2><ul class="list" id="rts"></ul>
+</div>
+<div id="secJ" hidden>
+ <h2 class="sech" id="jh"></h2>
+ <div class="sbar"><div class="sin"><span class="sico" id="jico"></span><input id="jq" type="search" aria-label="Buscar institución o proyecto" placeholder="Busca tu institución o proyecto…"><button class="gps" id="jgps" type="button" aria-label="Los más cercanos" title="Los más cercanos"></button></div></div>
+ <div class="flt" id="flt"></div>
+ <ul class="list" id="jlist"></ul>
+</div>
+<p class="note">Tu ubicación se usa solo en este móvil, mientras tengas esta página abierta. No se guarda. Para listar sitios cercanos se consulta OpenStreetMap con una zona aproximada de unos 600 m.</p>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="/ic.js"></script><script src="/ac.js"></script>
 <script>
-const $=id=>document.getElementById(id);const K=new URLSearchParams(location.search).get('k')==='project'?'project':'place';let sp=null,ALL=[],RT=[],PL=[],me=null,map=null,layer=null,L2=null,cur=null,wid=null;const INF={};
+const $=id=>document.getElementById(id);const K=new URLSearchParams(location.search).get('k')==='project'?'project':'place';
+let sp=null,ALL=[],RT=[],PL=[],me=null,map=null,layer=null,L2=null,cur=null,wid=null,pickMk=null,osmL=null,plL=null,lastQ=null,SEG=new Set(),JQ='',NEARJ=false;const INF={};
 const km=(a,b,c,d)=>{const R=6371e3,r=x=>x*Math.PI/180,h=Math.sin(r(c-a)/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(r(d-b)/2)**2;return 2*R*Math.asin(Math.sqrt(h))};
 const fmt=m=>m<1000?Math.round(m/10)*10+' m':(m/1000).toFixed(1).replace('.',',')+' km';
 const inPoly=(pt,sh)=>{let c=false;for(let i=0,j=sh.length-1;i<sh.length;j=i++){const[yi,xi]=sh[i],[yj,xj]=sh[j];if((xi>pt[1])!==(xj>pt[1])&&pt[0]<(yj-yi)*(pt[1]-xi)/(xj-xi)+yi)c=!c}return c};
@@ -65,6 +76,8 @@ const inside=(p,pos)=>!!pos&&hasG(p)&&(Array.isArray(p.shape)&&p.shape.length>=3
 const href=(p,v)=>'/v?t='+p.kind+'&n='+encodeURIComponent(p.name)+'&s=qr&pl='+encodeURIComponent(p.id||'')+(hasG(p)?'&g='+p.lat+','+p.lng+(v?'&v=1':''):'');
 const CPK='roi_cp',cpGet=()=>{try{return JSON.parse(localStorage.getItem(CPK)||'{}')}catch(e){return{}}},cpSet=id=>{try{const o=cpGet();if(!o[id]){o[id]=1;localStorage.setItem(CPK,JSON.stringify(o))}}catch(e){}};
 const ST={estudio:'En estudio',marcha:'En marcha',hecho:'Hecho'};
+const oc=()=>me||sp;
+const segOf=p=>/ayuntamient|diputaci|generalitat|consell|junta|gobierno|municip|concejal|conselleria/i.test(p.org||'')?'muni':/universi|campus|facultad|colegio|instituto|escuela/i.test(p.org||'')?'uni':'emp';
 async function info(p){if(INF[p.id])return INF[p.id];try{const r=await fetch('/api/public?n='+encodeURIComponent(p.name));INF[p.id]=r.ok?await r.json():{}}catch(e){INF[p.id]={}}return INF[p.id]}
 async function banner(p){$('ht').textContent='Estás en «'+p.name+'». ¿Cómo ha ido?';$('hb').href=href(p,true);$('hr').href='/sala?t='+p.kind+'&n='+encodeURIComponent(p.name);
  const hi=$('hi');hi.hidden=!p.info;hi.textContent=p.info||'';$('here').hidden=false;const hc=$('hc'),ok=p.cta_url&&/^https:\/\//.test(p.cta_url);hc.hidden=!ok;if(ok){hc.href=p.cta_url;hc.textContent=(p.cta_label||'Abrir')+' ↗'}
@@ -72,66 +85,87 @@ async function banner(p){$('ht').textContent='Estás en «'+p.name+'». ¿Cómo 
  const hu=$('hu');hu.textContent='';const ups=(j.updates||[]);hu.hidden=!ups.length;
  if(ups.length){const b=document.createElement('b');b.textContent='Tú dijiste, nosotros hicimos';hu.append(b);ups.forEach(u=>{const q=document.createElement('p');if(u.status){const s=document.createElement('span');s.className='st';s.textContent=ST[u.status]||'';q.append(s)}const t=document.createElement('strong');t.textContent=u.title;q.append(t);if(u.body)q.append(' — '+u.body);hu.append(q)})}
  const hp=$('hp');hp.textContent='';hp.hidden=!j.pulse;if(j.pulse){const a=document.createElement('a');a.href='/v?p='+encodeURIComponent(j.pulse.id);a.textContent='Pregunta rápida: '+j.pulse.question;hp.append(a)}}
-function draw(){
-  const oc=me||sp,L=PL.map(p=>({p,d:oc&&hasG(p)?km(oc[0],oc[1],p.lat,p.lng):null})).sort((a,b)=>(a.d==null)-(b.d==null)||(a.d!=null&&b.d!=null?a.d-b.d:a.p.name.localeCompare(b.p.name,'es')));
+function itemEl(o){const a=document.createElement('a');a.className='it';a.href=o.href;a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';
+ const k=a.firstChild;k.innerHTML=IC(o.ic||'pin',22);if(o.col){k.style.background=o.col+'22';k.style.color=o.col}
+ a.querySelector('b').textContent=o.name;a.querySelector('small').textContent=o.sub||'';a.querySelector('.d').textContent=o.d||'';const li=document.createElement('li');li.append(a);return li}
+function drawZones(){
   const ul=$('list');ul.textContent='';
-  if(!L.length){const e=document.createElement('li');e.className='empty';e.textContent=K==='project'?'Aún no hay iniciativas publicadas. Las organizaciones las añaden desde su panel.':'Aún no hay lugares en el mapa. Las organizaciones los añaden desde su panel.';ul.append(e)}
-  L.forEach(({p,d})=>{const ins=inside(p,me),a=document.createElement('a');a.className='it';a.href=href(p,ins);
-    a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';
-    a.firstChild.innerHTML=IC(p.kind==='project'?'spark':'zone',22);a.querySelector('b').textContent=p.name;const hh=Array.isArray(p.hitos)?p.hitos:[],dn=hh.filter(x=>x.s==='hecho').length;a.querySelector('small').textContent=[p.org,p.description||(p.kind==='project'?'Iniciativa':'Lugar'),hh.length?dn+' de '+hh.length+' hitos':''].filter(Boolean).join(' · ');
-    a.querySelector('.d').textContent=ins?'Estás aquí':d!=null?fmt(d):'Opinar';a.dataset.id=p.id;const li=document.createElement('li');li.append(a);if(p.cta_url&&/^https:\/\//.test(p.cta_url)){const c=document.createElement('a');c.className='cta';c.href=p.cta_url;c.target='_blank';c.rel='noopener';c.textContent=(p.cta_label||'Abrir')+' ↗';li.append(c)}ul.append(li)});
+  const L=PL.filter(p=>K==='place'||false).map(p=>({p,d:oc()&&hasG(p)?km(oc()[0],oc()[1],p.lat,p.lng):null})).sort((a,b)=>(a.d==null)-(b.d==null)||(a.d!=null&&b.d!=null?a.d-b.d:a.p.name.localeCompare(b.p.name,'es')));
+  if(!L.length){const e=document.createElement('li');e.className='empty';e.textContent='Aún no hay zonas Roi aquí. Las organizaciones las añaden desde su panel.';ul.append(e)}
+  L.forEach(({p,d})=>{const ins=inside(p,me),li=itemEl({href:href(p,ins),ic:'zone',name:p.name,sub:[p.org,p.description].filter(Boolean).join(' · ')||'Zona Roi',d:ins?'Estás aquí':d!=null?fmt(d):'Opinar'});
+    if(p.cta_url&&/^https:\/\//.test(p.cta_url)){const c=document.createElement('a');c.className='cta';c.href=p.cta_url;c.target='_blank';c.rel='noopener';c.textContent=(p.cta_label||'Abrir')+' ↗';li.append(c)}ul.append(li)});
   const near=L.find(x=>inside(x.p,me));const np=near?near.p:null;
   if(np)cpSet(np.id);routes();
   if(!np){cur=null;$('here').hidden=true}else if(!cur||cur.id!==np.id){cur=np;banner(np);if(navigator.vibrate)try{navigator.vibrate(150)}catch(e){}}
-  if(L2&&map){layer.clearLayers();const pts=[];PL.filter(hasG).forEach(p=>{const sh=Array.isArray(p.shape)&&p.shape.length>=3;
-      const m=(sh?L2.polygon(p.shape,{color:'#3f5a3a',fillOpacity:.2}):L2.circle([p.lat,p.lng],{radius:p.radius_m,color:'#3f5a3a',fillOpacity:.15})).addTo(layer);
-      m.bindPopup(Object.assign(document.createElement('a'),{href:href(p,false),textContent:p.name}));(sh?p.shape:[[p.lat,p.lng]]).forEach(x=>pts.push(x))});
-    if(me||sp){L2.circleMarker(me||sp,{radius:8,color:'#3f5a3a',fillOpacity:.9}).addTo(layer);pts.push(me||sp)}if(!window.__fit&&pts.length){window.__fit=1;map.fitBounds(pts,{padding:[30,30],maxZoom:17})}}
 }
-
-
+function drawProj(){
+  const ul=$('jlist');ul.textContent='';const o=oc(),q=JQ.toLowerCase();
+  let L=PL.filter(p=>(!SEG.size||SEG.has(segOf(p)))&&(!q||(p.name+' '+(p.org||'')+' '+(p.description||'')).toLowerCase().includes(q))).map(p=>({p,d:o&&hasG(p)?km(o[0],o[1],p.lat,p.lng):null}));
+  L.sort((a,b)=>NEARJ&&o?((a.d==null)-(b.d==null)||(a.d||0)-(b.d||0)):a.p.name.localeCompare(b.p.name,'es'));
+  if(!L.length){const e=document.createElement('li');e.className='empty';e.textContent=PL.length?'Nada con ese filtro. Prueba otra búsqueda.':'Aún no hay proyectos publicados. Las organizaciones los añaden desde su panel.';ul.append(e)}
+  L.forEach(({p,d})=>{const hh=Array.isArray(p.hitos)?p.hitos:[],dn=hh.filter(x=>x.s==='hecho').length,sg=segOf(p);
+    ul.append(itemEl({href:href(p,false),ic:'spark',col:'#ef7d1a',name:p.name,sub:[p.org,hh.length?dn+' de '+hh.length+' hitos':p.description].filter(Boolean).join(' · '),d:d!=null&&NEARJ?fmt(d):''}))})}
+function mapDraw(){
+  if(!(L2&&map))return;layer.clearLayers();const pts=[];
+  PL.filter(hasG).forEach(p=>{const sh=Array.isArray(p.shape)&&p.shape.length>=3,col=K==='project'?'#ef7d1a':'#1f9d6b';
+    const m=(sh?L2.polygon(p.shape,{color:col,fillOpacity:.2}):L2.circle([p.lat,p.lng],{radius:p.radius_m,color:col,fillOpacity:.15})).addTo(layer);
+    const a=Object.assign(document.createElement('a'),{href:href(p,false),textContent:p.name+' · valorar'});m.bindPopup(a);(sh?p.shape:[[p.lat,p.lng]]).forEach(x=>pts.push(x))});
+  if(me){let mm=3;try{mm=parseInt(localStorage.getItem('roi_mood'),10);if(isNaN(mm))mm=3}catch(e){}L2.marker(me,{icon:L2.divIcon({className:'',html:'<div class="pf" style="border-color:var(--ac)">'+ROI_FACE(mm,34)+'</div>',iconSize:[34,34]})}).addTo(layer)}
+  if(sp&&pickMk===null){}
+  if(!window.__fit&&pts.length){window.__fit=1;map.fitBounds(pts,{padding:[30,30],maxZoom:17})}}
+function draw(){if(K==='place')drawZones();else drawProj();mapDraw()}
 function routes(){const ul=$('rts');if(!ul)return;const v=cpGet();ul.textContent='';const R=K==='place'?RT.filter(r=>Array.isArray(r.place_ids)&&r.place_ids.some(id=>ALL.find(p=>p.id===id))):[];$('rh').hidden=!R.length;
  R.forEach(r=>{const pts=r.place_ids.map(id=>ALL.find(p=>p.id===id)).filter(Boolean),dn=pts.filter(p=>v[p.id]).length,li=document.createElement('li'),d=document.createElement('div');d.className='rt';
   const b=document.createElement('b');b.textContent=r.name;const sm=document.createElement('small');sm.textContent=(r.description?r.description+' · ':'')+dn+' de '+pts.length+' puntos';const cp=document.createElement('div');cp.className='cp';
-  pts.forEach((p,i)=>{const sp=document.createElement('span');sp.className=v[p.id]?'ok':'';sp.textContent=(v[p.id]?'✓ ':(i+1)+'. ')+p.name;cp.append(sp)});d.append(b,sm,cp);
-  if(dn===pts.length&&r.reward){const rw=document.createElement('p');rw.className='rw';rw.textContent='Premio: '+r.reward;d.append(rw)}li.append(d);ul.append(li)})}
-let lastQ=null,plL=null;
+  pts.forEach((p,i)=>{const sp2=document.createElement('span');sp2.className=v[p.id]?'ok':'';sp2.textContent=(v[p.id]?'✓ ':(i+1)+'. ')+p.name;cp.append(sp2)});d.append(b,sm,cp);
+  if(dn===pts.length&&r.reward){const rw=document.createElement('p');rw.className='rw';rw.textContent='Premio: '+r.reward;d.append(rw)}
+  const a=document.createElement('a');a.className='btn ac rbtn';a.href='/v?t=project&n='+encodeURIComponent('Ruta · '+r.name)+'&s=ruta';a.textContent='Valorar la ruta';d.append(a);li.append(d);ul.append(li)})}
+/* Qué hay cerca (OpenStreetMap): comercios, parques, bibliotecas, deporte… con icono y color por tipo */
+const OT={restaurant:['food','#e8590c','Restaurante'],cafe:['food','#b8610f','Cafetería'],bar:['food','#c2255c','Bar'],fast_food:['food','#e8590c','Comida rápida'],ice_cream:['food','#c2255c','Heladería'],library:['book','#7048e8','Biblioteca'],pharmacy:['cross','#e03131','Farmacia'],hospital:['cross','#e03131','Hospital'],clinic:['cross','#e03131','Clínica'],university:['cap','#2a7de1','Universidad'],college:['cap','#2a7de1','Centro de estudios'],school:['cap','#2a7de1','Colegio'],townhall:['landmark','#8a5a2b','Ayuntamiento'],post_office:['landmark','#8a5a2b','Correos'],bank:['card','#1c7ed6','Banco'],cinema:['star','#ae3ec9','Cine'],theatre:['star','#ae3ec9','Teatro'],museum:['landmark','#8a5a2b','Museo'],park:['tree','#2f9e44','Parque'],playground:['tree','#2f9e44','Zona de juegos'],pitch:['ball','#e67700','Pista deportiva'],sports_centre:['ball','#e67700','Polideportivo'],fitness_centre:['ball','#e67700','Gimnasio'],swimming_pool:['ball','#1098ad','Piscina'],supermarket:['cart','#0c8599','Supermercado'],mall:['store','#0c8599','Centro comercial'],shop:['store','#0c8599','Tienda'],bus_station:['route','#495057','Estación']};
+const OAM='restaurant|cafe|bar|fast_food|ice_cream|library|pharmacy|hospital|clinic|university|college|school|townhall|post_office|bank|cinema|theatre';
+async function osm(){const c=window.__me||sp;if(!c||K!=='place')return;if(lastQ&&km(c[0],c[1],lastQ[0],lastQ[1])<150)return;lastQ=c.slice();$('ol').textContent='Buscando lo que hay cerca…';
+  const at='(around:600,'+c[0]+','+c[1]+')',q='[out:json][timeout:15];(nwr'+at+'["name"]["amenity"~"^('+OAM+')$"];nwr'+at+'["name"]["leisure"~"^(park|playground|pitch|sports_centre|fitness_centre|swimming_pool)$"];nwr'+at+'["name"]["tourism"="museum"];nwr'+at+'["name"]["shop"~"^(supermarket|mall|clothes|bakery|books|sports|electronics)$"];);out center 70;';
+  let j=null;for(const u of ['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter']){try{const r=await fetch(u,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});if(r.ok){j=await r.json();break}}catch(e){}}
+  if(!j){$('ol').textContent='No pude consultar el mapa ahora. Inténtalo en un momento.';return}
+  const known=new Set(PL.map(p=>p.name.toLowerCase())),seen=new Set();
+  const A=(j.elements||[]).map(e=>{const t=e.tags||{},la=e.lat??(e.center&&e.center.lat),lo=e.lon??(e.center&&e.center.lon),k=t.amenity||t.leisure||(t.tourism==='museum'?'museum':t.shop==='supermarket'?'supermarket':t.shop==='mall'?'mall':'shop');return{name:t.name,la,lo,k,d:km(c[0],c[1],la,lo)}}).filter(x=>x.la!=null&&!known.has(x.name.toLowerCase())&&!seen.has(x.name.toLowerCase())&&seen.add(x.name.toLowerCase())).sort((a,b)=>a.d-b.d).slice(0,30);
+  const ul=$('osm');ul.textContent='';$('ol').textContent=A.length?'':'No hay sitios con nombre en 600 m. Prueba en otra zona.';
+  if(osmL)osmL.clearLayers();else if(L2&&map)osmL=L2.layerGroup().addTo(map);
+  A.forEach(x=>{const o=OT[x.k]||['pin','#3f5a3a','Lugar'],u='/v?t=place&n='+encodeURIComponent(x.name)+'&s=qr&g='+x.la.toFixed(5)+','+x.lo.toFixed(5)+(x.d<=60?'&v=1':'');
+    ul.append(itemEl({href:u,ic:o[0],col:o[1],name:x.name,sub:o[2],d:fmt(x.d)}));
+    if(osmL&&L2){const a=document.createElement('a');a.href=u;a.textContent=x.name+' · valorar';L2.marker([x.la,x.lo],{icon:L2.divIcon({className:'',html:'<div class="pdot" style="background:'+o[1]+'"></div>',iconSize:[16,16]})}).bindPopup(a).addTo(osmL)}});
+  $('oh').querySelector('small').textContent=A.length?A.length+' cerca · toca para valorar':''}
+/* Punto elegido: búsqueda, toque en el mapa o mi ubicación → punto geolocalizado con botón Valorar */
+async function pickPoint(pt,label,known){sp=pt;lastQ=null;window.__fit=1;
+  const pk=$('pick');pk.hidden=false;$('pkn').textContent=label||'Punto elegido en el mapa';$('pks').textContent=known?'':'Buscando la dirección…';
+  const mk=(n)=>{const g=pt[0].toFixed(5)+','+pt[1].toFixed(5);$('pkb').href='/v?t=place&n='+encodeURIComponent(n)+'&s=map&g='+g+(me&&km(me[0],me[1],pt[0],pt[1])<80?'&v=1':'')};mk(label||'Punto en el mapa');
+  if(map){map.setView(pt,17);if(L2){if(pickMk)map.removeLayer(pickMk);pickMk=L2.marker(pt).addTo(map)}}
+  if(!known){try{const r=await fetch('/api/search?rev='+pt[0]+','+pt[1]),j=await r.json();if(j.place){$('pkn').textContent=j.place.name;$('pks').textContent=j.place.sub||'';mk(j.place.name)}else $('pks').textContent='Sin dirección conocida · puedes valorarlo igualmente'}catch(e){$('pks').textContent=''}}
+  else $('pks').textContent=known;
+  draw();osm();near()}
 const anonId=()=>{let a='';try{a=localStorage.getItem('roi_anon')||'';if(!a){a=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));localStorage.setItem('roi_anon',a)}}catch(e){}return a};
 async function near(){const c=window.__me||sp;if(!c||!L2||!map||K!=='place')return;try{const r=await fetch('/api/near?lat='+c[0]+'&lng='+c[1]+'&a='+encodeURIComponent(anonId())),j=await r.json();if(!plL)plL=L2.layerGroup().addTo(map);plL.clearLayers();const P=j.people||[];
-  P.forEach(x=>L2.marker([x.lat,x.lng],{icon:L2.divIcon({className:'',html:'<div class="pp"></div>',iconSize:[30,30]})}).bindPopup((x.nick||'Anónimo')+' · cerca').addTo(plL));
-  document.querySelectorAll('.pp').forEach((e,i)=>{if(P[i])e.textContent=(P[i].nick||'A').trim().charAt(0).toUpperCase()});
-  const pn=$('pn');pn.hidden=!P.length;pn.textContent=P.length?(P.length===1?'1 persona':P.length+' personas')+' con Roi por esta zona ahora mismo.':''}catch(e){}}
-function beat(){if(!$('shw')||!$('shw').checked||!window.__me)return;let nk='';try{nk=localStorage.getItem('roi_nick')||''}catch(e){}fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),nick:nk,lat:window.__me[0],lng:window.__me[1]})}).catch(()=>{})}
-if(K==='place'){$('shl').hidden=false;try{$('shw').checked=localStorage.getItem('roi_show')==='1'}catch(e){}
- $('shw').onchange=()=>{try{localStorage.setItem('roi_show',$('shw').checked?'1':'0')}catch(e){}if($('shw').checked){if(!window.__me)$('loc').click();beat()}else fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),off:true})}).catch(()=>{})};
- setInterval(()=>{beat();near()},60000)}
-const OT={restaurant:['🍽️','Restaurante'],cafe:['☕','Cafetería'],bar:['🍺','Bar'],fast_food:['🍔','Comida rápida'],library:['📚','Biblioteca'],pharmacy:['💊','Farmacia'],park:['🌳','Parque'],university:['🎓','Universidad'],school:['🏫','Colegio'],townhall:['🏛️','Ayuntamiento'],museum:['🖼️','Museo'],supermarket:['🛒','Supermercado']};
-async function osm(){const me=window.__me||sp;if(!me||K!=='place')return;if(lastQ&&km(me[0],me[1],lastQ[0],lastQ[1])<150)return;lastQ=me.slice();
-  const q='[out:json][timeout:12];(nwr(around:500,'+me[0]+','+me[1]+')["name"]["amenity"~"^(restaurant|cafe|bar|fast_food|library|pharmacy|university|school|townhall)$"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["leisure"="park"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["tourism"="museum"];nwr(around:500,'+me[0]+','+me[1]+')["name"]["shop"="supermarket"];);out center 40;';
-  try{const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});if(!r.ok)return;const j=await r.json();
-   const known=new Set(PL.map(p=>p.name.toLowerCase()));const seen=new Set();
-   const A=(j.elements||[]).map(e=>{const t=e.tags||{},la=e.lat??(e.center&&e.center.lat),lo=e.lon??(e.center&&e.center.lon),k=t.amenity||(t.leisure==='park'?'park':t.tourism==='museum'?'museum':'supermarket');return{name:t.name,la,lo,k,d:km(me[0],me[1],la,lo)}}).filter(x=>x.la!=null&&!known.has(x.name.toLowerCase())&&!seen.has(x.name.toLowerCase())&&seen.add(x.name.toLowerCase())).sort((a,b)=>a.d-b.d).slice(0,15);
-   const ul=$('osm');ul.textContent='';$('oh').hidden=!A.length;
-   A.forEach(x=>{const o=OT[x.k]||['📍','Lugar'],a=document.createElement('a');a.className='it';a.href='/v?t=place&n='+encodeURIComponent(x.name)+'&s=qr&g='+x.la.toFixed(5)+','+x.lo.toFixed(5)+(x.d<=60?'&v=1':'');
-    a.innerHTML='<span class="k"></span><span class="t"><b></b><small></small></span><span class="d"></span>';a.firstChild.innerHTML=IC('pin',22);a.querySelector('b').textContent=x.name;a.querySelector('small').textContent=o[1];a.querySelector('.d').textContent=fmt(x.d);
-    const li=document.createElement('li');li.append(a);ul.append(li)})}catch(e){}}
-$('nav').innerHTML=ROI_NAV(K);$('zh').innerHTML=IC(K==='project'?'spark':'zone',22)+(K==='project'?'Proyectos <small>de organizaciones</small>':'Zonas Roi <small>aviso al llegar</small>');$('rh').innerHTML=IC('route',22)+'Rutas <small>puntos de control</small>';$('oh').innerHTML=IC('users',22)+'Otros lugares cerca <small>del mapa abierto</small>';$('sico').innerHTML=IC('search',22);
-const ST3={place:[['search','Busca o toca el mapa'],['heart','Valora cómo estuvo'],['users','Habla con quien está cerca']],project:[['locate','Encuentra uno cerca o de tu organización'],['heart','Opina y cuenta tu bienestar'],['chat','Sigue las novedades y chatea']]};
+  P.forEach(x=>{const a=document.createElement('a');a.href='/sala?t=zona&n='+encodeURIComponent('Zona '+x.lat.toFixed(2)+','+x.lng.toFixed(2));a.textContent=(x.nick||'Anónimo')+' · hablar en la sala de esta zona';L2.marker([x.lat,x.lng],{icon:L2.divIcon({className:'',html:'<div class="pf">'+ROI_FACE(x.mood,34)+'</div>',iconSize:[34,34]})}).bindPopup(a).addTo(plL)});
+  const pn=$('pn');pn.hidden=!P.length;pn.textContent=P.length?(P.length===1?'1 persona':P.length+' personas')+' con Roi por esta zona ahora mismo. Toca su avatar en el mapa para entrar en la sala de la zona.':''}catch(e){}}
+function beat(){if(!$('shw')||!$('shw').checked||!window.__me)return;let nk='';try{nk=localStorage.getItem('roi_nick')||''}catch(e){}fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),nick:nk,mood:(()=>{try{return parseInt(localStorage.getItem('roi_mood'),10)||3}catch(e){return 3}})(),lat:window.__me[0],lng:window.__me[1]})}).catch(()=>{})}
+function locate(){$('gps').classList.add('on');if(!navigator.geolocation){$('asm').hidden=false;$('asm').textContent='Tu navegador no da la ubicación.';return}
+  if(wid!=null)return;let first=true;$('asm').hidden=false;$('asm').textContent='Buscando tu posición…';
+  wid=navigator.geolocation.watchPosition(p=>{me=[p.coords.latitude,p.coords.longitude];window.__me=me;if(first){first=false;$('asm').textContent='Siguiendo tu posición mientras esta página esté abierta.';if(map&&K==='place'&&!sp)map.setView(me,16);if(K==='place'){window.__fit=1;beat()}}draw();osm();near()},()=>{wid=null;$('gps').classList.remove('on');$('asm').textContent='No pude ver tu ubicación. Busca una dirección o toca el mapa.'},{enableHighAccuracy:true,timeout:15000,maximumAge:10000})}
+/* Interfaz */
+$('nav').innerHTML=ROI_NAV(K);$('rhero').innerHTML=ROI_HERO(K);$('sico').innerHTML=IC('search',22);$('gps').innerHTML=IC('locate',22);$('jico').innerHTML=IC('search',22);$('jgps').innerHTML=IC('locate',22);
+const ST3={place:[['search','Busca o toca el mapa'],['heart','Valora cómo estuvo'],['users','Habla con quien está cerca']],project:[['locate','Encuentra uno cerca o de tu institución'],['heart','Opina y cuenta tu bienestar'],['chat','Sigue novedades y chatea']]};
 $('stp').innerHTML=ST3[K].map(x=>'<li>'+IC(x[0],30)+'<span>'+x[1]+'</span></li>').join('');
-const CH=$('chp');let FILT='all';
-const chip=(ic,t,fn,on)=>{const b=document.createElement('button');b.type='button';b.className='chp'+(on?' on':'');b.innerHTML=IC(ic,18)+'<span></span>';b.lastChild.textContent=t;b.onclick=()=>fn(b);CH.append(b);return b};
-const segOf=p=>/ayuntamient|diputaci|generalitat|consell|junta|gobierno|municip|concejal/i.test(p.org||'')?'muni':/universi|campus|facultad|colegio|instituto/i.test(p.org||'')?'uni':'emp';
-const locBtn=chip('locate',K==='project'?'Cerca de mí':'Cerca de mí',()=>$('loc').click());
-if(K==='place'){chip('zone','Zonas Roi',()=>$('zh').scrollIntoView({behavior:'smooth',block:'start'}));const tb=chip('tap','Tocar el mapa',b=>{TAP=!TAP;b.classList.toggle('on',TAP);$('asm').hidden=false;$('asm').textContent=TAP?'Toca un punto del mapa para ver lo que hay y valorarlo.':'';if(TAP&&$('map').scrollIntoView)$('map').scrollIntoView({behavior:'smooth',block:'center'})})}
-else{[['all','Todos'],['muni','Municipales'],['emp','Empresas'],['uni','Universidades']].forEach(([k,t])=>{const b=chip(k==='muni'?'build':k==='uni'?'spark':k==='emp'?'users':'globe',t,x=>{FILT=k;[...CH.querySelectorAll('.chp')].forEach(c=>c.classList.toggle('on',c===x||c===locBtn&&false));PL=ALL.filter(p=>p.kind===K&&(k==='all'||segOf(p)===k));draw()},k==='all')})}
-let TAP=false;
-RoiAC($('asq'),{t:'place',bias:()=>(window.__me||sp)||null,pick:it=>{$('asq').value=it.name;pickPoint([it.lat,it.lng],it.name+(it.sub?' · '+it.sub:''))}});
-$('asq').addEventListener('keydown',e=>{if(e.key==='Enter'&&!document.querySelector('.acl li.on'))searchFirst($('asq').value.trim())});
-async function searchFirst(v){if(!v)return;const m=$('asm');m.hidden=false;m.textContent='Buscando…';try{const r=await fetch('/api/search?t=place&q='+encodeURIComponent(v)),j=await r.json(),it=(j.results||[])[0];if(!it){m.textContent='No encuentro eso. Prueba con calle y ciudad.';return}pickPoint([it.lat,it.lng],it.name+(it.sub?' · '+it.sub:''))}catch(x){m.textContent='No pude buscar ahora. Inténtalo en un momento.'}}
-function pickPoint(pt,label){sp=pt;lastQ=null;const m=$('asm');m.hidden=false;m.textContent=label?'Cerca de: '+label:'Punto elegido en el mapa';window.__fit=0;if(map)map.setView(sp,16);draw();osm();near()}
-try{if(window.L){L2=window.L;map=L2.map('map',{scrollWheelZoom:false}).setView([40.4,-3.7],5);L2.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);layer=L2.layerGroup().addTo(map);map.on('click',e=>{if(TAP||K==='place'){TAP=false;[...CH.querySelectorAll('.chp')].forEach(c=>{if(c.textContent==='Tocar el mapa')c.classList.remove('on')});pickPoint([e.latlng.lat,e.latlng.lng],'')}})}else $('map').hidden=true}catch(e){$('map').hidden=true}
+$('oh').innerHTML=IC('pin',22)+'Cerca de ti <small></small>';$('zh').innerHTML=IC('zone',22)+'Zonas Roi <small>aviso al llegar</small>';$('rh').innerHTML=IC('route',22)+'Rutas experienciales <small>puntos de control y premio</small>';$('jh').innerHTML=IC('spark',22)+'Proyectos <small>de organizaciones</small>';
+$('ol').textContent='Busca un sitio, toca el mapa o usa tu ubicación y verás aquí lo que hay cerca.';
+if(K==='project'){$('sbar').hidden=true;$('secP').hidden=true;$('secJ').hidden=false;
+  [['muni','build','Municipales'],['emp','users','Empresas'],['uni','cap','Universidades']].forEach(([k,ic,t])=>{const b=document.createElement('button');b.type='button';b.innerHTML=IC(ic,18)+'<span></span>';b.lastChild.textContent=t;b.onclick=()=>{SEG.has(k)?SEG.delete(k):SEG.add(k);b.classList.toggle('on',SEG.has(k));draw()};$('flt').append(b)});
+  $('jq').oninput=()=>{JQ=$('jq').value.trim();draw()};$('jgps').onclick=()=>{NEARJ=!NEARJ;$('jgps').classList.toggle('on',NEARJ);if(NEARJ&&!me)locate();draw()}}
+else{$('gps').onclick=locate;
+  RoiAC($('asq'),{t:'place',bias:()=>oc(),pick:it=>{$('asq').value=it.name;pickPoint([it.lat,it.lng],it.name,it.sub||'')}});
+  $('asq').addEventListener('keydown',async e=>{if(e.key!=='Enter'||document.querySelector('.acl li.on'))return;const v=$('asq').value.trim();if(v.length<2)return;const m=$('asm');m.hidden=false;m.textContent='Buscando…';try{const c=oc(),r=await fetch('/api/search?t=place&q='+encodeURIComponent(v)+(c?'&lat='+c[0]+'&lng='+c[1]:'')),j=await r.json(),it=(j.results||[])[0];if(!it){m.textContent='No encuentro eso. Prueba con calle y ciudad, o toca el mapa.';return}m.hidden=true;pickPoint([it.lat,it.lng],it.name,it.sub||'')}catch(x){m.textContent='No pude buscar ahora. Toca el mapa para elegir el punto.'}});
+  $('shl').hidden=false;try{$('shw').checked=localStorage.getItem('roi_show')==='1'}catch(e){}
+  $('shw').onchange=()=>{try{localStorage.setItem('roi_show',$('shw').checked?'1':'0')}catch(e){}if($('shw').checked){if(!window.__me)locate();beat()}else fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),off:true})}).catch(()=>{})};
+  setInterval(()=>{beat();near()},60000)}
+try{if(window.L){L2=window.L;map=L2.map('map',{scrollWheelZoom:false}).setView([40.4,-3.7],5);L2.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);layer=L2.layerGroup().addTo(map);if(K==='place')map.on('click',e=>pickPoint([e.latlng.lat,e.latlng.lng],''))}else $('map').hidden=true}catch(e){$('map').hidden=true}
 fetch('/api/public?places=1').then(r=>r.json()).then(j=>{ALL=(j&&j.places)||[];RT=(j&&j.routes)||[];PL=ALL.filter(p=>p.kind===K);draw()}).catch(()=>draw());
-$('loc').onclick=()=>{$('loc').hidden=false;$('loc').disabled=false;if(!navigator.geolocation){$('loc').textContent='Tu navegador no da la ubicación';return}
-  $('loc').textContent='Buscando…';let first=true,first2=true;
-  wid=navigator.geolocation.watchPosition(p=>{me=[p.coords.latitude,p.coords.longitude];window.__me=me;if(first){first=false;$('loc').textContent='Siguiendo tu posición mientras esta página esté abierta';$('loc').disabled=true}draw();osm();near();if(first2){first2=false;beat()}},()=>{$('loc').textContent='No pude ver tu ubicación · elige un lugar de la lista'},{enableHighAccuracy:true,timeout:15000,maximumAge:10000})};
-</script></script></body></html>
+</script></body></html>
