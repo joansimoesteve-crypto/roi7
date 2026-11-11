@@ -94,6 +94,8 @@ module.exports = async (req, res) => {
     if (b.action === 'showcase') { // solo la cuenta «todo Roi» decide qué sale en la landing
       if (!a.org.all_data) return res.status(403).json({ ok: false });
       const v = db.clip(String(b.value || ''), 120).toLowerCase(); if (!v) return res.status(400).json({ ok: false });
+      if (b.pub) { await db.del('landing_hide?value=eq.' + encodeURIComponent(v)); const r0 = await db.upsert('landing_hide', { value: '+' + v }, 'value'); return res.status(r0 && r0.ok === false ? 500 : 200).json({ ok: !(r0 && r0.ok === false) }); } // «+nombre» = publicar aunque sea privado de una organización
+      if (b.hide) await db.del('landing_hide?value=eq.' + encodeURIComponent('+' + v));
       const r = b.hide ? await db.upsert('landing_hide', { value: v }, 'value') : await db.del('landing_hide?value=eq.' + encodeURIComponent(v));
       return res.status(r && r.ok === false ? 500 : 200).json({ ok: !(r && r.ok === false) });
     }

@@ -1,6 +1,6 @@
 // GET /api/panel · datos del panel de una organización. Cabecera: Authorization: Bearer <token de Supabase Auth>.
 // Devuelve SOLO las valoraciones de sus objetivos. Plan «muestra»: 7 días, sin comentarios, temas, novedades ni preguntas.
-const db = require('./_db'), org = require('./_org');
+const db = require('./_db'), org = require('./_org'), pub = require('./_pub');
 const placesQ = async oid => { // prueba con todas las columnas y baja si el SQL nuevo aún no está ejecutado
   const base = 'id,name,kind,description,lat,lng,radius_m';
   for (const c of [`${base},shape,info,cta_label,cta_url,hitos`, `${base},shape,info,cta_label,cta_url`, `${base},shape,info`, base]) {
@@ -21,9 +21,10 @@ module.exports = async (req, res) => {
     const out = org.compute(rows, tg, sites, days, full);
     out.org = { name: o.name, plan: o.plan, all: !!o.all_data };
     if (o.all_data) { // escaparate: qué webs, lugares y proyectos salen en los rankings de la landing
-      const hid = await db.select('landing_hide?select=value'), H = new Set(Array.isArray(hid) ? hid.map(x => String(x.value).toLowerCase()) : []), M = {};
+      const hid = await db.select('landing_hide?select=value'), H = new Set(Array.isArray(hid) ? hid.map(x => String(x.value).toLowerCase()) : []), M = {}, PV = await pub();
       for (const r of rows) { const nm = r.type === 'web' ? (r.site || r.subject) : r.subject; if (!nm) continue; const k = r.type + '|' + nm.toLowerCase(), g = M[k] || (M[k] = { name: nm, kind: r.type, n: 0, s: 0 }); g.n++; g.s += r.rating; }
-      out.showcase = Object.values(M).sort((a, b) => b.n - a.n).slice(0, 60).map(g => ({ name: g.name, kind: g.kind, n: g.n, avg: +(g.s / g.n).toFixed(1), hidden: H.has(g.name.toLowerCase()) }));
+      out.showcase = Object.values(M).sort((a, b) => b.n - a.n).slice(0, 60).map(g => ({ name: g.name, kind: g.kind, n: g.n, avg: +(g.s / g.n).toFixed(1), hidden: H.has(g.name.toLowerCase()) || PV.has(g.name.toLowerCase()), priv: PV.has(g.name.toLowerCase()) && !H.has(g.name.toLowerCase()) }));
+      out.recent = rows.slice().sort((x, y) => String(y.created_at).localeCompare(String(x.created_at))).slice(0, 40).map(r => ({ id: r.id, name: r.type === 'web' ? (r.site || r.subject) : r.subject, kind: r.type, rating: r.rating, comment: r.comment ? String(r.comment).slice(0, 120) : '', ts: r.created_at }));
     } out.email = a.email;
     out.targetList = tg.map(t => ({ kind: t.kind, value: t.value }));
     if (full) {

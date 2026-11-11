@@ -1,16 +1,18 @@
 // GET /api/rankings · medias por web, lugar, proyecto y organización + datos «en vivo» para la portada.
 // Las personas (type = person) NO aparecen en rankings públicos: solo las ve su dueño en el panel de Supabase.
-const db = require('./_db');
+const db = require('./_db'), pub = require('./_pub');
 module.exports = async (req, res) => {
   if (db.cors(req, res)) return;
   if (!db.ok()) return res.status(503).json({ error: 'sin configurar' });
-  const rows = await db.select('ratings?select=client_id,type,subject,site,rating,feeling,lat,lng,created_at&order=created_at.desc&limit=20000');
+  let rows = await db.select('ratings?select=client_id,type,subject,site,rating,feeling,lat,lng,created_at,hidden&order=created_at.desc&limit=20000');
+  if (!Array.isArray(rows)) rows = await db.select('ratings?select=client_id,type,subject,site,rating,feeling,lat,lng,created_at&order=created_at.desc&limit=20000');
   if (!Array.isArray(rows)) return res.status(500).json({});
   const hid = await db.select('landing_hide?select=value'), H = new Set(Array.isArray(hid) ? hid.map(x => String(x.value).toLowerCase()) : []);
+  for (const v of await pub()) H.add(v); // lo privado de cada organización no sale en la portada
   const G = { webs: {}, places: {}, projects: {}, orgs: {} }, since = Date.now() - 864e5;
   let n = 0, day = 0, daySum = 0; const recent = [];
   for (const r of rows) {
-    if (r.type === 'person' || String(r.client_id).startsWith('demo-')) continue;
+    if (r.hidden === true || r.type === 'person' || String(r.client_id).startsWith('demo-')) continue;
     const k = r.type === 'place' ? 'places' : r.type === 'project' ? 'projects' : r.type === 'org' ? 'orgs' : 'webs';
     const name = k === 'webs' ? (r.site || r.subject) : r.subject; if (!name || H.has(String(name).toLowerCase())) continue;
     const g = G[k][name] || (G[k][name] = { name, s: 0, n: 0, la: 0, lo: 0, c: 0 });
