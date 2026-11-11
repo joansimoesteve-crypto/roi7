@@ -7,12 +7,12 @@ module.exports = async (req, res) => {
   if (!(lat > 27 && lat < 44 && lng > -19 && lng < 5)) return res.status(400).json({ error: 'coords' });
   const at = `(around:${r},${lat.toFixed(4)},${lng.toFixed(4)})`;
   const q = `[out:json][timeout:10];(nwr${at}["name"]["amenity"~"^(restaurant|cafe|bar|fast_food|ice_cream|library|pharmacy|hospital|clinic|university|college|school|townhall|post_office|bank|cinema|theatre)$"];nwr${at}["name"]["leisure"~"^(park|playground|pitch|sports_centre|fitness_centre|swimming_pool)$"];nwr${at}["name"]["tourism"="museum"];nwr${at}["name"]["shop"~"^(supermarket|mall|clothes|bakery|books|sports|electronics)$"];);out center ${lim};`;
-  for (const e of ENDPOINTS) {
-    try {
+  try { // se piden a la vez a todos los servidores: gana el primero que responde
+    const j = await Promise.any(ENDPOINTS.map(async e => {
       const f = await fetch(e, { method: 'POST', body: 'data=' + encodeURIComponent(q), headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'CitizenVoice/1.0 (+https://www.citizenvoice.es)' }, signal: AbortSignal.timeout(9000) });
-      if (!f.ok) continue; const j = await f.json();
-      res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=3600'); return res.status(200).json({ elements: j.elements || [] });
-    } catch (_) { }
-  }
+      if (!f.ok) throw new Error('http'); return f.json();
+    }));
+    res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=3600'); return res.status(200).json({ elements: j.elements || [] });
+  } catch (_) { }
   res.status(502).json({ error: 'overpass' });
 };

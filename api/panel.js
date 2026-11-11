@@ -16,10 +16,10 @@ module.exports = async (req, res) => {
   try {
     const a = await org.auth(req);
     if (!a.org) return res.status(a.status).json({ error: a.error, email: a.email });
-    const o = a.org, full = o.plan === 'completo', days = full ? 90 : 7;
+    const o = a.org, full = o.plan === 'completo' || !!o.all_data, days = full ? 90 : 7;
     const { rows, tg, sites } = await org.load(o.id, days, !!o.all_data);
     const out = org.compute(rows, tg, sites, days, full);
-    out.org = { name: o.name, plan: o.plan, all: !!o.all_data };
+    out.org = { name: o.name, plan: o.all_data ? 'completo' : o.plan, all: !!o.all_data };
     if (o.all_data) { // escaparate: qué webs, lugares y proyectos salen en los rankings de la landing
       const hid = await db.select('landing_hide?select=value'), H = new Set(Array.isArray(hid) ? hid.map(x => String(x.value).toLowerCase()) : []), M = {}, PV = await pub();
       for (const r of rows) { const nm = r.type === 'web' ? (r.site || r.subject) : r.subject; if (!nm) continue; const k = r.type + '|' + nm.toLowerCase(), g = M[k] || (M[k] = { name: nm, kind: r.type, n: 0, s: 0 }); g.n++; g.s += r.rating; }
