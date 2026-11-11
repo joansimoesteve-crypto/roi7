@@ -17,7 +17,7 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 .sub{color:var(--mut);margin:0 0 14px}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 22px;border-radius:99px;border:0;background:var(--moss);color:#fff;font:inherit;font-weight:600;text-decoration:none;cursor:pointer}.btn.g{background:#fff;color:var(--ink);border:1px solid var(--line)}
 :focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-#map{height:260px;border-radius:20px;border:1px solid var(--line);margin:12px 0;background:var(--sage)}
+#map{position:relative;z-index:0;isolation:isolate;height:260px;border-radius:20px;border:1px solid var(--line);margin:12px 0;background:var(--sage)}
 .here{background:#fff;border:2px solid var(--moss);border-radius:20px;padding:16px;margin:12px 0}.here p{margin:0 0 10px;font-weight:600}
 .list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
 .it{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;color:inherit;text-decoration:none}
@@ -35,7 +35,7 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 .sech{display:flex;align-items:center;gap:8px;font-size:18px;margin:22px 0 8px;color:var(--ink)}.sech .ri{color:var(--ac)}.sech small{margin-left:auto;font-weight:400;color:var(--mut);font-size:13px}
 .k{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--sage);color:var(--moss)}
 .pick{background:#fff;border:2px solid var(--ac);border-radius:20px;padding:14px 16px;margin:12px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap}.pick .t{flex:1;min-width:180px}.pick b{display:block}.pick small{color:var(--mut)}
-.pf{width:34px;height:34px;border-radius:50%;background:#fff;border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.3)}.pf svg{display:block}.pp{background:var(--ac);color:#fff;border:2px solid #fff;border-radius:50%;width:30px;height:30px;display:grid!important;place-items:center;font-weight:700;font-size:13px;box-shadow:0 3px 10px rgba(0,0,0,.25)}.pdot{width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.pfw{position:relative;width:34px;height:34px}.pfn{position:absolute;left:50%;bottom:38px;transform:translateX(-50%);background:#26331f;color:#fff;font:700 11px/1 system-ui;padding:3px 7px;border-radius:99px;white-space:nowrap;max-width:90px;overflow:hidden;text-overflow:ellipsis}.pf{width:34px;height:34px;border-radius:50%;background:#fff;border:3px solid var(--h,#fff);box-shadow:0 3px 10px rgba(0,0,0,.3)}.pf svg{display:block}.pp{background:var(--ac);color:#fff;border:2px solid #fff;border-radius:50%;width:30px;height:30px;display:grid!important;place-items:center;font-weight:700;font-size:13px;box-shadow:0 3px 10px rgba(0,0,0,.25)}.pdot{width:16px;height:16px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35)}
 .tog{display:flex;align-items:center;gap:10px;margin:10px 0 0;font-size:14px;color:var(--mut)}.tog input{width:20px;height:20px;accent-color:var(--ac)}
 .flt{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px}.flt button{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:99px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:600;font-size:14px;cursor:pointer}.flt button.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .btn.ac{background:var(--ac)}.rbtn{margin-top:10px;min-height:42px;padding:8px 18px;font-size:15px}.hint{color:var(--mut);font-size:14px;margin:6px 2px}
@@ -49,7 +49,7 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 <div class="here" id="here" hidden><p id="ht"></p><p id="hi" class="hi" hidden></p><div id="hu" class="hu" hidden></div><div id="hp" class="hp" hidden></div><div class="hr"><a class="btn ac" id="hb" href="#">Opinar ahora</a> <a class="btn g" id="hr" href="#">Sala</a> <a class="btn g" id="hc" hidden target="_blank" rel="noopener"></a></div></div>
 <div id="map" role="img" aria-label="Mapa"></div>
 <div class="pick" id="pick" hidden><div class="t"><b id="pkn"></b><small id="pks"></small></div><a class="btn ac" id="pkb" href="#">Valorar este lugar</a></div>
-<label class="tog" id="shl" hidden><input type="checkbox" id="shw"><span>Mostrar mi avatar a otras personas cerca (zona aproximada, nunca tu punto exacto)</span></label><p class="hint" id="pn" hidden></p>
+<label class="tog" id="shl" hidden><input type="checkbox" id="shw"><span>Mostrar mi avatar a otras personas cerca (zona aproximada, nunca tu punto exacto)</span></label><div id="nkw" hidden style="margin:6px 0"><input id="nk" maxlength="20" placeholder="Tu apodo (opcional)" autocomplete="off" style="width:100%;min-height:44px;border:1px solid var(--line);border-radius:14px;padding:8px 14px;font:inherit"></div><p class="hint" id="pn" hidden></p>
 <div id="secP">
  <h2 class="sech" id="oh"></h2><ul class="list" id="osm"></ul><p class="ld" id="ol"></p>
  <h2 class="sech" id="zh"></h2><ul class="list" id="list"></ul>
@@ -123,32 +123,40 @@ function routes(){const ul=$('rts');if(!ul)return;const v=cpGet();ul.textContent
 /* Qué hay cerca (OpenStreetMap): comercios, parques, bibliotecas, deporte… con icono y color por tipo */
 const OT={restaurant:['food','#e8590c','Restaurante'],cafe:['food','#b8610f','Cafetería'],bar:['food','#c2255c','Bar'],fast_food:['food','#e8590c','Comida rápida'],ice_cream:['food','#c2255c','Heladería'],library:['book','#7048e8','Biblioteca'],pharmacy:['cross','#e03131','Farmacia'],hospital:['cross','#e03131','Hospital'],clinic:['cross','#e03131','Clínica'],university:['cap','#2a7de1','Universidad'],college:['cap','#2a7de1','Centro de estudios'],school:['cap','#2a7de1','Colegio'],townhall:['landmark','#8a5a2b','Ayuntamiento'],post_office:['landmark','#8a5a2b','Correos'],bank:['card','#1c7ed6','Banco'],cinema:['star','#ae3ec9','Cine'],theatre:['star','#ae3ec9','Teatro'],museum:['landmark','#8a5a2b','Museo'],park:['tree','#2f9e44','Parque'],playground:['tree','#2f9e44','Zona de juegos'],pitch:['ball','#e67700','Pista deportiva'],sports_centre:['ball','#e67700','Polideportivo'],fitness_centre:['ball','#e67700','Gimnasio'],swimming_pool:['ball','#1098ad','Piscina'],supermarket:['cart','#0c8599','Supermercado'],mall:['store','#0c8599','Centro comercial'],shop:['store','#0c8599','Tienda'],bus_station:['route','#495057','Estación']};
 const OAM='restaurant|cafe|bar|fast_food|ice_cream|library|pharmacy|hospital|clinic|university|college|school|townhall|post_office|bank|cinema|theatre';
-async function osm(){const c=window.__me||sp;if(!c||K!=='place')return;if(lastQ&&km(c[0],c[1],lastQ[0],lastQ[1])<150)return;lastQ=c.slice();$('ol').textContent='Buscando lo que hay cerca…';
-  const at='(around:'+OR+','+c[0]+','+c[1]+')',q='[out:json][timeout:15];(nwr'+at+'["name"]["amenity"~"^('+OAM+')$"];nwr'+at+'["name"]["leisure"~"^(park|playground|pitch|sports_centre|fitness_centre|swimming_pool)$"];nwr'+at+'["name"]["tourism"="museum"];nwr'+at+'["name"]["shop"~"^(supermarket|mall|clothes|bakery|books|sports|electronics)$"];);out center 70;';
-  let j=null;for(const u of ['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter']){try{const r=await fetch(u,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});if(r.ok){j=await r.json();break}}catch(e){}}
-  if(!j){$('ol').textContent='No pude consultar el mapa ahora. Inténtalo en un momento.';return}
-  const known=new Set(PL.map(p=>p.name.toLowerCase())),seen=new Set();
-  const A=(j.elements||[]).map(e=>{const t=e.tags||{},la=e.lat??(e.center&&e.center.lat),lo=e.lon??(e.center&&e.center.lon),k=t.amenity||t.leisure||(t.tourism==='museum'?'museum':t.shop==='supermarket'?'supermarket':t.shop==='mall'?'mall':'shop');return{name:t.name,la,lo,k,d:km(c[0],c[1],la,lo)}}).filter(x=>x.la!=null&&!known.has(x.name.toLowerCase())&&!seen.has(x.name.toLowerCase())&&seen.add(x.name.toLowerCase())).sort((a,b)=>a.d-b.d).slice(0,30);
-  const ul=$('osm');ul.textContent='';$('ol').textContent=A.length?'':'No hay sitios con nombre en 600 m. Prueba en otra zona.';
-  if(osmL)osmL.clearLayers();else if(L2&&map)osmL=L2.layerGroup().addTo(map);
-  A.forEach(x=>{const o=OT[x.k]||['pin','#3f5a3a','Lugar'],u='/v?t=place&n='+encodeURIComponent(x.name)+'&s=qr&g='+x.la.toFixed(5)+','+x.lo.toFixed(5)+(x.d<=60?'&v=1':'');
-    ul.append(itemEl({href:u,ic:o[0],col:o[1],name:x.name,sub:o[2],d:fmt(x.d)}));
-    if(osmL&&L2){const a=document.createElement('a');a.href=u;a.textContent=x.name+' · valorar';L2.marker([x.la,x.lo],{icon:L2.divIcon({className:'',html:'<div class="pdot" style="background:'+o[1]+'"></div>',iconSize:[16,16]})}).bindPopup(a).addTo(osmL)}});
-  $('oh').querySelector('small').textContent=A.length?A.length+' cerca · toca para valorar':''}
+let osmTok=0;
+async function osmFetch(c,r,lim){const at='(around:'+r+','+c[0]+','+c[1]+')',q='[out:json][timeout:12];(nwr'+at+'["name"]["amenity"~"^('+OAM+')$"];nwr'+at+'["name"]["leisure"~"^(park|playground|pitch|sports_centre|fitness_centre|swimming_pool)$"];nwr'+at+'["name"]["tourism"="museum"];nwr'+at+'["name"]["shop"~"^(supermarket|mall|clothes|bakery|books|sports|electronics)$"];);out center '+lim+';';
+  for(const u of ['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter']){try{const r2=await fetch(u,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});if(r2.ok)return await r2.json()}catch(e){}}return null}
+/* Carga por capas: primero lo más cercano (150-250 m, sale casi al instante) y luego se amplía poco a poco */
+async function osm(){const c=window.__me||sp;if(!c||K!=='place')return;if(lastQ&&km(c[0],c[1],lastQ[0],lastQ[1])<150)return;lastQ=c.slice();const tok=++osmTok;$('ol').textContent='Buscando lo más cercano…';
+  const known=new Set(PL.map(p=>p.name.toLowerCase())),ul=$('osm');let shown=false;
+  for(const [r,lim,max] of [[250,25,12],[600,50,22],[Math.max(OR,1000),80,30]]){
+    const j=await osmFetch(c,r,lim);if(tok!==osmTok)return;if(!j){if(!shown)$('ol').textContent='No pude consultar el mapa ahora. Inténtalo en un momento.';return}
+    const seen=new Set();
+    const A=(j.elements||[]).map(e=>{const t=e.tags||{},la=e.lat??(e.center&&e.center.lat),lo=e.lon??(e.center&&e.center.lon),k=t.amenity||t.leisure||(t.tourism==='museum'?'museum':t.shop==='supermarket'?'supermarket':t.shop==='mall'?'mall':'shop');return{name:t.name,la,lo,k,d:km(c[0],c[1],la,lo)}}).filter(x=>x.la!=null&&!known.has(x.name.toLowerCase())&&!seen.has(x.name.toLowerCase())&&seen.add(x.name.toLowerCase())).sort((a,b)=>a.d-b.d).slice(0,max);
+    ul.textContent='';$('ol').textContent=A.length?(r<OR||r<1000?'Cargando más sitios…':''):(r>=1000?'No hay sitios con nombre cerca. Prueba en otra zona.':'Buscando lo más cercano…');shown=shown||A.length>0;
+    if(osmL)osmL.clearLayers();else if(L2&&map)osmL=L2.layerGroup().addTo(map);
+    A.forEach(x=>{const o=OT[x.k]||['pin','#3f5a3a','Lugar'],u='/v?t=place&n='+encodeURIComponent(x.name)+'&s=qr&g='+x.la.toFixed(5)+','+x.lo.toFixed(5)+(x.d<=60?'&v=1':'');
+      ul.append(itemEl({href:u,ic:o[0],col:o[1],name:x.name,sub:o[2],d:fmt(x.d)}));
+      if(osmL&&L2){const a=document.createElement('a');a.href=u;a.textContent=x.name+' · valorar';L2.marker([x.la,x.lo],{icon:L2.divIcon({className:'',html:'<div class="pdot" style="background:'+o[1]+'"></div>',iconSize:[16,16]})}).bindPopup(a).addTo(osmL)}});
+    $('oh').querySelector('small').textContent=A.length?A.length+' cerca · toca para valorar':''}
+  if(tok===osmTok&&$('ol').textContent==='Cargando más sitios…')$('ol').textContent=''}
 /* Punto elegido: búsqueda, toque en el mapa o mi ubicación → punto geolocalizado con botón Valorar */
 let AREA=null,OR=600;
 function areaTo(pt,label){AREA=pt;sp=pt;lastQ=null;OR=K==='place'?1000:600;window.__fit=1;const m=$('asm');m.hidden=false;m.textContent=(label?'Zona: '+label+'. ':'')+(K==='place'?'Toca el mapa o elige un sitio de la lista.':'Mostrando proyectos de esa zona y los que no tienen sitio fijo.');
   if(map)map.setView(pt,K==='place'?15:12);draw();if(K==='place'){osm();near()}}
 async function pickPoint(pt,label,known){sp=pt;lastQ=null;window.__fit=1;
-  const pk=$('pick');pk.hidden=false;$('pkn').textContent=label||'Punto elegido en el mapa';$('pks').textContent=known?'':'Buscando la dirección…';
-  const mk=(n)=>{const g=pt[0].toFixed(5)+','+pt[1].toFixed(5);MOT={n,g};$('pkb').href='/v?t=place&n='+encodeURIComponent(n)+'&s=map&g='+g+(me&&km(me[0],me[1],pt[0],pt[1])<80?'&v=1':'')};mk(label||'Punto en el mapa');
+  const pk=$('pick');pk.hidden=false;$('pkn').textContent=label||'Buscando la dirección…';$('pks').textContent=known?'':'Buscando la dirección…';
+  const mk=(n)=>{const g=pt[0].toFixed(5)+','+pt[1].toFixed(5);MOT={n,g};$('pkb').href='/v?t=place&n='+encodeURIComponent(n)+'&s=map&g='+g+(me&&km(me[0],me[1],pt[0],pt[1])<80?'&v=1':'')};mk(label||('Punto '+pt[0].toFixed(4)+', '+pt[1].toFixed(4)));
   if(map){map.setView(pt,17);if(L2){if(pickMk)map.removeLayer(pickMk);pickMk=L2.marker(pt).addTo(map)}}
-  if(!known){try{const r=await fetch('/api/search?rev='+pt[0]+','+pt[1]),j=await r.json();if(j.place){$('pkn').textContent=j.place.name;$('pks').textContent=j.place.sub||'';mk(j.place.name)}else $('pks').textContent='Sin dirección conocida · puedes valorarlo igualmente'}catch(e){$('pks').textContent=''}}
+  if(!known){try{const r=await fetch('/api/search?rev='+pt[0]+','+pt[1]),j=await r.json();if(j.place){$('pkn').textContent=j.place.name;$('pks').textContent=j.place.sub||'';mk(j.place.name)}else $('pkn').textContent='Punto elegido en el mapa';$('pks').textContent='Sin dirección conocida · puedes valorarlo igualmente'}catch(e){$('pks').textContent=''}}
   else $('pks').textContent=known;
   draw();osm();near()}
 const anonId=()=>{let a='';try{a=localStorage.getItem('roi_anon')||'';if(!a){a=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));localStorage.setItem('roi_anon',a)}}catch(e){}return a};
+/* Avatar en el mapa: apodo arriba y color del aro distinto según el día y su ánimo */
+function avHtml(x){const nk=String(x.nick||'Anónimo').replace(/[<>&"]/g,''),d=Math.floor(Date.now()/864e5);let h=0;for(const ch of nk)h=(h*31+ch.charCodeAt(0))%360;const hue=(h+d*47+(x.mood||3)*35)%360,bg='hsl('+hue+',65%,86%)';
+  return '<div class="pfw"><span class="pfn">'+nk+'</span><div class="pf" style="--h:hsl('+hue+',60%,42%);background:'+bg+'">'+ROI_FACE(x.mood,28)+'</div></div>'}
 async function near(){const c=window.__me||sp;if(!c||!L2||!map||K!=='place')return;try{const r=await fetch('/api/near?lat='+c[0]+'&lng='+c[1]+'&a='+encodeURIComponent(anonId())),j=await r.json();if(!plL)plL=L2.layerGroup().addTo(map);plL.clearLayers();const P=j.people||[];
-  P.forEach(x=>L2.marker([x.lat,x.lng],{icon:L2.divIcon({className:'',html:'<div class="pf">'+ROI_FACE(x.mood,34)+'</div>',iconSize:[34,34]})}).bindPopup(()=>talkPop(x)).addTo(plL));
+  P.forEach(x=>L2.marker([x.lat,x.lng],{icon:L2.divIcon({className:'',html:avHtml(x),iconSize:[34,34],iconAnchor:[17,17]})}).bindPopup(()=>talkPop(x)).addTo(plL));
   const pn=$('pn');pn.hidden=!P.length;pn.textContent=P.length?(P.length===1?'1 persona':P.length+' personas')+' con Roi por esta zona ahora mismo. Para hablar con alguien, elige un motivo (valorar un lugar) y toca su avatar.':''}catch(e){}}
 /* Para hablar con alguien siempre hay un motivo: valorar un lugar, una zona o un punto. Después se entra en su sala. */
 function talkPop(x){const d=document.createElement('div');d.style.cssText='min-width:180px;font:15px/1.4 system-ui';const t=document.createElement('b');t.textContent=(x.nick||'Anónimo')+' está por aquí';d.append(t);
@@ -174,8 +182,9 @@ $('gps').onclick=()=>{NEARJ=true;locate()};
 RoiAC($('asq'),{t:'muni',bias:()=>null,pick:it=>{$('asq').value=it.name;areaTo([it.lat,it.lng],it.name+(it.sub?' · '+it.sub:''))}});
 $('asq').addEventListener('keydown',async e=>{if(e.key!=='Enter'||document.querySelector('.acl li.on'))return;const v=$('asq').value.trim();if(v.length<2)return;const m=$('asm');m.hidden=false;m.textContent='Buscando…';try{const r=await fetch('/api/search?t=muni&q='+encodeURIComponent(v)),j=await r.json(),it=(j.results||[])[0];if(!it){m.textContent='No encuentro ese municipio. Toca el mapa o usa «Cerca de mí».';return}areaTo([it.lat,it.lng],it.name+(it.sub?' · '+it.sub:''))}catch(x){m.textContent='No pude buscar ahora. Toca el mapa o usa «Cerca de mí».'}});
 if(K==='place'){
-  $('shl').hidden=false;try{$('shw').checked=localStorage.getItem('roi_show')==='1'}catch(e){}
-  $('shw').onchange=()=>{try{localStorage.setItem('roi_show',$('shw').checked?'1':'0')}catch(e){}if($('shw').checked){if(!window.__me)locate();beat()}else fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),off:true})}).catch(()=>{})};
+  $('shl').hidden=false;try{$('shw').checked=localStorage.getItem('roi_show')==='1'}catch(e){}$('nkw').hidden=!$('shw').checked;
+  $('nk').value=(()=>{try{return localStorage.getItem('roi_nick')||''}catch(e){return ''}})();$('nk').oninput=()=>{try{localStorage.setItem('roi_nick',$('nk').value.trim().slice(0,20))}catch(e){}};$('nk').onchange=beat;
+  $('shw').onchange=()=>{$('nkw').hidden=!$('shw').checked;try{localStorage.setItem('roi_show',$('shw').checked?'1':'0')}catch(e){}if($('shw').checked){if(!window.__me)locate();beat()}else fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),off:true})}).catch(()=>{})};
   setInterval(()=>{beat();near()},60000)}
 try{if(window.L){L2=window.L;map=L2.map('map',{scrollWheelZoom:false}).setView([40.4,-3.7],5);L2.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);layer=L2.layerGroup().addTo(map);map.on('click',e=>{if(K==='place')pickPoint([e.latlng.lat,e.latlng.lng],'');else areaTo([e.latlng.lat,e.latlng.lng],'')})}else $('map').hidden=true}catch(e){$('map').hidden=true}
 fetch('/api/public?places=1').then(r=>r.json()).then(j=>{ALL=(j&&j.places)||[];RT=(j&&j.routes)||[];PL=ALL.filter(p=>p.kind===K);draw()}).catch(()=>draw());

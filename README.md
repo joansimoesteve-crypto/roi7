@@ -81,7 +81,7 @@ Una sola base de datos (Supabase) recibe las valoraciones de la extensión, de `
 
 
 ## Versión final · orden de SQL en Supabase
-v2_v3 → v4 → v5 → v6 → v7 → v8 → v9 → v10 → v11 (todos idempotentes).
+v2_v3 → v4 → v5 → v6 → v7 → v8 → v9 → v10 → v11 → v12 (limpiar+ejemplos propios) → v13 (privacidad por organización) (todos idempotentes).
 
 ## Variables opcionales (Vercel)
 - `GEOAPIFY_KEY` (mejora buscador de municipios), `SEARXNG_URL` (webs).

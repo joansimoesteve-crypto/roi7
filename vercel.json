@@ -13,6 +13,10 @@
       "destination": "/mapa.html"
     },
     {
+      "source": "/participacion-ciudadana",
+      "destination": "/participacion-ciudadana.html"
+    },
+    {
       "source": "/sala",
       "destination": "/sala.html"
     }
