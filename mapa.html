@@ -137,15 +137,15 @@ function osmRender(c,j,final){const known=new Set(PL.map(p=>p.name.toLowerCase()
     ul.append(itemEl({href:u,ic:o[0],col:o[1],name:x.name,sub:o[2],d:fmt(x.d)}));
     if(osmL&&L2){const a=document.createElement('a');a.href=u;a.textContent=x.name+' · valorar';L2.marker([x.la,x.lo],{icon:L2.divIcon({className:'',html:'<div class="pdot" style="background:'+o[1]+'"></div>',iconSize:[16,16]})}).bindPopup(a).addTo(osmL)}});
   $('oh').querySelector('small').textContent=A.length?A.length+' cerca · desliza y toca para valorar':'';return A.length}
-/* «Cerca de ti»: se piden a la vez los 300 m (sale enseguida) y 1 km; se pinta lo primero que llega y se amplía. Guarda lo último para mostrarlo al instante. */
+/* «Cerca de ti»: Photon (rápido, ~0,3 s) pinta lo primero; Overpass amplía después. Guarda lo último para mostrarlo al instante. */
+const PHK=[['amenity',/^(restaurant|cafe|bar|fast_food|ice_cream|library|pharmacy|hospital|clinic|university|college|school|townhall|post_office|bank|cinema|theatre)$/],['leisure',/^(park|playground|pitch|sports_centre|fitness_centre|swimming_pool)$/],['shop',/^(supermarket|mall|clothes|bakery|books|sports|electronics)$/],['tourism',/^museum$/]];
+async function photonNear(c){const all=await Promise.all(PHK.map(async([k,re])=>{try{const r=await fetch('https://photon.komoot.io/reverse?lat='+c[0]+'&lon='+c[1]+'&radius=0.8&limit=20&osm_tag='+k+'&lang=default');if(!r.ok)return[];const j=await r.json();return(j.features||[]).filter(f=>f.properties&&f.properties.name&&f.properties.osm_key===k&&re.test(f.properties.osm_value)).map(f=>({lat:f.geometry.coordinates[1],lon:f.geometry.coordinates[0],tags:{name:f.properties.name,[k]:f.properties.osm_value}}))}catch(e){return[]}}));return{elements:[].concat(...all)}}
 async function osm(){const c=window.__me||sp;if(!c||K!=='place')return;if(lastQ&&km(c[0],c[1],lastQ[0],lastQ[1])<150)return;lastQ=c.slice();const tok=++osmTok,key='roi_osm:'+c[0].toFixed(3)+','+c[1].toFixed(3);
-  let cached=null;try{cached=JSON.parse(sessionStorage.getItem(key)||'null')}catch(e){}
-  if(cached)osmRender(c,cached,false);else{$('osm').textContent='';$('ol').textContent='Buscando lo más cercano…'}
-  const p1=osmFetch(c,300,30),p2=osmFetch(c,1000,90);let big=false;
-  p1.then(j=>{if(tok===osmTok&&j&&!big)osmRender(c,j,false)});
-  const j2=await p2;if(tok!==osmTok)return;big=true;
-  if(j2){osmRender(c,j2,true);try{sessionStorage.setItem(key,JSON.stringify({elements:(j2.elements||[]).slice(0,90)}))}catch(e){}}
-  else{const j1=await p1;if(tok!==osmTok)return;if(j1)osmRender(c,j1,true);else if(!cached)$('ol').textContent='No pude cargar sitios ahora. Toca el mapa o inténtalo en unos segundos.'}}
+  let acc=[];try{const ch=JSON.parse(sessionStorage.getItem(key)||'null');if(ch&&ch.elements){acc=ch.elements;osmRender(c,{elements:acc},false)}}catch(e){}
+  if(!acc.length){$('osm').textContent='';$('ol').textContent='Buscando lo más cercano…'}
+  let pend=3,got=0;const add=(j,last)=>{if(tok!==osmTok)return;pend--;if(j&&j.elements&&j.elements.length){acc=acc.concat(j.elements);got+=j.elements.length}if(got||acc.length)osmRender(c,{elements:acc},pend===0);else if(pend===0)$('ol').textContent='No pude cargar sitios ahora. Toca el mapa o inténtalo en unos segundos.';
+    if(pend===0&&got){try{sessionStorage.setItem(key,JSON.stringify({elements:acc.slice(0,120)}))}catch(e){}}};
+  photonNear(c).then(j=>add(j));osmFetch(c,300,30).then(j=>add(j));osmFetch(c,1000,90).then(j=>add(j))}
 /* Punto elegido: búsqueda, toque en el mapa o mi ubicación → punto geolocalizado con botón Valorar */
 let AREA=null,OR=600;
 function areaTo(pt,label){AREA=pt;sp=pt;lastQ=null;OR=K==='place'?1000:600;window.__fit=1;const m=$('asm');m.hidden=false;m.textContent=(label?'Zona: '+label+'. ':'')+(K==='place'?'Toca el mapa o elige un sitio de la lista.':'Mostrando proyectos de esa zona y los que no tienen sitio fijo.');
