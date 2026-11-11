@@ -90,9 +90,26 @@ async function searx(q) {
   } catch (e) { return []; }
 }
 
+
+// ?near=1&lat&lng&r&lim · sitios con nombre cerca (OpenStreetMap/Overpass) desde el servidor, con caché
+const OVP = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter', 'https://overpass.private.coffee/api/interpreter'];
+async function nearby(Q, res) {
+  const lat = +Q.lat, lng = +Q.lng, r = Math.min(Math.max(+Q.r || 500, 100), 1500), lim = Math.min(Math.max(+Q.lim || 40, 10), 100);
+  if (!(lat > 27 && lat < 44 && lng > -19 && lng < 5)) return res.status(400).json({ error: 'coords' });
+  const at = `(around:${r},${lat.toFixed(4)},${lng.toFixed(4)})`;
+  const q = `[out:json][timeout:10];(nwr${at}["name"]["amenity"~"^(restaurant|cafe|bar|fast_food|ice_cream|library|pharmacy|hospital|clinic|university|college|school|townhall|post_office|bank|cinema|theatre)$"];nwr${at}["name"]["leisure"~"^(park|playground|pitch|sports_centre|fitness_centre|swimming_pool)$"];nwr${at}["name"]["tourism"="museum"];nwr${at}["name"]["shop"~"^(supermarket|mall|clothes|bakery|books|sports|electronics)$"];);out center ${lim};`;
+  try {
+    const j = await Promise.any(OVP.map(async e => {
+      const f = await fetch(e, { method: 'POST', body: 'data=' + encodeURIComponent(q), headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': UA }, signal: AbortSignal.timeout(9000) });
+      if (!f.ok) throw new Error('http'); return f.json();
+    }));
+    res.setHeader('Cache-Control', 's-maxage=600, stale-while-revalidate=3600'); return res.status(200).json({ elements: j.elements || [] });
+  } catch (_) { return res.status(502).json({ error: 'overpass' }); }
+}
 module.exports = async (req, res) => {
   if (db.cors(req, res)) return;
   if (db.limited(req, 90)) return res.status(429).json({ ok: false, results: [] });
+  if ((req.query || {}).near) return nearby(req.query, res);
   const Q = req.query || {}, q = clip(String(Q.q || '').replace(/[\u0000-\u001f<>]/g, ' ').trim(), 100), t = String(Q.t || 'place');
   if (Q.rev) { const [a, b] = String(Q.rev).split(',').map(parseFloat); if (!isFinite(a) || !isFinite(b)) return res.status(200).json({ ok: true, place: null }); const p = await reverse(a, b); res.setHeader('Cache-Control', 'public, s-maxage=3600'); return res.status(200).json({ ok: true, place: p }); }
   if (q.length < 2) return res.status(200).json({ ok: true, results: [] });
