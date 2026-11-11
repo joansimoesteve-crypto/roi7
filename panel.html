@@ -90,7 +90,7 @@ async function boot(){
 
 /* ===== Panel ===== */
 const lockBox=(inner,txt,n)=>`<div class="lock"><div class="blur" aria-hidden="true">${inner}</div><div class="cta"><b>Incluido en el plan completo</b><span>${txt}</span><a class="btn s" href="${UPGRADE_URL||'/#empresas'}">Desbloquear</a></div></div>`;
-function show(){const T=D.totals,pro=D.org.plan==='completo',days=D.days;
+function show(){const T=D.totals,pro=D.org.plan==='completo'||!!D.org.all,days=D.days;
  $('org').hidden=false;$('org').innerHTML=(D.org.crest?'<img class="crest" src="'+esc(D.org.crest)+'" alt="" onerror="this.replaceWith(shield(\''+esc((D.org.muni||'R').charAt(0))+'\'))">':'')+esc(D.org.name)+' <span class="badge'+(pro?' pro':'')+'">'+(pro?(D.org.all?'Todo Roi':'Completo'):'Muestra')+'</span>'+(DEMO?' <span class="demo">DEMO</span>':'')+(D.email?'<small>'+esc(D.email)+'</small>':'');
  $('out').hidden=false;$('out').textContent=DEMO?'Salir':'Salir';$('out').onclick=DEMO?()=>location.href='/':logout;
  const dl=T.avg7!=null&&T.prevAvg7!=null?+(T.avg7-T.prevAvg7).toFixed(1):null,

@@ -19,7 +19,7 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 :focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 #map{position:relative;z-index:0;isolation:isolate;height:260px;border-radius:20px;border:1px solid var(--line);margin:12px 0;background:var(--sage)}
 .here{background:#fff;border:2px solid var(--moss);border-radius:20px;padding:16px;margin:12px 0}.here p{margin:0 0 10px;font-weight:600}
-.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.list.s3v{max-height:268px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:4px;scrollbar-width:thin;overscroll-behavior:contain}.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
 .it{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;color:inherit;text-decoration:none}
 .it:hover{border-color:var(--moss)}.it .t{flex:1;min-width:0}.it b{display:block}.it small{color:var(--mut)}
 .it .d{font-size:14px;font-weight:600;color:var(--moss);white-space:nowrap}
@@ -51,15 +51,16 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 <div class="pick" id="pick" hidden><div class="t"><b id="pkn"></b><small id="pks"></small></div><a class="btn ac" id="pkb" href="#">Valorar este lugar</a></div>
 <label class="tog" id="shl" hidden><input type="checkbox" id="shw"><span>Mostrar mi avatar a otras personas cerca (zona aproximada, nunca tu punto exacto)</span></label><div id="nkw" hidden style="margin:6px 0"><input id="nk" maxlength="20" placeholder="Tu apodo (opcional)" autocomplete="off" style="width:100%;min-height:44px;border:1px solid var(--line);border-radius:14px;padding:8px 14px;font:inherit"></div><p class="hint" id="pn" hidden></p>
 <div id="secP">
- <h2 class="sech" id="oh"></h2><ul class="list" id="osm"></ul><p class="ld" id="ol"></p>
- <h2 class="sech" id="zh"></h2><ul class="list" id="list"></ul>
- <h2 class="sech" id="rh" hidden></h2><ul class="list" id="rts"></ul>
+ <h2 class="sech" id="oh"></h2><ul class="list s3v" id="osm"></ul><p class="ld" id="ol"></p>
+ <h2 class="sech" id="vh"></h2><ul class="list s3v" id="vlist"></ul>
+ <h2 class="sech" id="zh"></h2><ul class="list s3v" id="list"></ul>
+ <h2 class="sech" id="rh" hidden></h2><ul class="list s3v" id="rts"></ul>
 </div>
 <div id="secJ" hidden>
  <h2 class="sech" id="jh"></h2>
  <div class="sbar"><div class="sin"><span class="sico" id="jico"></span><input id="jq" type="search" aria-label="Buscar institución o proyecto" placeholder="Filtra por institución o proyecto…" style="padding-right:18px"></div></div>
  <div class="flt" id="flt"></div>
- <ul class="list" id="jlist"></ul>
+ <ul class="list s3v" id="jlist"></ul>
 </div>
 <p class="note">Tu ubicación se usa solo en este móvil, mientras tengas esta página abierta. No se guarda. Para listar sitios cercanos se consulta OpenStreetMap con una zona aproximada.</p>
 </div>
@@ -127,21 +128,24 @@ const OAM='restaurant|cafe|bar|fast_food|ice_cream|library|pharmacy|hospital|cli
 let osmTok=0;
 async function osmFetch(c,r,lim){try{const s=await fetch('/api/nearby?lat='+c[0].toFixed(4)+'&lng='+c[1].toFixed(4)+'&r='+r+'&lim='+lim);if(s.ok){const j=await s.json();if(j&&j.elements)return j}}catch(e){}
   const at='(around:'+r+','+c[0]+','+c[1]+')',q='[out:json][timeout:12];(nwr'+at+'["name"]["amenity"~"^('+OAM+')$"];nwr'+at+'["name"]["leisure"~"^(park|playground|pitch|sports_centre|fitness_centre|swimming_pool)$"];nwr'+at+'["name"]["tourism"="museum"];nwr'+at+'["name"]["shop"~"^(supermarket|mall|clothes|bakery|books|sports|electronics)$"];);out center '+lim+';';
-  for(const u of ['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter']){try{const r2=await fetch(u,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});if(r2.ok)return await r2.json()}catch(e){}}return null}
-/* Carga por capas: primero lo más cercano (150-250 m, sale casi al instante) y luego se amplía poco a poco */
-async function osm(){const c=window.__me||sp;if(!c||K!=='place')return;if(lastQ&&km(c[0],c[1],lastQ[0],lastQ[1])<150)return;lastQ=c.slice();const tok=++osmTok;$('ol').textContent='Buscando lo más cercano…';
-  const known=new Set(PL.map(p=>p.name.toLowerCase())),ul=$('osm');let shown=false;
-  for(const [r,lim,max] of [[300,30,12],[1000,90,30]]){
-    const j=await osmFetch(c,r,lim);if(tok!==osmTok)return;if(!j){if(!shown)$('ol').textContent='No pude consultar el mapa ahora. Inténtalo en un momento.';return}
-    const seen=new Set();
-    const A=(j.elements||[]).map(e=>{const t=e.tags||{},la=e.lat??(e.center&&e.center.lat),lo=e.lon??(e.center&&e.center.lon),k=t.amenity||t.leisure||(t.tourism==='museum'?'museum':t.shop==='supermarket'?'supermarket':t.shop==='mall'?'mall':'shop');return{name:t.name,la,lo,k,d:km(c[0],c[1],la,lo)}}).filter(x=>x.la!=null&&!known.has(x.name.toLowerCase())&&!seen.has(x.name.toLowerCase())&&seen.add(x.name.toLowerCase())).sort((a,b)=>a.d-b.d).slice(0,max);
-    ul.textContent='';$('ol').textContent=A.length?(r<OR||r<1000?'Cargando más sitios…':''):(r>=1000?'No hay sitios con nombre cerca. Prueba en otra zona.':'Buscando lo más cercano…');shown=shown||A.length>0;
-    if(osmL)osmL.clearLayers();else if(L2&&map)osmL=L2.layerGroup().addTo(map);
-    A.forEach(x=>{const o=OT[x.k]||['pin','#3f5a3a','Lugar'],u='/v?t=place&n='+encodeURIComponent(x.name)+'&s=qr&g='+x.la.toFixed(5)+','+x.lo.toFixed(5)+(x.d<=60?'&v=1':'');
-      ul.append(itemEl({href:u,ic:o[0],col:o[1],name:x.name,sub:o[2],d:fmt(x.d)}));
-      if(osmL&&L2){const a=document.createElement('a');a.href=u;a.textContent=x.name+' · valorar';L2.marker([x.la,x.lo],{icon:L2.divIcon({className:'',html:'<div class="pdot" style="background:'+o[1]+'"></div>',iconSize:[16,16]})}).bindPopup(a).addTo(osmL)}});
-    $('oh').querySelector('small').textContent=A.length?A.length+' cerca · toca para valorar':''}
-  if(tok===osmTok&&$('ol').textContent==='Cargando más sitios…')$('ol').textContent=''}
+  try{return await Promise.any(['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'].map(async u=>{const r2=await fetch(u,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});if(!r2.ok)throw 0;return await r2.json()}))}catch(e){return null}}
+function osmRender(c,j,final){const known=new Set(PL.map(p=>p.name.toLowerCase())),ul=$('osm'),seen=new Set();
+  const A=(j.elements||[]).map(e=>{const t=e.tags||{},la=e.lat??(e.center&&e.center.lat),lo=e.lon??(e.center&&e.center.lon),k=t.amenity||t.leisure||(t.tourism==='museum'?'museum':t.shop==='supermarket'?'supermarket':t.shop==='mall'?'mall':'shop');return{name:t.name,la,lo,k,d:km(c[0],c[1],la,lo)}}).filter(x=>x.name&&x.la!=null&&!known.has(x.name.toLowerCase())&&!seen.has(x.name.toLowerCase())&&seen.add(x.name.toLowerCase())).sort((a,b)=>a.d-b.d).slice(0,30);
+  ul.textContent='';$('ol').textContent=A.length?(final?'':'Cargando más sitios…'):(final?'No hay sitios con nombre cerca. Prueba en otra zona.':'Buscando lo más cercano…');
+  if(osmL)osmL.clearLayers();else if(L2&&map)osmL=L2.layerGroup().addTo(map);
+  A.forEach(x=>{const o=OT[x.k]||['pin','#3f5a3a','Lugar'],u='/v?t=place&n='+encodeURIComponent(x.name)+'&s=qr&g='+x.la.toFixed(5)+','+x.lo.toFixed(5)+(x.d<=60?'&v=1':'');
+    ul.append(itemEl({href:u,ic:o[0],col:o[1],name:x.name,sub:o[2],d:fmt(x.d)}));
+    if(osmL&&L2){const a=document.createElement('a');a.href=u;a.textContent=x.name+' · valorar';L2.marker([x.la,x.lo],{icon:L2.divIcon({className:'',html:'<div class="pdot" style="background:'+o[1]+'"></div>',iconSize:[16,16]})}).bindPopup(a).addTo(osmL)}});
+  $('oh').querySelector('small').textContent=A.length?A.length+' cerca · desliza y toca para valorar':'';return A.length}
+/* «Cerca de ti»: se piden a la vez los 300 m (sale enseguida) y 1 km; se pinta lo primero que llega y se amplía. Guarda lo último para mostrarlo al instante. */
+async function osm(){const c=window.__me||sp;if(!c||K!=='place')return;if(lastQ&&km(c[0],c[1],lastQ[0],lastQ[1])<150)return;lastQ=c.slice();const tok=++osmTok,key='roi_osm:'+c[0].toFixed(3)+','+c[1].toFixed(3);
+  let cached=null;try{cached=JSON.parse(sessionStorage.getItem(key)||'null')}catch(e){}
+  if(cached)osmRender(c,cached,false);else{$('osm').textContent='';$('ol').textContent='Buscando lo más cercano…'}
+  const p1=osmFetch(c,300,30),p2=osmFetch(c,1000,90);let big=false;
+  p1.then(j=>{if(tok===osmTok&&j&&!big)osmRender(c,j,false)});
+  const j2=await p2;if(tok!==osmTok)return;big=true;
+  if(j2){osmRender(c,j2,true);try{sessionStorage.setItem(key,JSON.stringify({elements:(j2.elements||[]).slice(0,90)}))}catch(e){}}
+  else{const j1=await p1;if(tok!==osmTok)return;if(j1)osmRender(c,j1,true);else if(!cached)$('ol').textContent='No pude cargar sitios ahora. Toca el mapa o inténtalo en unos segundos.'}}
 /* Punto elegido: búsqueda, toque en el mapa o mi ubicación → punto geolocalizado con botón Valorar */
 let AREA=null,OR=600;
 function areaTo(pt,label){AREA=pt;sp=pt;lastQ=null;OR=K==='place'?1000:600;window.__fit=1;const m=$('asm');m.hidden=false;m.textContent=(label?'Zona: '+label+'. ':'')+(K==='place'?'Toca el mapa o elige un sitio de la lista.':'Mostrando proyectos de esa zona y los que no tienen sitio fijo.');
@@ -157,7 +161,10 @@ const anonId=()=>{let a='';try{a=localStorage.getItem('roi_anon')||'';if(!a){a=(
 /* Avatar en el mapa: apodo arriba y color del aro distinto según el día y su ánimo */
 function avHtml(x){const nk=String(x.nick||'Anónimo').replace(/[<>&"]/g,''),d=Math.floor(Date.now()/864e5);let h=0;for(const ch of nk)h=(h*31+ch.charCodeAt(0))%360;const hue=(h+d*47+(x.mood||3)*35)%360,bg='hsl('+hue+',65%,86%)';
   return '<div class="pfw"><span class="pfn">'+nk+'</span><div class="pf" style="--h:hsl('+hue+',60%,42%);background:'+bg+'">'+ROI_FACE(x.mood,28)+'</div></div>'}
-async function near(){const c=window.__me||sp;if(!c||!L2||!map||K!=='place')return;try{const r=await fetch('/api/near?lat='+c[0]+'&lng='+c[1]+'&a='+encodeURIComponent(anonId())),j=await r.json();if(!plL)plL=L2.layerGroup().addTo(map);plL.clearLayers();const P=j.people||[];
+const seenInv=new Set();
+function showInv(I){const x=I.find(i=>!seenInv.has(i.id));if(!x)return;seenInv.add(x.id);let t=$('inv');if(!t){t=document.createElement('div');t.id='inv';t.style.cssText='position:fixed;left:12px;right:12px;bottom:14px;z-index:5000;background:#26331f;color:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:flex;gap:10px;align-items:center;flex-wrap:wrap';document.body.append(t)}
+  t.textContent='';const s=document.createElement('span');s.style.cssText='flex:1;min-width:180px';s.textContent=x.nick+' te invita a valorar «'+x.p+'» y chatear';const a=document.createElement('a');a.className='btn ac';a.style.cssText='min-height:40px;padding:6px 16px;color:#fff;text-decoration:none;border:2px solid #fff';a.href='/v?t=place&n='+encodeURIComponent(x.p)+'&s=map'+(x.g?'&g='+encodeURIComponent(x.g):'');a.textContent='Unirme';const c=document.createElement('button');c.textContent='✕';c.setAttribute('aria-label','Cerrar');c.style.cssText='background:none;border:0;color:#fff;font-size:18px;min-width:44px;min-height:44px';c.onclick=()=>t.remove();t.append(s,a,c);setTimeout(()=>{if(t.parentNode)t.remove()},25000)}
+async function near(){const c=window.__me||sp;if(!c||!L2||!map||K!=='place')return;try{const r=await fetch('/api/near?lat='+c[0]+'&lng='+c[1]+'&a='+encodeURIComponent(anonId())),j=await r.json();if(!plL)plL=L2.layerGroup().addTo(map);plL.clearLayers();const P=j.people||[];showInv(j.invites||[]);
   P.forEach(x=>L2.marker([x.lat,x.lng],{icon:L2.divIcon({className:'',html:avHtml(x),iconSize:[34,34],iconAnchor:[17,17]})}).bindPopup(()=>talkPop(x)).addTo(plL));
   const pn=$('pn');pn.hidden=!P.length;pn.textContent=P.length?(P.length===1?'1 persona':P.length+' personas')+' con Roi por esta zona ahora mismo. Para hablar con alguien, elige un motivo (valorar un lugar) y toca su avatar.':''}catch(e){}}
 /* Para hablar con alguien siempre hay un motivo: valorar un lugar, una zona o un punto. Después se entra en su sala. */
@@ -165,7 +172,7 @@ function talkPop(x){const d=document.createElement('div');d.style.cssText='min-w
   let mt=(cur&&{n:cur.name,g:hasG(cur)?cur.lat+','+cur.lng:''})||MOT;if(!mt){const c=window.__me||sp;if(c){const nz=PL.filter(hasG).map(p=>({p,d:km(c[0],c[1],p.lat,p.lng)})).sort((a,b)=>a.d-b.d)[0];mt=nz&&nz.d<1500?{n:nz.p.name,g:nz.p.lat+','+nz.p.lng}:{n:'Esta zona',g:c[0].toFixed(5)+','+c[1].toFixed(5)}}}const p=document.createElement('p');p.style.margin='6px 0';
   if(!mt){p.textContent='Para hablar con esta persona elige primero un motivo: toca un lugar del mapa, busca uno o elige un sitio de la lista.';d.append(p);return d}
   p.textContent='Invítale a valorar «'+mt.n+'» contigo y habla con él en el chat.';d.append(p);
-  const a=document.createElement('a');a.className='btn ac';a.style.cssText='min-height:40px;padding:6px 14px;color:#fff;text-decoration:none';a.href='/v?t=place&n='+encodeURIComponent(mt.n)+'&s=map'+(mt.g?'&g='+mt.g:'');a.textContent='Valorar y chatear con '+(x.nick||'esta persona');d.append(a);return d}
+  const a=document.createElement('a');a.className='btn ac';a.style.cssText='min-height:40px;padding:6px 14px;color:#fff;text-decoration:none';a.href='/v?t=place&n='+encodeURIComponent(mt.n)+'&s=map'+(mt.g?'&g='+mt.g:'');a.textContent='Valorar y chatear con '+(x.nick||'esta persona');a.addEventListener('click',()=>{try{let nk='';try{nk=localStorage.getItem('roi_nick')||''}catch(e){}fetch('/api/near',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),nick:nk,invite:{to:x.h,p:mt.n,g:mt.g||''}})})}catch(e){}});d.append(a);return d}
 function beat(){if(!$('shw')||!$('shw').checked||!window.__me)return;let nk='';try{nk=localStorage.getItem('roi_nick')||''}catch(e){}fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),nick:nk,mood:(()=>{try{return parseInt(localStorage.getItem('roi_mood'),10)||3}catch(e){return 3}})(),lat:window.__me[0],lng:window.__me[1]})}).catch(()=>{})}
 function locate(){$('gps').classList.add('on');if(!navigator.geolocation){$('asm').hidden=false;$('asm').textContent='Tu navegador no da la ubicación.';return}
   if(wid!=null)return;let first=true;$('asm').hidden=false;$('asm').textContent='Buscando tu posición…';
@@ -174,7 +181,7 @@ function locate(){$('gps').classList.add('on');if(!navigator.geolocation){$('asm
 $('nav').innerHTML=ROI_NAV(K);$('rhero').innerHTML=ROI_HERO(K);$('sico').innerHTML=IC('search',22);$('jico').innerHTML=IC('search',22);$('gpi').innerHTML=IC('locate',20);
 const ST3={place:[['search','Busca o toca el mapa'],['heart','Valora cómo estuvo'],['users','Habla con quien está cerca']],project:[['locate','Encuentra uno cerca o de tu institución'],['heart','Opina y cuenta tu bienestar'],['chat','Sigue novedades y chatea']]};
 $('stp').innerHTML=ST3[K].map(x=>'<li>'+IC(x[0],30)+'<span>'+x[1]+'</span></li>').join('');
-$('oh').innerHTML=IC('pin',22)+'Cerca de ti <small></small>';$('zh').innerHTML=IC('zone',22)+'Zonas Roi <small>aviso al llegar</small>';$('rh').innerHTML=IC('route',22)+'Rutas experienciales <small>puntos de control y premio</small>';$('jh').innerHTML=IC('spark',22)+'Proyectos <small>de organizaciones</small>';
+$('oh').innerHTML=IC('pin',22)+'Cerca de ti <small></small>';$('zh').innerHTML=IC('zone',22)+'Zonas Roi <small>aviso al llegar</small>';$('zh').insertAdjacentHTML('afterend','<p class="hint" id="zx">Si estás físicamente en una zona, te salta solo el aviso para valorar o chatear con otras personas que están allí. Desliza para ver más.</p>');$('rh').innerHTML=IC('route',22)+'Rutas experienciales <small>puntos de control y premio</small>';$('jh').innerHTML=IC('spark',22)+'Proyectos <small>de organizaciones</small>';
 $('ol').textContent='Busca tu municipio, toca el mapa o usa «Cerca de mí» y verás aquí lo que hay cerca.';
 if(K==='project'){$('tapH').textContent='…o toca el mapa para ver los proyectos de esa zona';$('secP').hidden=true;$('secJ').hidden=false;
   [['muni','build','Municipales'],['emp','users','Empresas'],['uni','cap','Universidades']].forEach(([k,ic,t])=>{const b=document.createElement('button');b.type='button';b.innerHTML=IC(ic,18)+'<span></span>';b.lastChild.textContent=t;b.onclick=()=>{SEG.has(k)?SEG.delete(k):SEG.add(k);b.classList.toggle('on',SEG.has(k));draw()};$('flt').append(b)});
@@ -187,7 +194,12 @@ if(K==='place'){
   $('shl').hidden=false;try{$('shw').checked=localStorage.getItem('roi_show')==='1'}catch(e){}$('nkw').hidden=!$('shw').checked;
   $('nk').value=(()=>{try{return localStorage.getItem('roi_nick')||''}catch(e){return ''}})();$('nk').oninput=()=>{try{localStorage.setItem('roi_nick',$('nk').value.trim().slice(0,20))}catch(e){}};$('nk').onchange=beat;
   $('shw').onchange=()=>{$('nkw').hidden=!$('shw').checked;try{localStorage.setItem('roi_show',$('shw').checked?'1':'0')}catch(e){}if($('shw').checked){if(!window.__me)locate();beat()}else fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),off:true})}).catch(()=>{})};
-  setInterval(()=>{beat();near()},60000)}
-try{if(window.L){L2=window.L;map=L2.map('map',{scrollWheelZoom:false}).setView([40.4,-3.7],5);L2.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);layer=L2.layerGroup().addTo(map);map.on('click',e=>{if(K==='place')pickPoint([e.latlng.lat,e.latlng.lng],'');else areaTo([e.latlng.lat,e.latlng.lng],'')})}else $('map').hidden=true}catch(e){$('map').hidden=true}
+  setInterval(()=>{beat();near()},60000);setInterval(()=>{if($('shw').checked&&window.__me&&!document.hidden)near()},8000)}
+/* Qué se está valorando ahora (últimas valoraciones de toda la red) */
+$('vh').innerHTML=IC('spark',22)+'Ahora se está valorando <small>en directo</small>';
+function recent(){fetch('/api/rankings').then(r=>r.json()).then(j=>{const R=(j&&j.recent)||[],ul=$('vlist');ul.textContent='';if(!R.length){$('vh').hidden=true;ul.hidden=true;return}$('vh').hidden=false;ul.hidden=false;
+  R.forEach(x=>{const li=document.createElement('li');li.className='it';li.style.cssText='display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:8px 12px';const f=document.createElement('span');f.innerHTML=ROI_FACE(Math.max(0,Math.min(4,(x.rating||3)-1)),30);const t=document.createElement('span');t.style.cssText='flex:1;min-width:0';const b=document.createElement('b');b.textContent=x.name;b.style.cssText='display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';const s=document.createElement('small');s.textContent=(x.feeling||'')+' · '+({web:'Web',place:'Lugar',project:'Proyecto',org:'Organización'}[x.type]||'');s.style.color='var(--mut)';t.append(b,s);li.append(f,t);ul.append(li)})}).catch(()=>{})}
+recent();setInterval(()=>{if(!document.hidden)recent()},30000);
+try{if(window.L){L2=window.L;map=L2.map('map',{scrollWheelZoom:false}).setView([39.4699,-0.3763],11);L2.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);layer=L2.layerGroup().addTo(map);map.on('click',e=>{if(K==='place')pickPoint([e.latlng.lat,e.latlng.lng],'');else areaTo([e.latlng.lat,e.latlng.lng],'')})}else $('map').hidden=true}catch(e){$('map').hidden=true}
 fetch('/api/public?places=1').then(r=>r.json()).then(j=>{ALL=(j&&j.places)||[];RT=(j&&j.routes)||[];PL=ALL.filter(p=>p.kind===K);draw()}).catch(()=>draw());
 </script></body></html>
