@@ -7,6 +7,7 @@ const db = require('./_db'), crypto = require('crypto');
 const hid = a => crypto.createHash('sha256').update(String(a) + ':roi').digest('hex').slice(0, 14); // identificador público corto (nunca el anon_id)
 const GRID = 0.004, BLOCK = /(https?:|www\.|@|\.com|\.es|\d{6,})/i;
 const snap = (v, id, k) => { let h = 0; for (const c of id + k) h = (h * 31 + c.charCodeAt(0)) | 0; return Math.round(v / GRID) * GRID + (((h >>> 0) % 1000) / 1000 - .5) * GRID * .8; };
+const spam = async id => { const r = await db.select(`chat_messages?select=id&anon_id=eq.${encodeURIComponent(id)}&created_at=gte.${encodeURIComponent(new Date(Date.now() - 60e3).toISOString())}&limit=6`); return Array.isArray(r) && r.length >= 5; }; // máx. 5 invitaciones/respuestas por minuto
 module.exports = async (req, res) => {
   if (db.cors(req, res)) return;
   if (db.limited(req, 60)) return res.status(429).json({ ok: false });
@@ -16,10 +17,17 @@ module.exports = async (req, res) => {
       const b = db.body(req) || {}, id = db.clip(b.anon_id, 64);
       if (!id) return res.status(400).json({ ok: false });
       if (b.invite && b.invite.to && /^[0-9a-f]{14}$/.test(String(b.invite.to))) { // invitar a otra persona cercana a valorar un sitio y chatear
-        if (db.limited(req, 8)) return res.status(429).json({ ok: false });
+        if (await spam(id)) return res.status(429).json({ ok: false });
         const pl = db.clip(b.invite.p, 120), g = db.clip(b.invite.g, 40); if (!pl) return res.status(400).json({ ok: false });
         let nk = (db.clip(b.nick, 20) || 'Alguien').replace(/[<>]/g, ''); if (BLOCK.test(nk)) nk = 'Alguien';
-        const r = await db.insert('chat_messages', { room: 'inv-' + b.invite.to, nick: nk, body: JSON.stringify({ p: pl, g: g || '' }), anon_id: id });
+        const r = await db.insert('chat_messages', { room: 'inv-' + b.invite.to, nick: nk, body: JSON.stringify({ p: pl, g: g || '', f: hid(id) }), anon_id: id });
+        return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
+      }
+      if (b.accept && /^[0-9a-f]{14}$/.test(String(b.accept.to))) { // aceptar una invitación: se avisa a quien invitó
+        if (await spam(id)) return res.status(429).json({ ok: false });
+        const pl = db.clip(b.accept.p, 120), g = db.clip(b.accept.g, 40); if (!pl) return res.status(400).json({ ok: false });
+        let nk = (db.clip(b.nick, 20) || 'Alguien').replace(/[<>]/g, ''); if (BLOCK.test(nk)) nk = 'Alguien';
+        const r = await db.insert('chat_messages', { room: 'acc-' + b.accept.to, nick: nk, body: JSON.stringify({ p: pl, g: g || '' }), anon_id: id });
         return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
       }
       if (b.off) { await db.del(`presence_geo?anon_id=eq.${encodeURIComponent(id)}`); return res.status(200).json({ ok: true }); }
@@ -36,7 +44,9 @@ module.exports = async (req, res) => {
     const rows = await db.select(`presence_geo?select=anon_id,nick,mood,lat,lng&seen_at=gte.${since}&lat=gte.${la - .03}&lat=lte.${la + .03}&lng=gte.${lo - .04}&lng=lte.${lo + .04}&limit=40`);
     const people = (Array.isArray(rows) ? rows : []).filter(x => x.anon_id !== me).map(x => ({ nick: x.nick, mood: x.mood, lat: x.lat, lng: x.lng, h: hid(x.anon_id) }));
     let invites = [];
-    if (me) { const iv = await db.select(`chat_messages?select=id,nick,body,created_at&room=eq.inv-${hid(me)}&hidden=eq.false&created_at=gte.${encodeURIComponent(new Date(Date.now() - 3 * 60e3).toISOString())}&order=created_at.desc&limit=3`); invites = (Array.isArray(iv) ? iv : []).map(m => { let d = {}; try { d = JSON.parse(m.body) } catch (_) { } return { id: m.id, nick: m.nick, p: d.p || '', g: d.g || '' }; }).filter(x => x.p); }
-    res.setHeader('Cache-Control', 'no-store'); res.status(200).json({ ok: true, people, invites });
+    if (me) { const iv = await db.select(`chat_messages?select=id,nick,body,created_at&room=eq.inv-${hid(me)}&hidden=eq.false&created_at=gte.${encodeURIComponent(new Date(Date.now() - 3 * 60e3).toISOString())}&order=created_at.desc&limit=3`); invites = (Array.isArray(iv) ? iv : []).map(m => { let d = {}; try { d = JSON.parse(m.body) } catch (_) { } return { id: m.id, nick: m.nick, p: d.p || '', g: d.g || '', f: d.f || '' }; }).filter(x => x.p); }
+    res.setHeader('Cache-Control', 'no-store'); let accepted = [];
+    if (me) { const ac = await db.select(`chat_messages?select=id,nick,body&room=eq.acc-${hid(me)}&hidden=eq.false&created_at=gte.${encodeURIComponent(new Date(Date.now() - 3 * 60e3).toISOString())}&order=created_at.desc&limit=3`); accepted = (Array.isArray(ac) ? ac : []).map(m => { let d = {}; try { d = JSON.parse(m.body) } catch (_) { } return { id: m.id, nick: m.nick, p: d.p || '', g: d.g || '' }; }).filter(x => x.p); }
+    res.status(200).json({ ok: true, people, invites, accepted });
   } catch (e) { res.status(200).json({ ok: true, people: [] }); }
 };
