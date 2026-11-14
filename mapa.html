@@ -188,7 +188,15 @@ function talkPop(x){const d=document.createElement('div');d.style.cssText='min-w
 function beat(){if(!$('shw')||!$('shw').checked||!window.__me)return;let nk='';try{nk=localStorage.getItem('roi_nick')||''}catch(e){}fetch('/api/near',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id:anonId(),nick:nk,mood:(()=>{try{return parseInt(localStorage.getItem('roi_mood'),10)||3}catch(e){return 3}})(),lat:window.__me[0],lng:window.__me[1]})}).catch(()=>{})}
 function locate(){$('gps').classList.add('on');if(!navigator.geolocation){$('asm').hidden=false;$('asm').textContent='Tu navegador no da la ubicación.';return}
   if(wid!=null)return;let first=true;$('asm').hidden=false;$('asm').textContent='Buscando tu posición…';
-  wid=navigator.geolocation.watchPosition(p=>{me=[p.coords.latitude,p.coords.longitude];window.__me=me;if(first){first=false;$('asm').textContent='Siguiendo tu posición mientras esta página esté abierta.';if(map&&K==='place'&&!sp)map.setView(me,16);if(K==='project'){AREA=me;if(map)map.setView(me,12);window.__fit=1}if(K==='place'){window.__fit=1;beat()}}draw();osm();near()},()=>{wid=null;$('gps').classList.remove('on');$('asm').textContent='No pude ver tu ubicación. Busca una dirección o toca el mapa.'},{enableHighAccuracy:true,timeout:15000,maximumAge:10000})}
+  const ok=p=>{me=[p.coords.latitude,p.coords.longitude];window.__me=me;if(first){first=false;$('asm').textContent='Siguiendo tu posición mientras esta página esté abierta.';if(map&&K==='place'&&!sp)map.setView(me,16);if(K==='project'){AREA=me;if(map)map.setView(me,12);window.__fit=1}if(K==='place'){window.__fit=1;beat()}}draw();osm();near()};
+  const web=/FBAN|FBAV|Instagram|Line\/|WhatsApp|Snapchat|TikTok|Twitter|LinkedInApp/i.test(navigator.userAgent);
+  let low=false;
+  const bad=e=>{wid=null;$('gps').classList.remove('on');$('asm').hidden=false;
+    if(e&&e.code===1)$('asm').textContent=web?'Este navegador integrado no deja usar la ubicación. Abre esta página en Safari o Chrome.':'Ubicación bloqueada. En iPhone: Ajustes › Privacidad y seguridad › Localización › Safari (sitios web) › «Al usar la app». En Android/Chrome: toca el candado de la barra de direcciones › Permisos. Luego recarga y pulsa «Cerca de mí».';
+    else if(!low){low=true;$('asm').textContent='Buscando tu posición con menos precisión…';wid=navigator.geolocation.watchPosition(ok,bad,{enableHighAccuracy:false,timeout:25000,maximumAge:60000})}
+    else $('asm').textContent='No pude ver tu ubicación (comprueba que el GPS y la localización del navegador estén activos). Busca un municipio o toca el mapa.'};
+  navigator.geolocation.getCurrentPosition(ok,()=>{},{enableHighAccuracy:false,timeout:8000,maximumAge:60000}); // dispara el aviso de permiso en Safari desde el toque
+  wid=navigator.geolocation.watchPosition(ok,bad,{enableHighAccuracy:true,timeout:15000,maximumAge:10000})}
 /* Interfaz */
 $('nav').innerHTML=ROI_NAV(K);$('rhero').innerHTML=ROI_HERO(K);$('sico').innerHTML=IC('search',22);$('jico').innerHTML=IC('search',22);$('gpi').innerHTML=IC('locate',20);
 const ST3={place:[['search','Busca o toca el mapa'],['heart','Valora cómo estuvo'],['users','Habla con quien está cerca']],project:[['locate','Encuentra uno cerca o de tu institución'],['heart','Opina y cuenta tu bienestar'],['chat','Sigue novedades y chatea']]};
