@@ -134,7 +134,7 @@ async function begin(){
   else{const x='¡Hola! Soy Roi 👋 ¿Qué quieres valorar?';add('b').textContent=x;speak(x);what()}
 }
 function what(){const dig=t==='web';
-  block('opts',dig?'<button data-t="web">🌐 Una web o servicio online</button><button data-t="org">🏢 Una empresa o institución</button><button data-t="person">🙋 Una persona o perfil</button>':'<button data-t="web">🌐 Una web o experiencia digital</button><button data-t="project">💡 Una iniciativa o proyecto</button><button data-t="place">📍 Un lugar o establecimiento</button><button data-t="org">🏢 Una empresa o institución</button><button data-t="person">🙋 Una persona</button>',(b,d)=>{lock(d);t=b.dataset.t;me(b.textContent);name()})}
+  block('opts',dig?'<button data-t="web">🌐 Una web o servicio online</button><button data-t="org">🏢 Una empresa o institución</button><button data-t="person">🙋 Una persona o perfil</button>':'<button data-go="/mapa?near=1">📍 Cerca de mí</button><button data-go="/mapa">🗺️ Marcar un punto en el mapa</button><button data-t="web">🌐 Una web o experiencia digital</button><button data-go="/mapa?k=project">💡 Una iniciativa o proyecto</button><button data-t="org">🏢 Una empresa o institución</button><button data-t="person">🙋 Una persona</button>',(b,d)=>{if(b.dataset.go){location.href=b.dataset.go;return}lock(d);t=b.dataset.t;me(b.textContent);name()})}
 
 function webHome(){
   document.body.classList.add('wh');const vb=$('vb');if(vb){const a=document.createElement('a');a.className='btn g';a.href='/';a.textContent='Inicio';a.style.cssText='min-height:40px;padding:6px 16px';vb.replaceWith(a)}

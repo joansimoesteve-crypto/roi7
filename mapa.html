@@ -207,6 +207,7 @@ if(K==='project'){$('tapH').textContent='…o toca el mapa para ver los proyecto
   [['muni','build','Municipales'],['emp','users','Empresas'],['uni','cap','Universidades']].forEach(([k,ic,t])=>{const b=document.createElement('button');b.type='button';b.innerHTML=IC(ic,18)+'<span></span>';b.lastChild.textContent=t;b.onclick=()=>{SEG.has(k)?SEG.delete(k):SEG.add(k);b.classList.toggle('on',SEG.has(k));draw()};$('flt').append(b)});
   $('jq').oninput=()=>{JQ=$('jq').value.trim();draw()}}
 $('gps').onclick=()=>{NEARJ=true;locate()};
+try{if(new URLSearchParams(location.search).get('near'))setTimeout(()=>$('gps').click(),500)}catch(e){}
 /* Buscador por municipio (solo España): centra el mapa. Las calles y plazas se eligen tocando el mapa o con «Cerca de mí». */
 RoiAC($('asq'),{t:'muni',bias:()=>null,pick:it=>{$('asq').value=it.name;areaTo([it.lat,it.lng],it.name+(it.sub?' · '+it.sub:''))}});
 $('asq').addEventListener('keydown',async e=>{if(e.key!=='Enter'||document.querySelector('.acl li.on'))return;const v=$('asq').value.trim();if(v.length<2)return;const m=$('asm');m.hidden=false;m.textContent='Buscando…';try{const r=await fetch('/api/search?t=muni&q='+encodeURIComponent(v)),j=await r.json(),it=(j.results||[])[0];if(!it){m.textContent='No encuentro ese municipio. Toca el mapa o usa «Cerca de mí».';return}areaTo([it.lat,it.lng],it.name+(it.sub?' · '+it.sub:''))}catch(x){m.textContent='No pude buscar ahora. Toca el mapa o usa «Cerca de mí».'}});
