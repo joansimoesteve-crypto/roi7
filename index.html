@@ -259,7 +259,7 @@ const sp='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach
 
 /* ===== Las tres opciones, con pregunta y respuesta ===== */
 const THREE=[
- {ic:'pin',c:'#1f9d6b',href:'/mapa',h:'Un lugar',q:'¿Cómo te has sentido en ese parque, tienda o aula?',st:['Busca o toca el mapa','Valora','Habla con otros'],f:'Comercios · Campus · Ayuntamientos'},
+ {ic:'pin',c:'#1f9d6b',href:'/mapa',h:'Un lugar',q:'¿Cómo te has sentido en ese parque, tienda o aula?',st:['Cerca de mí o QR','Valora','Habla con otros'],f:'Comercios · Campus · Ayuntamientos'},
  {ic:'globe',c:'#2a7de1',href:'/v?t=web',h:'Una web',q:'¿Esa web te ha hecho perder la paciencia?',st:['Pega el enlace','Valora','Habla con otros'],f:'Universidades · Empresas · Creadores'},
  {ic:'spark',c:'#ef7d1a',href:'/mapa?k=project',h:'Un proyecto',q:'¿Cómo te sientes en tu trabajo, campus o ciudad?',st:['Busca tu institución','Opina y bienestar','Sigue y chatea'],f:'Empresas · Ayuntamientos · Universidades'}];
 
@@ -271,6 +271,8 @@ function MINI(k,still){const A=(a,at)=>still?'':a, op=(vals,kt,dur)=>still?'':`<
  if(k===0)return base+`<rect width="300" height="120" fill="#eef3e3"/><path d="M0 92 L120 70 L300 98 M150 0 L170 120" stroke="#fff" stroke-width="9" fill="none"/><path d="M0 92 L120 70 L300 98 M150 0 L170 120" stroke="#d9e2c8" stroke-width="1" fill="none"/>
  <circle cx="205" cy="64" r="36" fill="#1f9d6b" fill-opacity=".16" stroke="#1f9d6b" stroke-width="2" stroke-dasharray="5 4">${still?'':'<animate attributeName="r" values="34;40;34" dur="2.4s" repeatCount="indefinite"/>'}</circle>
  <text x="205" y="68" font-size="9" font-weight="700" fill="#1f6b4a" text-anchor="middle">ZONA ROI</text>
+ <rect x="6" y="6" width="104" height="18" rx="9" fill="#fff" stroke="#2a7de1"/><text x="58" y="18.5" font-size="9" font-weight="700" fill="#1d4f94" text-anchor="middle">📍 Cerca de mí</text>
+ <rect x="6" y="28" width="104" height="18" rx="9" fill="#fff" stroke="#26331f"/><text x="58" y="40.5" font-size="9" font-weight="700" fill="#26331f" text-anchor="middle">▦ Escanea el QR</text>
  <circle r="7" fill="#2a7de1" stroke="#fff" stroke-width="3" cx="${still?'200':'30'}" cy="${still?'74':'100'}">${still?'':'<animate attributeName="cx" values="30;110;200;200" keyTimes="0;.35;.6;1" dur="7s" repeatCount="indefinite"/><animate attributeName="cy" values="100;80;74;74" keyTimes="0;.35;.6;1" dur="7s" repeatCount="indefinite"/>'}</circle>
  <g ${op1}>${op('0;0;1;1;0','0;.6;.66;.94;1',7)}<rect x="120" y="4" width="170" height="40" rx="12" fill="#fff" stroke="#1f9d6b"/><text x="205" y="19" font-size="9" font-weight="700" fill="#26331f" text-anchor="middle">Roi: ¿cómo estás aquí?</text><text x="205" y="37" font-size="15" text-anchor="middle">${FACE.slice(1).join(' ')}</text></g></svg>`;
  if(k===1)return base+`<rect width="300" height="120" fill="#e6eefb"/><rect x="28" y="10" width="244" height="100" rx="10" fill="#fff" stroke="#9db8e0"/><rect x="28" y="10" width="244" height="18" rx="10" fill="#cfe0f7"/><circle cx="40" cy="19" r="3" fill="#ef7d6b"/><circle cx="50" cy="19" r="3" fill="#f2c14e"/><circle cx="60" cy="19" r="3" fill="#6bc18a"/><rect x="74" y="14" width="130" height="10" rx="5" fill="#fff"/><text x="80" y="22" font-size="7" fill="#4d5c43">www.tu-servicio.es</text>
