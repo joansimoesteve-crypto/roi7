@@ -115,12 +115,13 @@ module.exports = async (req, res) => {
       const r = await db.patch(`ratings?id=eq.${b.id}`, { hidden: true }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
     }
     if (b.action === 'digest') { // resumen semanal con IA (con respaldo sin IA) y borrador de respuesta pública
-      const { rows, tg, sites } = await org.load(oid, 14, !!a.org.all_data), c = org.compute(rows, tg, sites, 14, true);
-      if (!c.totals.n7 || c.totals.n7 < 5) return res.status(200).json({ ok: true, none: true, message: 'Aún hay pocas valoraciones esta semana (mínimo 5) para un resumen fiable.' });
+      const L = await org.load(oid, 14, !!a.org.all_data), scope = db.clip(String(b.target || ''), 160).toLowerCase();
+      const rows = scope ? L.rows.filter(r => [r.site, r.subject, r.location].some(x => String(x || '').toLowerCase() === scope)) : L.rows, c = org.compute(rows, L.tg, L.sites, 14, true), minN = scope ? 3 : 5;
+      if (!c.totals.n7 || c.totals.n7 < minN) return res.status(200).json({ ok: true, none: true, message: `Aún hay pocas valoraciones esta semana${scope ? ' sobre «' + b.target + '»' : ''} (mínimo ${minN}) para un resumen fiable.` });
       const clean = s => String(s || '').replace(/https?:\/\/\S+|\S+@\S+\.\S+|(?:\d[\s.-]?){8,}/g, '[…]').slice(0, 180);
       const T = c.totals, W = (c.targets || []).filter(t => t.n >= 3).sort((x, y) => y.avg - x.avg), Bw = W.slice().reverse();
       const data = {
-        valoraciones_7d: T.n7, media_7d: T.avg7, media_semana_anterior: T.prevAvg7, positivas_pct: T.pos, negativas_pct: T.neg,
+        ambito: scope ? String(b.target) : 'toda la organización', valoraciones_7d: T.n7, media_7d: T.avg7, media_semana_anterior: T.prevAvg7, positivas_pct: T.pos, negativas_pct: T.neg,
         mejores: W.slice(0, 3).map(t => ({ nombre: t.name, n: t.n, media: t.avg })), peores: Bw.slice(0, 3).map(t => ({ nombre: t.name, n: t.n, media: t.avg })),
         zonas: (c.locations || []).slice(0, 5).map(l => ({ zona: l.name, n: l.n, media: l.avg })),
         temas: (c.topics || []).slice(0, 8), en_aumento: (c.trending || []).map(t => ({ tema: t.name, ahora: t.now, antes: t.before })),
