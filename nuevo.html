@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Avatar ROI — Opina donde estés</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Opina en 10 segundos sobre el lugar donde estás. Para ciudades, empresas y universidades.">
+<meta name="theme-color" content="#3f5a3a">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<script src="ic.js"></script>
+<style>
+:root{--ink:#26331f;--moss:#3f5a3a;--sage:#e9efdc;--paper:#fbf7ec;--mut:#4d5c43;--line:#cfd6c2;--ac:#1f9d6b}
+*{box-sizing:border-box}[hidden]{display:none!important}html{-webkit-text-size-adjust:100%}html,body{overflow-x:clip}
+body{margin:0;font:17px/1.55 "Bricolage Grotesque",system-ui,sans-serif;color:var(--ink);background:var(--paper)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.w{max-width:760px;margin:0 auto;padding:0 18px}
+header{position:sticky;top:0;z-index:20;background:rgba(251,247,236,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:10px;padding:10px 0;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:20px;color:var(--ink);text-decoration:none}.logo img{width:34px;height:34px}
+.acc{min-height:40px;display:inline-flex;align-items:center;padding:6px 16px;border-radius:99px;background:var(--moss);color:#fff;text-decoration:none;font-weight:700;font-size:15px}
+.seg{display:flex;gap:6px;padding:0 0 10px}.seg button{flex:1 1 0;min-width:0;min-height:44px;border:2px solid var(--line);background:#fff;border-radius:99px;font:700 15px inherit;font-family:inherit;color:var(--ink);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--moss);border-color:var(--moss);color:#fff}
+h1{font-size:clamp(34px,8vw,54px);line-height:1.05;margin:26px 0 10px;font-weight:800;letter-spacing:-.02em}
+.sub{font-size:19px;color:var(--mut);margin:0 0 22px;max-width:34em}
+.big{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:76px;border:0;border-bottom:6px solid #14704c;border-radius:26px;background:linear-gradient(180deg,#27b97f,#1f9d6b);color:#fff;font:800 26px "Bricolage Grotesque",system-ui;cursor:pointer;box-shadow:0 14px 30px rgba(31,157,107,.35);animation:pu 2.6s ease-in-out infinite}
+.big:active{transform:translateY(4px);border-bottom-width:2px}.big svg{width:30px;height:30px}
+@keyframes pu{50%{box-shadow:0 14px 30px rgba(31,157,107,.35),0 0 0 10px rgba(31,157,107,.14)}}
+.alt{margin:12px 0 0;text-align:center;color:var(--mut);font-size:16px}.alt a{color:var(--moss);font-weight:700}
+.verbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}
+.verbs a{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding:14px 6px;min-height:92px;background:#fff;border:1px solid var(--line);border-radius:20px;text-decoration:none;color:var(--ink);font-weight:800;font-size:15px;line-height:1.2}
+.verbs a svg{width:28px;height:28px;color:var(--moss)}.verbs small{font-weight:400;color:var(--mut);font-size:12.5px}
+/* Roi */
+#roi{background:#fff;border:1px solid var(--line);border-radius:26px;padding:18px;margin:6px 0 0;box-shadow:0 14px 34px rgba(38,51,31,.12)}
+.rh{display:flex;gap:12px;align-items:flex-start}.rh img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:none;border:3px solid var(--sage)}
+.rb{color:var(--ink);background:var(--sage);border-radius:6px 20px 20px 20px;padding:12px 16px;font-size:16px;line-height:1.4;flex:1;min-width:0}.rb b{color:var(--moss)}
+.faces{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0 4px}.faces button{min-height:64px;border:2px solid var(--line);border-radius:18px;background:#fff;cursor:pointer;display:grid;place-items:center;padding:4px;transition:transform .15s}
+.faces button:active,.faces button:hover{transform:scale(1.07);border-color:var(--moss)}.faces svg{width:44px;height:44px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.btn{min-height:48px;padding:8px 20px;border-radius:99px;border:2px solid var(--moss);background:var(--moss);color:#fff;font:700 16px "Bricolage Grotesque",system-ui;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}.btn.o{background:#fff;color:var(--moss)}
+textarea{width:100%;min-height:84px;margin-top:14px;border:2px solid var(--line);border-radius:16px;padding:12px;font:inherit;resize:vertical}
+.hint{font-size:14px;color:var(--mut);margin:8px 0 0}
+section{margin:38px 0}h2{font-size:24px;margin:0 0 14px}
+.ben{display:grid;gap:10px}.ben div{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}.ben i{font-style:normal;font-size:24px;line-height:1}.ben b{display:block}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0;list-style:none;margin:0}.how li{background:var(--sage);border-radius:18px;padding:14px 10px;text-align:center;font-weight:700;font-size:15px;line-height:1.25}.how span{display:block;font-size:26px;margin-bottom:4px}
+.cta{background:var(--moss);color:#fff;border-radius:26px;padding:22px 20px;text-align:center}.cta h2{margin:0 0 6px}.cta p{margin:0 0 14px;opacity:.92}.cta .btn{background:#fff;color:var(--moss);border-color:#fff}
+footer{padding:26px 0 40px;text-align:center;color:var(--mut);font-size:14px}footer a{color:var(--moss)}
+@media(max-width:420px){.big{font-size:23px;min-height:70px}.faces button{min-height:58px}.faces svg{width:38px;height:38px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<header><div class="w"><div class="top"><a class="logo" href="/nuevo"><img src="logo.png" alt="">Avatar ROI</a><a class="acc" href="/panel">Acceder</a></div>
+<div class="seg" role="group" aria-label="Soy"><button data-s="ciudades" aria-pressed="true">Ciudades</button><button data-s="empresas" aria-pressed="false">Empresas</button><button data-s="universidades" aria-pressed="false">Universidades</button></div></div></header>
+<main class="w">
+<div id="hero"><h1 id="h1"></h1><p class="sub" id="sub"></p>
+<button class="big" id="go" type="button"><span id="gi"></span>Opinar aquí</button>
+<p class="alt">o valora <a href="/v?t=web">una web</a> · <a href="/mapa?k=project">un proyecto</a></p></div>
+<div id="roi" hidden aria-live="polite"></div>
+<nav class="verbs" aria-label="Qué quieres hacer"><a href="/mapa?near=1"><span id="v1"></span>Valorar<small>donde estás</small></a><a href="/mapa"><span id="v2"></span>Hablar con otros<small>cerca de ti</small></a><a id="v3a" href="/panel"><span id="v3"></span>Pedir opinión<small>a tu gente</small></a></nav>
+<section><h2 id="bh"></h2><div class="ben" id="ben"></div></section>
+<section><h2>Así de fácil</h2><ol class="how"><li><span>📍</span>Cerca de mí o QR</li><li><span>🙂</span>Elige una carita</li><li><span>📊</span>Se convierte en un resumen</li></ol></section>
+<section class="cta"><h2 id="ch"></h2><p id="cp"></p><a class="btn" id="cb" href="/panel?demo=ayuntamiento">Ver demo del panel</a></section>
+</main>
+<footer><div class="w">Sin cuentas · Gratis para empezar · <a href="/privacy.html">Privacidad</a> · <a href="mailto:urnovai@outlook.es">urnovai@outlook.es</a></div></footer>
+<script>
+const $=id=>document.getElementById(id);
+const SEG={
+ ciudades:{h:'Tu ciudad te escucha.',s:'Opina en 10 segundos sobre parques, servicios y comercios de tu municipio. Sin registrarte.',bh:'Para ayuntamientos y vecinos',ben:[['🗣️','Vecinos y visitantes opinan','Con un QR o al estar cerca de un lugar, en 10 segundos.'],['🧭','El ayuntamiento sabe qué mejorar','Un panel y un resumen semanal con prioridades.'],['🛍️','Comercio y turismo local','Rutas y valoraciones que dan visibilidad a los negocios.']],ch:'Pide una demo para tu ayuntamiento',cp:'10 minutos y un piloto gratuito en 2 o 3 puntos de tu municipio.',demo:'ayuntamiento'},
+ empresas:{h:'Tus clientes, en una carita.',s:'Sabe cómo se sienten tus clientes y tu equipo en cada punto de contacto. Sin formularios.',bh:'Para empresas y negocios',ben:[['⭐','Opinión en el momento','Un QR en el local o en la web y 10 segundos para valorar.'],['📈','Qué funciona y qué no','Resultados por punto de contacto y su evolución.'],['🤝','Fideliza con rutas y premios','Incentiva visitas y comentarios de tus clientes.']],ch:'Prueba la demo para empresas',cp:'Piloto gratuito y un informe de una página.',demo:'empresa'},
+ universidades:{h:'Tu campus opina.',s:'El alumnado y el personal valoran biblioteca, secretaría, aulas y servicios en 10 segundos.',bh:'Para universidades y centros',ben:[['🎓','Alumnado y personal opinan','Escanean un QR en cada espacio, sin registro.'],['🏛️','Calidad que se ve','Qué servicios funcionan y cuáles hay que mejorar.'],['💬','Propuestas y respuestas','Ideas del campus y respuesta visible.']],ch:'Pide una demo para tu universidad',cp:'Piloto gratuito de 30 días en 2 o 3 espacios.',demo:'universidad'}};
+function seg(k,push){if(!SEG[k])k='ciudades';const d=SEG[k];$('h1').textContent=d.h;$('sub').textContent=d.s;$('bh').textContent=d.bh;
+ $('ben').innerHTML=d.ben.map(b=>`<div><i>${b[0]}</i><span><b>${b[1]}</b>${b[2]}</span></div>`).join('');$('ch').textContent=d.ch;$('cp').textContent=d.cp;$('cb').href='/panel?demo='+d.demo;
+ document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===k));if(push)try{history.replaceState(null,'','#'+k)}catch(e){}}
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>seg(b.dataset.s,true));seg((location.hash||'').slice(1),false);
+$('gi').innerHTML=IC('pin',30);$('v1').innerHTML=IC('pin',28);$('v2').innerHTML=IC('users',28);$('v3').innerHTML=IC('spark',28);
+/* Roi: te guía según dónde estés */
+const FE=['Enfado','Decepción','Indiferencia','Bienestar','Entusiasmo'];let PL=null,POS=null,SPOT=null,MOOD=null;
+const km=(a,b,c,d)=>{const R=6371e3,r=x=>x*Math.PI/180,h=Math.sin(r(c-a)/2)**2+Math.cos(r(a))*Math.cos(r(c))*Math.sin(r(d-b)/2)**2;return 2*R*Math.asin(Math.sqrt(h))};
+const inPoly=(pt,sh)=>{let c=false;for(let i=0,j=sh.length-1;i<sh.length;j=i++){const[yi,xi]=sh[i],[yj,xj]=sh[j];if((xi>pt[1])!==(xj>pt[1])&&pt[0]<(yj-yi)*(pt[1]-xi)/(xj-xi)+yi)c=!c}return c};
+const hasG=p=>p.lat!=null&&p.lng!=null,inside=(p,q)=>hasG(p)&&(Array.isArray(p.shape)&&p.shape.length>=3?inPoly(q,p.shape):km(q[0],q[1],p.lat,p.lng)<=(p.radius_m||120));
+const R=$('roi');function say(html,extra){R.innerHTML='<div class="rh"><img src="roi.png" alt="Roi"><div class="rb">'+html+'</div></div>'+(extra||'');R.hidden=false;$('hero').hidden=true;R.scrollIntoView({block:'center',behavior:'smooth'})}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function anon(){try{let a=localStorage.getItem('roi_anon');if(!a){a=(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random());localStorage.setItem('roi_anon',a)}return a}catch(e){return 'n-'+Date.now()}}
+$('go').onclick=()=>{say('Un momento… buscando dónde estás 📍');if(!navigator.geolocation)return noGeo();
+ const web=/FBAN|FBAV|Instagram|WhatsApp|Snapchat|TikTok|LinkedInApp/i.test(navigator.userAgent);let low=false;
+ const ok=p=>{POS=[p.coords.latitude,p.coords.longitude];locate()},bad=e=>{if(e&&e.code===1)return noGeo(web?'Este navegador integrado no deja usar la ubicación. Ábrelo en Safari o Chrome.':'Tienes la ubicación bloqueada para esta página.');if(!low){low=true;navigator.geolocation.getCurrentPosition(ok,bad,{enableHighAccuracy:false,timeout:20000,maximumAge:60000})}else noGeo('No he podido ver tu ubicación.')};
+ navigator.geolocation.getCurrentPosition(ok,bad,{enableHighAccuracy:true,timeout:9000,maximumAge:30000})};
+function noGeo(m){say((m?esc(m)+' ':'')+'Sin problema: <b>marca en el mapa</b> dónde estás y lo valoramos.','<div class="acts"><a class="btn" href="/mapa">Marcar en el mapa</a><button class="btn o" id="bk" type="button">Volver</button></div>');$('bk').onclick=()=>{R.hidden=true;$('hero').hidden=false}}
+async function locate(){try{if(!PL){const j=await fetch('/api/public?places=1').then(r=>r.json());PL=((j&&j.places)||[]).filter(p=>p.kind==='place')}}catch(e){PL=[]}
+ const z=PL.filter(p=>inside(p,POS)).sort((a,b)=>km(POS[0],POS[1],a.lat,a.lng)-km(POS[0],POS[1],b.lat,b.lng))[0];
+ if(z){SPOT={name:z.name,verified:true};return ask()}
+ const near=PL.filter(hasG).map(p=>({p,d:km(POS[0],POS[1],p.lat,p.lng)})).sort((a,b)=>a.d-b.d)[0];
+ if(near&&near.d<400){SPOT={name:near.p.name,verified:false};return ask()}
+ let nm='este punto';try{const j=await fetch('/api/search?rev='+POS[0]+','+POS[1]).then(r=>r.json());if(j.place&&j.place.name)nm=j.place.name}catch(e){}
+ SPOT={name:nm,verified:false};ask()}
+function ask(){const F=[0,1,2,3,4].map(i=>`<button type="button" data-m="${i}" aria-label="${FE[i]}">${ROI_FACE(i,44)}</button>`).join('');
+ say('Estás en <b>'+esc(SPOT.name)+'</b>. ¿Cómo te sientes aquí?','<div class="faces">'+F+'</div><div class="acts"><a class="btn o" href="/mapa?near=1">Es otro sitio</a></div>');
+ R.querySelectorAll('.faces button').forEach(b=>b.onclick=()=>{MOOD=+b.dataset.m;comment()})}
+function comment(){say('Gracias 💚 ¿Quieres añadir algo? <b>(opcional)</b>','<textarea id="cm" maxlength="300" placeholder="Lo que quieras contar…" aria-label="Comentario"></textarea><div class="acts"><button class="btn" id="se" type="button">Enviar</button><button class="btn o" id="sk" type="button">Enviar sin comentario</button></div><p class="hint">Los comentarios no son públicos.</p>');
+ $('se').onclick=()=>send($('cm').value.trim());$('sk').onclick=()=>send('')}
+async function send(c){const body={client_id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),anon_id:anon(),source:'map',type:'place',subject:SPOT.name,site:null,url:null,rating:MOOD+1,feeling:FE[MOOD],comment:c||null,place_name:SPOT.name,location:null,lat:POS[0],lng:POS[1],place_verified:SPOT.verified,lang:'es',created_at:new Date().toISOString(),website:''};
+ try{localStorage.setItem('roi_mood',String(MOOD))}catch(e){}
+ let ok=false;for(let i=0;i<2&&!ok;i++){try{ok=(await fetch('/api/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})).ok}catch(e){}if(!ok)await new Promise(r=>setTimeout(r,1200))}
+ if(!ok)return say('No he podido guardar tu opinión. Revisa tu conexión.','<div class="acts"><button class="btn" id="rt" type="button">Reintentar</button></div>'),$('rt').onclick=()=>send(c);
+ say('¡Hecho! Tu opinión ya cuenta 💚','<div class="acts"><a class="btn" href="/sala?t=place&n='+encodeURIComponent(SPOT.name)+'">Hablar con otros aquí</a><a class="btn o" href="/mapa">Ver el mapa</a><button class="btn o" id="ag" type="button">Otra opinión</button></div>');$('ag').onclick=()=>{R.hidden=true;$('hero').hidden=false;window.scrollTo({top:0,behavior:'smooth'})}}
+</script></body></html>
