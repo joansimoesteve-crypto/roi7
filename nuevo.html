@@ -210,6 +210,23 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 .aud article{cursor:pointer}.bl{list-style:none;margin:0;padding:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .4s,opacity .3s,margin .3s}.bl li{position:relative;padding-left:22px;margin:7px 0;font-weight:600;font-size:14.5px}.bl li::before{content:"✓";position:absolute;left:0;color:var(--moss);font-weight:800}
 .aud article:hover .bl,.aud article:focus-within .bl,.aud article.open .bl{max-height:220px;opacity:1;margin-top:12px}.aud article:focus-visible{outline:3px solid var(--moss);outline-offset:3px}
 @media(max-width:600px){h1 .l{white-space:normal!important}h1 .d{display:block}h1{font-size:clamp(46px,16vw,76px)!important}}
+
+/* v12 · afinado */
+.hl{background:linear-gradient(transparent 62%,var(--sun) 62%);padding:0 2px;border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.pro .bw{color:var(--ink);font-weight:700}
+.auraw{margin:34px auto 18px}.auraw::before{inset:-8px -30px;filter:blur(24px);opacity:.5}.auraw::after{inset:-22px -64px;filter:blur(52px);opacity:.24}
+@keyframes aglow{50%{transform:scale(1.04);opacity:.8}}
+.opn{padding:16px clamp(64px,16vw,104px);letter-spacing:.02em}
+.trust.tf{align-items:center;justify-content:center}.trust.tf li::before{content:none!important;display:none}.trust.tf li:not(:has(.tfa)){}
+.tfa{display:inline-block;width:22px;height:22px;line-height:0;vertical-align:middle;transition:transform .35s,opacity .35s}.tfa.sw{transform:scale(.4) rotate(-20deg);opacity:0}
+.aud article{position:relative;overflow:hidden}
+.aud .bl{position:absolute;inset:0;margin:0!important;padding:22px 20px;max-height:none!important;opacity:0;pointer-events:none;display:flex;flex-direction:column;justify-content:center;gap:2px;background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(255,255,255,.92));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:opacity .28s ease;border-left:4px solid var(--moss)}
+.aud article:nth-child(1) .bl{border-left-color:#f08a5d}.aud article:nth-child(2) .bl{border-left-color:#5b8def}.aud article:nth-child(3) .bl{border-left-color:#e6b422}.aud article:nth-child(4) .bl{border-left-color:#3fa66b}
+.aud .bl::before{content:"Resolvemos";font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.aud article:hover .bl,.aud article:focus-within .bl,.aud article.open .bl{opacity:1;pointer-events:auto}
+.aud .bl li{transform:translateY(8px);opacity:0;transition:transform .35s,opacity .35s;font-size:15.5px}
+.aud article:hover .bl li,.aud article.open .bl li,.aud article:focus-within .bl li{transform:none;opacity:1}.aud article:hover .bl li:nth-child(2),.aud article.open .bl li:nth-child(2){transition-delay:.08s}.aud article:hover .bl li:nth-child(3),.aud article.open .bl li:nth-child(3){transition-delay:.16s}
+:root{--sun:#f7dc6f}
 </style>
 </head><body>
 <script src="/ic.js"></script>
@@ -221,11 +238,11 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 <div class="pg" id="pg" aria-hidden="true"></div>
 <header class="hero"><div class="fl" id="fl" aria-hidden="true"></div><div>
 <h1><span class="l"><span class="d" style="--i:0">Participa.</span> <span class="d" style="--i:1">Comparte.</span></span></h1>
-<p class="lead" id="lead">Valora tu experiencia en la ciudad, en una empresa o universidad, sigue sus proyectos, aporta ideas y participa de forma activa.</p>
-<p class="pro"><span>Te escuchamos.</span> <b>Actuamos.</b></p>
+<p class="lead" id="lead"><span class="hl">Valora tu experiencia</span> en la ciudad, en una empresa o una universidad, sigue sus proyectos, aporta ideas y <span class="hl">participa de forma activa</span>.</p>
+<p class="pro"><span>Te escuchamos.</span> <b>Actuamos.</b> <span class="bw">Tu bienestar importa.</span></p>
 <div class="strip" id="strip" role="group" aria-label="Elige tu carita para probar Roi" hidden></div>
 <div class="auraw"><a class="opn" href="/mapa2?near=1" id="gh">Opinar aquí</a></div>
-<ul class="trust"><li>Gratis</li><li>Sin cuentas</li><li>20 segundos</li></ul></div>
+<ul class="trust tf"><li>Gratis</li><li><i class="tfa" data-k="1"></i></li><li>Sin cuentas</li><li><i class="tfa" data-k="3"></i></li><li>20 segundos</li></ul></div>
 <div class="demo" id="demo" aria-label="Ejemplo de conversación con Roi"><div class="dh"><img id="dimg" alt="">Roi<span class="dbadge"></span></div><div class="dbody" aria-hidden="true"></div></div></header>
 
 <div class="live rv" id="live" aria-label="Valoraciones en directo"><span class="pulse">En vivo</span><span class="stat" id="lvs"></span><div class="tick"><div class="track" id="trk"></div></div></div>
@@ -486,4 +503,7 @@ if(RM){show(2);return}
 if('IntersectionObserver' in window){new IntersectionObserver(function(e){var v=e[0].isIntersecting;if(v&&!on){on=true;if(cur<0)show(0);else{clearTimeout(tm);}tm=setTimeout(nxt,D[Math.max(cur,0)])}else if(!v){on=false;clearTimeout(tm)}},{threshold:.35}).observe(ph)}else{on=true;show(0);tm=setTimeout(nxt,D[0])}
 /* para quién: tocar abre/cierra */
 document.querySelectorAll('.aud article').forEach(function(a){a.addEventListener('click',function(){var o=!a.classList.contains('open');document.querySelectorAll('.aud article.open').forEach(function(x){x.classList.remove('open');x.setAttribute('aria-expanded','false')});if(o){a.classList.add('open');a.setAttribute('aria-expanded','true')}});a.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();a.click()}})})})();</script>
+<script>(function(){var RM=matchMedia('(prefers-reduced-motion:reduce)').matches,el=[].slice.call(document.querySelectorAll('.tfa'));if(!el.length||!window.ROI_FACE)return;
+var seq=[0,1,2,3,4],k=[2,4];function put(e,i){e.innerHTML=ROI_FACE(i,22)}el.forEach(function(e,j){put(e,j?4:3)});
+if(RM)return;setInterval(function(){el.forEach(function(e,j){setTimeout(function(){e.classList.add('sw');setTimeout(function(){put(e,Math.floor(Math.random()*5));e.classList.remove('sw')},300)},j*350)})},2600)})();</script>
 </body></html>
