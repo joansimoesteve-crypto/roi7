@@ -14,6 +14,25 @@ const db = require('./_db'), org = require('./_org');
 const ID = /^[0-9a-f-]{32,40}$/i;
 const hitosOf = b => Array.isArray(b.hitos) ? b.hitos.slice(0, 12).map(h => ({ t: db.clip(h && h.t, 100), s: ['hecho', 'curso', 'pendiente'].includes(h && h.s) ? h.s : 'pendiente' })).filter(h => h.t) : null;
 const ctaOf = b => { const l = db.clip(b.cta_label, 40), u = String(b.cta_url || '').trim().slice(0, 300); return l && /^https:\/\/[^\s]+$/i.test(u) ? { cta_label: l, cta_url: u } : { cta_label: null, cta_url: null } };
+
+// Avisa por correo (Resend) a quien pidió seguimiento y valoró ese lugar/proyecto. Máx. 40 por novedad. Si falta la tabla o la clave, no hace nada.
+async function notifyFollowers(u, orgName) {
+  const key = process.env.RESEND_API_KEY; if (!key || !u.target) return 0;
+  const rs = await db.select(`ratings?select=anon_id&subject=eq.${encodeURIComponent(u.target)}&anon_id=not.is.null&order=created_at.desc&limit=400`);
+  if (!Array.isArray(rs) || !rs.length) return 0;
+  const ids = [...new Set(rs.map(x => x.anon_id).filter(Boolean))].slice(0, 200);
+  const fs = await db.select(`followups?select=email,token&anon_id=in.(${ids.map(i => '"' + String(i).replace(/"/g, '') + '"').join(',')})&limit=40`);
+  if (!Array.isArray(fs)) return 0;
+  const esc = t => String(t || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  let n = 0;
+  for (const f of fs) {
+    const un = 'https://www.citizenvoice.es/api/near?unsub=' + f.token;
+    const html = `<div style="font:16px/1.5 system-ui;max-width:520px;color:#26331f"><p><b>${esc(orgName)}</b> ha respondido sobre «${esc(u.target)}», que tú valoraste:</p><h2 style="margin:8px 0">${esc(u.title)}</h2>${u.body ? '<p>' + esc(u.body) + '</p>' : ''}<p>Gracias por participar 💚</p><p style="font-size:13px;color:#667">Recibes este aviso porque pediste seguimiento. <a href="${un}">Darme de baja</a></p></div>`;
+    const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' }, body: JSON.stringify({ from: process.env.LEADS_FROM_EMAIL || 'Avatar ROI <onboarding@resend.dev>', to: [f.email], subject: `${orgName} ha respondido: ${u.title}`.slice(0, 150), html, headers: { 'List-Unsubscribe': `<${un}>` } }) });
+    if (r.ok) n++;
+  }
+  return n;
+}
 module.exports = async (req, res) => {
   if (db.cors(req, res)) return;
   if (req.method !== 'POST') return res.status(405).json({ ok: false });
@@ -29,7 +48,8 @@ module.exports = async (req, res) => {
       const row = { org_id: oid, title, body: db.clip(b.body, 600), target: db.clip(b.target, 160) };
       let r = await db.insert('org_updates', { ...row, status: ['estudio', 'marcha', 'hecho'].includes(b.status) ? b.status : 'hecho' });
       if (!r.ok && r.status >= 400 && r.status < 500) r = await db.insert('org_updates', row); // v8 sin ejecutar
-      return res.status(r.ok ? 200 : 500).json({ ok: r.ok });
+      let notified = 0; if (r.ok && row.target) notified = await notifyFollowers(row, a.org.name).catch(() => 0);
+      return res.status(r.ok ? 200 : 500).json({ ok: r.ok, notified });
     }
     if (b.action === 'delete_update' && ID.test(String(b.id))) {
       const r = await db.patch(`org_updates?id=eq.${b.id}&org_id=eq.${oid}`, { published: false }); return res.status(r.ok ? 200 : 500).json({ ok: r.ok });

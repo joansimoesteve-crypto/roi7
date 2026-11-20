@@ -64,7 +64,7 @@ async function reverse(lat, lng) {
   } catch (e) { /* prueba Nominatim */ }
   try {
     const j = await J(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&accept-language=es&zoom=18&lat=${lat}&lon=${lng}`);
-    if (j && j.display_name) { const parts = String(j.display_name).split(','); return { name: clip(j.name || parts[0], 80), sub: clip(parts.slice(1, 4).join(',').trim(), 120), lat, lng, src: 'osm' }; }
+    if (j && j.display_name) { const parts = String(j.display_name).split(','); const nm0 = /^\d+\s*[a-zA-Z]?$/.test((j.name || parts[0] || '').trim()) ? (parts[1] || '').trim() + ' ' + (j.name || parts[0]).trim() : (j.name || parts[0]); return { name: clip(nm0, 80), sub: clip(parts.slice(1, 4).join(',').trim(), 120), lat, lng, src: 'osm' }; }
   } catch (e) { /* sin dirección */ }
   return null;
 }
