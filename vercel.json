@@ -23,6 +23,10 @@
     {
       "source": "/sala",
       "destination": "/sala.html"
+    },
+    {
+      "source": "/mapa2",
+      "destination": "/mapa2.html"
     }
   ],
   "headers": [
