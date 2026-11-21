@@ -59,13 +59,12 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
 .pmid{gap:4px!important}.pmid input{min-height:36px!important;font-size:15px!important}.pr2{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.pshare{font-size:13.5px!important}.pmood{margin-top:8px!important}.pfol{margin-top:6px!important;font-size:12.5px!important}
 .gps.hop{animation:hop 1.8s ease-in-out infinite}@keyframes hop{0%,55%,100%{transform:none}65%{transform:translateY(-8px)}75%{transform:none}84%{transform:translateY(-4px)}92%{transform:none}}@media(prefers-reduced-motion:reduce){.gps.hop{animation:none}}
 .sat{gap:5px!important}.sat .sf{line-height:0;display:inline-flex}.sat.no{font-weight:500!important;font-size:12px!important;opacity:.7}.ibt{padding:2px 10px!important;font-size:12px!important;border-color:transparent!important;background:#f1f3ea!important}
-</style></head><body><div class="app">
+.cond{margin:26px 0 10px;padding:14px 16px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}.cond h3{margin:0 0 6px;font-size:14px;color:var(--ink)}.cond p{margin:6px 0}.cond .pshare,.cond .pfol{color:var(--ink)}.cond .pfe input{border:1px solid var(--line)}.cond .pfe button{background:var(--moss);color:#fff}.pband .pmid{justify-content:center}.pband .prow{align-items:center}.pband #nk{background:rgba(255,255,255,.95)}.ppts{background:rgba(255,255,255,.2)}</style></head><body><div class="app">
 <div class="top"><a class="brand" href="/"><img src="logo.png" alt=""><span>Avatar <b>ROI</b></span></a><a class="btn g" href="/" style="min-height:40px;padding:6px 16px">Inicio</a></div>
 <div id="nav"></div><div id="rhero"></div><div class="pband" id="pband"><div class="prow"><button type="button" class="pav" id="pavb" aria-label="Cambiar cómo me siento"><img src="roi.png" alt=""><span class="pbd" id="pbd"></span></button>
-<div class="pmid"><input id="nk" maxlength="20" placeholder="Tu nombre o apodo" autocomplete="off" aria-label="Tu nombre o apodo"><div class="pr2"><label class="pshare" id="shl"><input type="checkbox" id="shw"><span>Compartir en el mapa</span></label><span class="ppts" id="ppts" aria-live="polite"></span></div></div></div>
+<div class="pmid"><input id="nk" maxlength="20" placeholder="Tu nombre o apodo" autocomplete="off" aria-label="Tu nombre o apodo"><div class="pr2"><span class="ppts" id="ppts" aria-live="polite"></span></div></div></div>
 <div class="pmood" id="pmw" hidden><small>¿Cómo te sientes ahora?</small><div id="pmf" role="group" aria-label="Tu estado de ánimo"></div></div>
-<label class="pfol"><input type="checkbox" id="fwc"><span>Avisarme por correo si responden a lo que valoro</span></label>
-<div class="pfe" id="fwb" hidden><input id="fwe" type="email" inputmode="email" maxlength="120" placeholder="tu@correo.com" autocomplete="email" aria-label="Tu correo"><button type="button" id="fws">Guardar</button><small id="fwm"></small></div></div>
+</div>
 
 <ol class="stp" id="stp" hidden></ol>
 <div class="sbar" id="sbar"><div class="sin"><span class="sico" id="sico"></span><input id="asq" type="search" enterkeyhint="search" aria-label="Busca tu municipio" placeholder="Busca por municipio o web"><button class="gps" id="gps" type="button" aria-label="Cerca de mí"><span id="gpi"></span>Cerca de mí</button></div><p class="hint" id="tapH">Toca el mapa para marcar un sitio</p><p class="hint" id="asm" hidden></p></div>
@@ -92,7 +91,9 @@ h1{font-size:clamp(28px,7vw,38px);line-height:1.08;letter-spacing:-.03em;margin:
  <div class="flt" id="flt"></div>
  <ul class="list s3v" id="jlist"></ul>
 </div>
-<p class="note">Tu ubicación se usa solo en este móvil, mientras tengas esta página abierta. No se guarda. Para listar sitios cercanos se consulta OpenStreetMap con una zona aproximada.</p>
+<section class="cond" id="cond"><h3>Condiciones y preferencias</h3><p>Al usar esta página aceptas que Roi use tu ubicación solo mientras la tienes abierta y que no se guarda. Las demás personas ven tu avatar, nombre y estado, nunca tu punto exacto. Las valoraciones son anónimas.</p><label class="pshare c" id="shl"><input type="checkbox" id="shw"><span>Compartir en el mapa</span></label><label class="pfol c"><input type="checkbox" id="fwc"><span>Avisarme por correo si responden a lo que valoro</span></label>
+<div class="pfe" id="fwb" hidden><input id="fwe" type="email" inputmode="email" maxlength="120" placeholder="tu@correo.com" autocomplete="email" aria-label="Tu correo"><button type="button" id="fws">Guardar</button><small id="fwm"></small></div><p>El correo solo sirve para avisarte de respuestas y puedes quitarlo cuando quieras. Para listar sitios cercanos se consulta OpenStreetMap con una zona aproximada.</p></section>
+
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="/ic.js"></script><script src="/ac.js"></script>
