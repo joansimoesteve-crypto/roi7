@@ -118,6 +118,12 @@ footer{padding:70px 0 120px;color:var(--mut);font-size:14px;display:flex;gap:14p
 h2::after{content:"";display:block;height:5px;width:0;border-radius:9px;margin-top:8px;background:linear-gradient(90deg,#e8605a,#f0913a,#f2d05c,#8cc35e,#5fb760);transition:width .9s .15s cubic-bezier(.2,.8,.2,1)}.rv.in h2::after{width:84px}html:not(.js) h2::after{width:84px}
 @media(prefers-reduced-motion:reduce){.bw{background-position:62% 0}.d{opacity:1}.pg{display:none}.fl>i{transform:none}*{animation:none!important;transition:none!important}.js .rv{opacity:1;transform:none}.track{animation:none}.tick{overflow-x:auto;-webkit-mask-image:none;mask-image:none;scrollbar-width:none}.tick::-webkit-scrollbar{display:none}}
 .ebtn{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.ebtn .btn{flex:1 1 220px;max-width:280px;text-align:center;justify-content:center}
+
+.edi{display:inline-flex;background:#fff;border:2px solid var(--line);border-radius:999px;padding:3px;gap:2px;margin:0 0 14px}.edi button{font:inherit;font-weight:800;font-size:15px;border:0;background:none;color:var(--ink);border-radius:999px;padding:7px 16px;cursor:pointer}.edi button[aria-pressed=true]{background:var(--moss);color:#fff}
+.go2{display:inline-flex;align-items:center;gap:10px;font:inherit;font-weight:800;font-size:20px;color:#fff;text-decoration:none;background:linear-gradient(#4f7448,#3a5a35);border-bottom:5px solid #26331f;border-radius:999px;padding:16px 34px;box-shadow:0 8px 22px rgba(63,90,58,.3);animation:gop 2.6s ease-in-out infinite}.go2:active{transform:translateY(3px);border-bottom-width:2px}@media(prefers-reduced-motion:reduce){.go2{animation:none}}.gb{display:flex;align-items:center;gap:8px;background:#fff;border:2px solid var(--line);border-radius:999px;padding:6px 6px 6px 20px;max-width:560px;margin:18px auto 0;box-shadow:0 6px 24px rgba(38,51,31,.08);transition:border-color .2s,box-shadow .2s}.gb:focus-within{border-color:var(--moss);box-shadow:0 8px 30px rgba(63,90,58,.18)}.gb input{flex:1;min-width:0;border:0;outline:0;font:inherit;font-size:18px;background:none;padding:10px 0;color:var(--ink)}
+.gb .go{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:800;font-size:17px;color:#fff;background:linear-gradient(#4f7448,#3a5a35);border:0;border-bottom:4px solid #26331f;border-radius:999px;padding:12px 22px;cursor:pointer;white-space:nowrap;box-shadow:0 8px 22px rgba(63,90,58,.3);animation:gop 2.6s ease-in-out infinite}.gb .go:active{transform:translateY(2px);border-bottom-width:2px}@keyframes gop{50%{box-shadow:0 8px 30px rgba(63,90,58,.6)}}
+.vb{display:flex;flex-wrap:wrap;gap:6px 16px;margin:14px 0 0;font-weight:600;font-size:15px;color:var(--mut);justify-content:center}.vb a{color:var(--moss);text-decoration:none;border-bottom:2px solid var(--sage)}.vb a:hover{border-color:var(--moss)}
+@media(max-width:820px){.gb input{font-size:16px}.gb .go{padding:12px 16px}}@media(prefers-reduced-motion:reduce){.gb .go{animation:none}}
 </style><style>
 /* v6 · portada sencilla tipo buscador */
 .fl,.demo{display:none!important}.hero{display:block!important;text-align:center;padding-top:clamp(28px,8vh,80px)}.hero .lead{margin-left:auto;margin-right:auto;max-width:46ch}
@@ -162,34 +168,112 @@ h1{font-size:clamp(27px,5.4vw,58px)!important;line-height:1.04!important}h1 .l{w
 .gbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.gbtns .btn{width:100%;min-height:48px;display:inline-flex;align-items:center;justify-content:center;text-align:center;margin:0;white-space:normal;line-height:1.2}.gbtns #tryit{grid-column:1/-1}
 @media(max-width:560px){.qa.row{flex-direction:column;align-items:flex-start}.qa.row>div{width:100%}.s3 li{font-size:13px!important;padding:6px 4px!important;min-height:64px!important}}
 .s3{display:grid!important;grid-template-columns:repeat(3,1fr);gap:6px}.s3 li{overflow-wrap:anywhere;hyphens:auto;display:flex;align-items:center;justify-content:center;text-align:center;min-height:74px;line-height:1.2;padding:8px 8px;font-size:15px;border-radius:14px!important}
+
+/* v11 · lema, botón fino con aura, cómo se usa, para quién */
+h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last-child{color:var(--ink)}h1 .d+.d{color:var(--moss)}
+@media(max-width:600px){h1{font-size:clamp(40px,12.4vw,64px)!important}}
+.pro{margin:-6px 0 0;font-size:clamp(18px,2.4vw,22px);font-weight:600;color:var(--mut)}.pro b{color:var(--moss)}
+.auraw{position:relative;display:inline-block;margin:34px auto 18px}
+.auraw::before,.auraw::after{content:"";position:absolute;border-radius:99px;pointer-events:none;background:conic-gradient(from var(--a),#f6c04a,#3f8f45,#4f9ad6,#e0605a,#f6c04a);animation:aura 5s linear infinite,aglow 3.2s ease-in-out infinite}
+.auraw::before{inset:-12px -26px;filter:blur(20px);opacity:.85}.auraw::after{inset:-30px -54px;filter:blur(46px);opacity:.42;animation-duration:7s,3.2s}
+@keyframes aglow{50%{transform:scale(1.07);opacity:1}}
+.opn{position:relative;z-index:1;display:inline-block;padding:15px 48px;border-radius:99px;font:600 18px/1 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:.01em;color:var(--ink);text-decoration:none;background:rgba(251,247,236,.8);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(38,51,31,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(0,0,0,.06);transition:transform .25s,background .25s,box-shadow .25s}
+.opn:hover{transform:scale(1.04);background:rgba(255,255,255,.95);box-shadow:inset 0 1px 0 #fff,0 6px 26px rgba(63,90,58,.2)}.opn:active{transform:scale(.97)}.opn:focus-visible{outline:3px solid var(--ink);outline-offset:6px}
+@media(prefers-reduced-motion:reduce){.auraw::before,.auraw::after{animation:none}}
+.hw{display:grid;grid-template-columns:auto minmax(0,430px);gap:clamp(24px,5vw,64px);align-items:center;justify-content:center;margin-top:10px}
+.hph{position:relative;width:min(270px,78vw);height:min(520px,150vw);border-radius:40px;border:9px solid #1f2a1a;background:#fff;box-shadow:0 30px 70px rgba(38,51,31,.25);overflow:hidden;margin:0 auto}
+.hnt{position:absolute;top:0;left:50%;width:84px;height:20px;margin-left:-42px;background:#1f2a1a;border-radius:0 0 14px 14px;z-index:5}
+.hscr{position:absolute;inset:0;display:none;background:#fbf7ec}.hscr.on{display:block;animation:sin .35s ease both}@keyframes sin{from{opacity:0}to{opacity:1}}
+.hmap{position:absolute;inset:0;width:100%;height:100%}
+.hcap{position:absolute;left:0;right:0;top:34px;text-align:center;font-weight:800;font-size:15px;color:var(--ink)}
+.hs0 .hme{position:absolute;left:0;top:0;width:100%;height:100%}.hs0 .hme span{position:absolute;width:16px;height:16px;border-radius:50%;background:#2f6fd6;border:3px solid #fff;box-shadow:0 0 0 8px rgba(47,111,214,.2);left:30px;top:410px}
+.hs0.on .hme span{animation:walk 2.6s ease-in-out forwards}@keyframes walk{to{left:142px;top:252px}}
+.hs0.on .hzr{animation:zr 1.6s ease-out 1.4s infinite;transform-origin:150px 260px}@keyframes zr{from{transform:scale(1);opacity:.8}to{transform:scale(1.5);opacity:0}}
+.htoast{position:absolute;left:12px;right:12px;bottom:18px;background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.2);transform:translateY(130%)}.htoast b{display:block;font-size:14px}.htoast small{display:block;color:var(--mut);font-size:13px}.htoast i{display:inline-block;margin-top:8px;font-style:normal;font-weight:700;background:var(--moss);color:#fff;border-radius:99px;padding:6px 16px;font-size:13px}
+.hs0.on .htoast{animation:up .5s cubic-bezier(.2,1.3,.4,1) 2.3s forwards}@keyframes up{to{transform:none}}
+.htap{position:absolute;left:128px;top:206px;width:34px;height:34px;margin:-17px;border-radius:50%;background:rgba(31,157,107,.35);opacity:0}.hs1.on .htap{animation:tp 1s ease-out .3s}@keyframes tp{0%{opacity:1;transform:scale(.4)}100%{opacity:0;transform:scale(2.4)}}
+.hpin{position:absolute;left:112px;top:150px;font-size:34px;opacity:0;transform:translateY(-30px)}.hs1.on .hpin{animation:drop2 .5s cubic-bezier(.3,1.6,.5,1) .8s forwards}@keyframes drop2{to{opacity:1;transform:none}}
+.hsheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:22px 22px 0 0;padding:14px 16px 18px;box-shadow:0 -8px 30px rgba(0,0,0,.15);transform:translateY(110%)}.hsheet b{display:block;margin-bottom:8px;font-size:14px}.hsheet span{display:block;background:var(--sage);border-radius:12px;padding:9px 12px;margin:6px 0;font-weight:600;font-size:14px}
+.hs1.on .hsheet{animation:up .5s ease 1.3s forwards}
+.hch{position:absolute;inset:32px 12px 12px;display:flex;flex-direction:column;gap:9px;justify-content:center}
+.hbb{max-width:90%;padding:9px 12px;border-radius:5px 16px 16px 16px;background:var(--sage);font-size:14px;line-height:1.35;opacity:0;transform:translateY(8px)}.hbb.hu{align-self:flex-end;background:var(--moss);color:#fff;border-radius:16px 5px 16px 16px}
+.hfcs{display:flex;gap:6px;opacity:0}.hfcs span{border:2px solid var(--line);border-radius:12px;padding:3px;line-height:0;background:#fff}.hfcs span.sel{border-color:var(--moss);transform:scale(1.18);box-shadow:0 6px 14px rgba(63,90,58,.3)}
+.hs2.on .hb1{animation:bi .4s .2s forwards}.hs2.on .hfcs{animation:bi .4s .9s forwards}.hs2.on .hfcs span:nth-child(4){animation:selp .5s 1.8s forwards}.hs2.on .hb2{animation:bi .4s 2.3s forwards}.hs2.on .hb3{animation:bi .4s 3s forwards}.hs2.on .hb4{animation:bi .4s 4s forwards}
+@keyframes bi{to{opacity:1;transform:none}}@keyframes selp{to{border-color:var(--moss);transform:scale(1.18);box-shadow:0 6px 14px rgba(63,90,58,.3)}}
+.hgr{display:grid;grid-template-columns:1fr 1fr;gap:9px}.hti{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 8px;text-align:center;font-size:22px;opacity:0;transform:scale(.7)}.hti b{display:block;font-size:12.5px;margin-top:4px}
+.hs3.on .ht1{animation:pp .4s .1s forwards}.hs3.on .ht2{animation:pp .4s .3s forwards}.hs3.on .ht3{animation:pp .4s .5s forwards}.hs3.on .ht4{animation:pp .4s .7s forwards}@keyframes pp{to{opacity:1;transform:none}}
+.hsum{background:var(--moss);color:#fff;border-radius:16px;padding:12px 14px;margin-top:8px;opacity:0;transform:translateY(14px)}.hsum small{opacity:.8;font-size:11.5px}.hsum b{display:block;font-size:14px;margin:3px 0 8px}.hs3.on .hsum{animation:bi .5s 1.3s forwards}.hbar i{display:block;height:6px;border-radius:9px;background:var(--sun);width:0}.hs3.on .hbar i{animation:gw 1.4s 1.6s forwards}@keyframes gw{to{width:78%}}
+.hst{list-style:none;margin:0;padding:0;display:grid;gap:12px}.hst li{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border:1px solid var(--line);border-radius:20px;background:#fff;opacity:.55;transition:opacity .3s,border-color .3s,transform .3s,box-shadow .3s;cursor:pointer}.hst li.on{opacity:1;border-color:var(--moss);transform:translateX(6px);box-shadow:0 10px 28px rgba(63,90,58,.14)}
+.hst b{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;background:var(--moss);color:#fff}.hst h3{margin:0 0 3px;font-size:19px}.hst p{margin:0;color:var(--mut);font-size:15.5px}
+@media(max-width:820px){.hw{grid-template-columns:1fr;justify-items:center}.hst{width:100%}.hst li.on{transform:none}}
+@media(prefers-reduced-motion:reduce){.hscr.on,.hscr.on *{animation:none!important}.hbb,.hfcs,.hti,.hsum{opacity:1!important;transform:none!important}.hfcs span:nth-child(4){border-color:var(--moss)}.hbar i{width:78%}}
+.aud article{cursor:pointer}.bl{list-style:none;margin:0;padding:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .4s,opacity .3s,margin .3s}.bl li{position:relative;padding-left:22px;margin:7px 0;font-weight:600;font-size:14.5px}.bl li::before{content:"✓";position:absolute;left:0;color:var(--moss);font-weight:800}
+.aud article:hover .bl,.aud article:focus-within .bl,.aud article.open .bl{max-height:220px;opacity:1;margin-top:12px}.aud article:focus-visible{outline:3px solid var(--moss);outline-offset:3px}
+@media(max-width:600px){h1 .l{white-space:normal!important}h1 .d{display:block}h1{font-size:clamp(46px,16vw,76px)!important}}
+
+/* v12 · afinado */
+.hl{background:linear-gradient(transparent 62%,var(--sun) 62%);padding:0 2px;border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.pro .bw{color:var(--ink);font-weight:700}
+.auraw{margin:34px auto 18px}.auraw::before{inset:-8px -30px;filter:blur(24px);opacity:.5}.auraw::after{inset:-22px -64px;filter:blur(52px);opacity:.24}
+@keyframes aglow{50%{transform:scale(1.04);opacity:.8}}
+.opn{padding:16px clamp(64px,16vw,104px);letter-spacing:.02em}
+.trust.tf{align-items:center;justify-content:center}.trust.tf li::before{content:none!important;display:none}.trust.tf li:not(:has(.tfa)){}
+.tfa{display:inline-block;width:22px;height:22px;line-height:0;vertical-align:middle;transition:transform .35s,opacity .35s}.tfa.sw{transform:scale(.4) rotate(-20deg);opacity:0}
+.aud article{position:relative;overflow:hidden}
+.aud .bl{position:absolute;inset:0;margin:0!important;padding:22px 20px;max-height:none!important;opacity:0;pointer-events:none;display:flex;flex-direction:column;justify-content:center;gap:2px;background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(255,255,255,.92));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:opacity .28s ease;border-left:4px solid var(--moss)}
+.aud article:nth-child(1) .bl{border-left-color:#f08a5d}.aud article:nth-child(2) .bl{border-left-color:#5b8def}.aud article:nth-child(3) .bl{border-left-color:#e6b422}.aud article:nth-child(4) .bl{border-left-color:#3fa66b}
+.aud .bl::before{content:"Resolvemos";font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.aud article:hover .bl,.aud article:focus-within .bl,.aud article.open .bl{opacity:1;pointer-events:auto}
+.aud .bl li{transform:translateY(8px);opacity:0;transition:transform .35s,opacity .35s;font-size:15.5px}
+.aud article:hover .bl li,.aud article.open .bl li,.aud article:focus-within .bl li{transform:none;opacity:1}.aud article:hover .bl li:nth-child(2),.aud article.open .bl li:nth-child(2){transition-delay:.08s}.aud article:hover .bl li:nth-child(3),.aud article.open .bl li:nth-child(3){transition-delay:.16s}
+:root{--sun:#f7dc6f}
+
+/* v13 · producción */
+.fd{display:inline-block;width:.24em;height:.24em;margin-left:.05em;position:relative;top:.01em;line-height:0;vertical-align:baseline;transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .3s}.fd svg{width:100%;height:100%;display:block}.fd.sw{transform:scale(.2) rotate(-90deg);opacity:0}
+.stage{position:relative;display:inline-block;padding:6px clamp(10px,6vw,70px) 4px;margin-top:6px}.stage::before{content:"";position:absolute;inset:-6px -2px -14px;border-radius:50%;background:conic-gradient(from var(--a),#f6c04a,#3f8f45,#4f9ad6,#e0605a,#f6c04a);filter:blur(46px);opacity:.5;animation:aura 7s linear infinite;pointer-events:none}
+.stage>*{position:relative;z-index:1}.pro{color:rgba(38,51,31,.66)!important;text-shadow:0 0 22px rgba(255,255,255,.75);margin:0!important;font-weight:600}.pro b{color:rgba(38,51,31,.82)!important}
+.auraw{margin:20px auto 14px!important}.auraw::before{opacity:.42!important}.auraw::after{opacity:.2!important}
+.trust.tf li{font-weight:600;letter-spacing:.06em;font-size:14px;color:var(--mut)}.trust.tf li+li::before{content:"·"!important;display:inline!important;margin-right:14px;opacity:.55;color:var(--mut)}.trust.tf{gap:0 14px;margin-top:6px}
+#instalar .how{grid-template-columns:repeat(2,minmax(0,1fr))!important}@media(max-width:700px){#instalar .how{grid-template-columns:1fr!important}}
+.gl{display:flex;gap:10px;align-items:flex-start;margin:12px 0 4px;font-weight:600;font-size:15px;cursor:pointer}.gl input{margin-top:3px;width:18px;height:18px}
+@media(prefers-reduced-motion:reduce){.stage::before{animation:none}}
 </style>
 </head><body>
 <script src="/ic.js"></script>
 <script>document.documentElement.classList.add('js')</script>
 <div class="bar" id="bar"><div class="wrap"><nav aria-label="Principal"><a class="brand" href="#"><img src="logo.png" alt="" width="52" height="52"><span class="bt"><span>Avatar <b>ROI</b></span><span class="mf5" id="mf" aria-hidden="true"></span></span></a>
-<div class="links"><a href="/mapa">Cerca de ti</a><a href="#pide">Pide valoraciones</a><a href="#empresas">Empresas</a><a class="cta" href="#instalar">Instalar</a></div></nav></div></div>
+<div class="links"><a href="/mapa?near=1">Cerca de ti</a><a href="#pide">Pide valoraciones</a><a href="#empresas">Contacto</a><a class="cta" href="#instalar">Instalar</a></div></nav></div></div>
 
 <div class="wrap">
 <div class="pg" id="pg" aria-hidden="true"></div>
 <header class="hero"><div class="fl" id="fl" aria-hidden="true"></div><div>
-<h1><span class="l"><span class="d" style="--i:0">Valora.</span> <span class="d" style="--i:1">Comparte.</span></span><span class="l"><span class="d" style="--i:2"><mark>TU</mark></span> <span class="d" style="--i:3"><span class="bw">bienestar</span><i class="bwf" id="bwf" aria-hidden="true"></i></span> <span class="d" style="--i:4">importa.</span></span></h1>
-<p class="lead">Roi te acompaña mientras navegas, te pregunta cómo te sientes y convierte tu opinión en conocimiento para mejores webs, lugares, ciudades y organizaciones.</p>
+<h1><span class="l"><span class="d" style="--i:0">Participa<span class="fd" data-i="3" aria-hidden="true"></span></span> <span class="d" style="--i:1">Comparte<span class="fd" data-i="4" aria-hidden="true"></span></span></span></h1>
+<p class="lead" id="lead"><span class="hl">Valora tu experiencia</span> en la ciudad, en una empresa o una universidad, sigue sus proyectos y <span class="hl">aporta ideas</span>.</p>
 <div class="strip" id="strip" role="group" aria-label="Elige tu carita para probar Roi" hidden></div>
-<div class="tri" id="tri"><a href="/mapa"><b>📍<br>Un lugar</b><span>Restaurante, parque, biblioteca, aula</span></a><a href="/v?t=web"><b>🌐<br>Una web</b><span>Servicio online, empresa o perfil</span></a><a href="/mapa?k=project"><b>💡<br>Un proyecto</b><span>Tu opinión, tu bienestar y novedades</span></a></div>
-<div class="tri2"><a href="/mapa?near=1">📍 Valorar cerca de mí</a><a class="o" href="/mapa">🗺️ Marcar en el mapa</a></div>
-<ul class="trust"><li>Sin cuentas</li><li>Gratis</li><li>20 segundos</li></ul></div>
+<div class="stage"><p class="pro"><span>Te escuchamos.</span> <b>Actuamos.</b> <span>Tu bienestar importa.</span></p>
+<div class="auraw"><a class="opn" href="/mapa?near=1" id="gh">Opinar aquí</a></div></div>
+<ul class="trust tf"><li>Gratis</li><li>Sin cuentas</li><li>20 segundos</li></ul></div>
 <div class="demo" id="demo" aria-label="Ejemplo de conversación con Roi"><div class="dh"><img id="dimg" alt="">Roi<span class="dbadge"></span></div><div class="dbody" aria-hidden="true"></div></div></header>
 
 <div class="live rv" id="live" aria-label="Valoraciones en directo"><span class="pulse">En vivo</span><span class="stat" id="lvs"></span><div class="tick"><div class="track" id="trk"></div></div></div>
 
-<section id="opciones" class="rv"><h2>¿Qué quieres valorar?</h2><p class="sub">Una carita, cómo te sientes y, si quieres, un comentario.</p>
-<div class="three" id="three"></div></section>
+<section id="opciones" class="rv"><h2>¿Cómo se valora o usa?</h2><p class="sub">Te acercas, Roi te saluda y eliges con una carita. Así de simple.</p>
+<div class="hw"><div class="hph" id="hph" aria-hidden="true"><div class="hnt"></div>
+ <div class="hscr hs0"><svg class="hmap" viewBox="0 0 260 480" preserveAspectRatio="xMidYMid slice"><rect width="260" height="480" fill="#eef3e3"/><path d="M-10 120 L270 90 M-10 300 L270 330 M80 -10 L110 490 M190 -10 L170 490" stroke="#fff" stroke-width="12" fill="none"/><path d="M-10 120 L270 90 M-10 300 L270 330 M80 -10 L110 490 M190 -10 L170 490" stroke="#d8dfc9" stroke-width="1.5" fill="none"/><rect x="120" y="150" width="60" height="50" rx="8" fill="#cfe3b8"/><rect x="20" y="340" width="52" height="60" rx="8" fill="#dfe7cf"/><rect x="200" y="360" width="46" height="70" rx="8" fill="#dfe7cf"/><circle class="hzn" cx="150" cy="260" r="52" fill="#1f9d6b" fill-opacity=".18" stroke="#1f9d6b" stroke-width="2"/><circle class="hzr" cx="150" cy="260" r="52" fill="none" stroke="#1f9d6b" stroke-width="2"/></svg>
+  <div class="hme"><span></span></div><div class="htoast"><b>📍 Estás en Parque de Cabecera</b><small>¿Cómo ha ido?</small><i>Opinar</i></div><div class="hcap">Acércate a un sitio</div></div>
+ <div class="hscr hs1"><svg class="hmap" viewBox="0 0 260 480" preserveAspectRatio="xMidYMid slice"><rect width="260" height="480" fill="#eef3e3"/><path d="M-10 160 L270 140 M-10 340 L270 360 M60 -10 L90 490 M200 -10 L180 490" stroke="#fff" stroke-width="12" fill="none"/><rect x="104" y="190" width="70" height="60" rx="8" fill="#cfe3b8"/><rect x="14" y="390" width="60" height="50" rx="8" fill="#dfe7cf"/></svg>
+  <div class="htap"></div><div class="hpin">📍</div><div class="hsheet"><b>Cerca de aquí</b><span>Biblioteca municipal</span><span>Parque de Cabecera</span><span>Proyecto: carril bici</span></div><div class="hcap">…o márcalo en el mapa</div></div>
+ <div class="hscr hs2"><div class="hch"><div class="hbb hb1">¿Cómo te sientes en <b>Parque de Cabecera</b>?</div><div class="hfcs" id="hfc"></div><div class="hbb hb2">¿Qué mejorarías?</div><div class="hbb hu hb3"><span>Más sombra, por favor</span></div><div class="hbb hb4"><b>Hecho</b> 💚 Tu opinión cuenta.</div></div></div>
+ <div class="hscr hs3"><div class="hch"><div class="hgr"><div class="hti ht1">💬<b>Hablar con otros</b></div><div class="hti ht2">💡<b>Proyectos</b></div><div class="hti ht3">🌐<b>Una web</b></div><div class="hti ht4">🧭<b>Rutas</b></div></div><div class="hsum"><small>Resumen de la semana</small><b>Lo más repetido: «más sombra»</b><span class="hbar"><i></i></span></div></div></div>
+</div>
+<ol class="hst" id="hst"><li data-s="0"><b>1</b><div><h3>Acércate o elige el lugar</h3><p>Roi detecta dónde estás. O marcas un sitio, un proyecto o una web.</p></div></li><li data-s="2"><b>2</b><div><h3>Cuéntaselo a Roi</h3><p>Una carita y, si quieres, una idea o un comentario. Sin cuentas.</p></div></li><li data-s="3"><b>3</b><div><h3>Llega a quien decide</h3><p>Resumen semanal para tu ayuntamiento, empresa o universidad. Y puedes charlar con quien está cerca.</p></div></li></ol></div>
+<div id="three" style="display:none!important"></div></section>
 
-<section id="para" class="rv"><h2>¿Para quién es?</h2><p class="sub">Cada uno lo usa a su manera. Siempre con una carita, una emoción y un comentario.</p>
+<section id="para" class="rv"><h2>¿Para quién es?</h2><p class="sub">Pasa el cursor o toca para ver qué resolvemos.</p>
 <div class="aud">
-<article><div class="ic" style="background:#fde9d6">🏛️</div><h3>Ciudades y administraciones</h3><p>Participación ciudadana sencilla: la gente opina sobre trámites, servicios, propuestas y espacios públicos con un QR o con acceso automático al acercarse a la zona.</p></article><article><div class="ic" style="background:#e9efdc">🎓</div><h3>Universidades</h3><p>Mide cómo se sienten estudiantes y profesorado con el campus virtual, la secretaría o la biblioteca.</p></article>
-<article><div class="ic" style="background:#fbf0c5">🏢</div><h3>Empresas y comercios</h3><p>Sabe qué sienten tus clientes y tu equipo, e incentiva el comercio local con rutas, valoraciones y checkpoints. Resumen cada lunes.</p></article>
-<article><div class="ic" style="background:#e3f1d8">🎤</div><h3>Creadores e influencers</h3><p>Pide a tu comunidad que te valore con un enlace o un QR en tu perfil.</p></article></div></section>
+<article tabindex="0" aria-expanded="false"><div class="ic" style="background:#fde9d6">🏛️</div><h3>Ciudades y administraciones</h3><p>Participación ciudadana sencilla: la gente opina sobre trámites, servicios, propuestas y espacios públicos con un QR o con acceso automático al acercarse a la zona.</p><ul class="bl"><li>Participación ciudadana sencilla</li><li>Bienestar de la gente por zona y servicio</li><li>Resumen semanal y «Tú dijiste, nosotros hicimos»</li></ul></article><article tabindex="0" aria-expanded="false"><div class="ic" style="background:#e9efdc">🎓</div><h3>Universidades</h3><p>Mide cómo se sienten estudiantes y profesorado con el campus virtual, la secretaría o la biblioteca.</p><ul class="bl"><li>Bienestar del campus</li><li>Opinión sobre secretaría, biblioteca y campus virtual</li><li>Proyectos y mejoras con respuesta</li></ul></article>
+<article tabindex="0" aria-expanded="false"><div class="ic" style="background:#fbf0c5">🏢</div><h3>Empresas y comercios</h3><p>Sabe qué sienten tus clientes y tu equipo, e incentiva el comercio local con rutas, valoraciones y checkpoints. Resumen cada lunes.</p><ul class="bl"><li>Bienestar del equipo</li><li>Clientes y comercio local, con rutas y checkpoints</li><li>Resumen cada lunes</li></ul></article>
+<article tabindex="0" aria-expanded="false"><div class="ic" style="background:#e3f1d8">🎤</div><h3>Creadores e influencers</h3><p>Pide a tu comunidad que te valore con un enlace o un QR en tu perfil.</p><ul class="bl"><li>Tu comunidad te valora con un enlace o QR</li><li>Ideas y comentarios de tu gente</li><li>Todo en un panel sencillo</li></ul></article></div></section>
 
 <section id="rankings" class="rv"><h2>Lo que opina la gente</h2><p class="sub">Elige qué mirar y desliza entre la carita triste, la neutra y la feliz.</p>
 <div class="tabs" id="tabs" role="group" aria-label="Qué mirar"><button data-t="places" aria-pressed="true">Lugares</button><button data-t="webs" aria-pressed="false">Webs</button><button data-t="projects" aria-pressed="false">Proyectos</button></div>
@@ -200,7 +284,8 @@ h1{font-size:clamp(27px,5.4vw,58px)!important;line-height:1.04!important}h1 .l{w
 <section id="pide" class="rv"><div class="card gen"><div><h2>Pide que te valoren</h2><p class="sub">Crea un enlace y un QR para tu perfil de LinkedIn o Facebook, tu restaurante, tu proyecto, tu empresa o tu web. Quien lo abra valora desde el móvil, sin instalar nada.</p>
 <label for="ur">Pega un enlace (opcional)</label><input id="ur" type="url" inputmode="url" placeholder="linkedin.com/in/tu-nombre, facebook.com/…, Google Maps, tu web…" autocomplete="off"><p class="hint" id="det">Detectamos el nombre y el tipo solos.</p>
 <label for="nm">Nombre</label><input id="nm" placeholder="Ej. Ana García, Café Central, Peatonalización calle Mayor…" maxlength="80">
-<label for="loc">Ubicación dentro del sitio (opcional)</label><input id="loc" placeholder="Ej. Planta 2, Aula 3.04, Recepción" maxlength="80"><p class="hint">Si tienes varios espacios, crea un QR para cada uno y compara cuál va mejor.</p><label for="ty">Qué es</label><select id="ty"><option value="place">Espacio físico (local, parque, oficina…)</option><option value="web">Espacio digital (web, servicio online)</option><option value="project">Proyecto o iniciativa</option><option value="person">Mi perfil (LinkedIn, redes)</option></select>
+<input id="loc" type="hidden"><select id="ty" hidden><option value="place">Espacio físico</option><option value="web">Espacio digital</option><option value="project">Proyecto o iniciativa</option><option value="person">Mi perfil</option></select>
+<label class="gl"><input type="checkbox" id="gl"><span>Añadir mi ubicación actual (para que se valore en este sitio)</span></label><p class="hint" id="glm"></p>
 <button class="btn" id="gen">Crear enlace y QR</button>
 <div id="out" hidden><label for="lk">Enlace para compartir</label><input id="lk" readonly>
 <div class="gbtns"><button class="btn s g" id="cp">Copiar enlace</button><button class="btn s g" id="sh">Compartir</button><button class="btn s g" id="dl">Descargar QR</button><button class="btn s g" id="dc">Descargar tarjeta</button><a class="btn s g" id="tryit" target="_blank" rel="noopener">Probarlo</a></div><label for="av">Avatar de la tarjeta de colección</label><select id="av"><option value="">Automático según el nombre</option><option value="parque">🌳 Parque</option><option value="pista">🎾 Pista deportiva</option><option value="biblio">📚 Biblioteca</option><option value="comida">🍽️ Restaurante o café</option><option value="campus">🎓 Campus</option><option value="publico">🏛️ Servicio público</option><option value="tienda">🛍️ Tienda</option><option value="web">🌐 Web</option><option value="proyecto">💡 Iniciativa</option><option value="persona">🙋 Persona</option></select>
@@ -208,13 +293,13 @@ h1{font-size:clamp(27px,5.4vw,58px)!important;line-height:1.04!important}h1 .l{w
 <label for="em">Para tu web: pega este código</label><textarea id="em" readonly></textarea><button class="btn s" id="cp2">Copiar código</button></div></div>
 <div class="qrbox"><div id="qr"><div class="qrph">Aquí aparecerá tu QR</div></div><p>Escanea y cuéntame cómo te sientes</p></div></div></section>
 
-<section class="rv" id="instalar"><h2>Roi, donde tú estés</h2><p class="sub">Para votar no hace falta instalar nada. Elige cómo quieres usarlo.</p>
+<section class="rv" id="instalar"><h2>Roi, donde tú estés</h2><p class="sub">En el móvil, en dos toques. Sin tiendas de aplicaciones.</p>
 <div class="how">
+<article class="hc"><span class="hi" aria-hidden="true">📱</span><h3>En el móvil</h3><ol><li><b>iPhone</b> (Safari): Compartir → <em>Añadir a pantalla de inicio</em>.</li><li><b>Android</b> (Chrome): menú ⋮ → <em>Instalar app</em>.</li><li>Abre Roi y toca <b>Opinar aquí</b>.</li></ol><div class="act"><a class="btn" href="/mapa?near=1">Opinar aquí</a></div><button class="btn g" id="pwa" hidden>Instalar app</button></article>
 <article class="hc"><span class="hi" aria-hidden="true">💻</span><h3>En el ordenador</h3><p>Extensión para Chrome, Edge y Brave: valoras sin salir de la página.</p><div class="act"><a class="btn" id="extb" href="#" aria-disabled="true">Próximamente en Chrome</a></div></article>
-<article class="hc"><span class="hi" aria-hidden="true">📱</span><h3>En el móvil</h3><ol><li>Abre <b>citizenvoice.es/v</b> en tu navegador.</li><li><b>Android:</b> menú ⋮ → <em>Instalar app</em>. <b>iPhone:</b> Compartir → <em>Añadir a pantalla de inicio</em>.</li><li>Para valorar: abre Roi, pega la dirección y toca la carita.</li></ol><p class="note">En Android también: <b>Compartir → Avatar ROI</b> desde cualquier web.</p><div class="act"><a class="btn" href="/v">Abrir Roi ahora</a></div><button class="btn g" id="pwa" hidden>Instalar app</button></article>
-<article class="hc"><span class="hi" aria-hidden="true">🔗</span><h3>Sin instalar nada</h3><p>Pega una dirección y valora. Si te comparten un QR o enlace de Roi, ábrelo y vota.</p><form class="try act" id="tryf"><input id="tu" type="text" inputmode="url" aria-label="Dirección de la web" placeholder="ejemplo.com" autocomplete="off"><button class="btn">Valorar</button></form></article>
+<article class="hc" hidden><form class="try act" id="tryf"><input id="tu" type="text" aria-label="Dirección de la web"><button class="btn">Valorar</button></form></article>
 </div>
-<p class="appq">¿Te gustaría una app para iPhone y Android? Si hay interés, la creamos. <button class="btn s g" id="appb">Me interesa</button></p></section>
+<p class="appq" hidden><button class="btn s g" id="appb">Me interesa</button></p></section>
 
 <section id="empresas" class="rv"><h2>Hablemos de tu organización</h2><p class="sub">Panel de resultados, Roi en tu web, QR para tus locales y proyectos ciudadanos. Déjanos tu teléfono y te contactamos.</p><p class="ebtn"><a class="btn s g" href="/panel?demo">Ver panel de muestra</a><a class="btn s g" href="/panel">Acceso organizaciones</a></p>
 <form class="card" id="lead"><div class="two"><div><label for="ln">Tu nombre</label><input id="ln" required maxlength="100" autocomplete="name"></div><div><label for="lo">Organización</label><input id="lo" required maxlength="120" autocomplete="organization"></div>
@@ -248,7 +333,7 @@ const face=i=>`<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy=
 const ci=a=>Math.min(4,Math.max(0,Math.round(a)-1));
 $('dimg').src='roi.png';
 const openRoi=()=>{window.AvatarRoi?AvatarRoi.open():location.href='/v'};
-$('dTry').onclick=openRoi;
+$('dTry').onclick=function(){location.href='/mapa?near=1'};
 
 /* barra y revelado al hacer scroll */
 const bar=$('bar');addEventListener('scroll',()=>bar.classList.toggle('s',scrollY>8),{passive:true});
@@ -284,7 +369,7 @@ function MINI(k,still){const A=(a,at)=>still?'':a, op=(vals,kt,dur)=>still?'':`<
  <g ${op1}>${op('0;0;1;1;0','0;.5;.58;.94;1',7)}<rect x="88" y="6" width="124" height="40" rx="12" fill="#fff" stroke="#ef7d1a"/><text x="150" y="21" font-size="9" font-weight="700" fill="#26331f" text-anchor="middle">¿Qué te parece?</text><text x="150" y="38" font-size="14" text-anchor="middle">${FACE.slice(1).join(' ')}</text></g></svg>`}
 {const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;THREE.forEach((x,n)=>x.m=MINI(n,RM))}
 $('three').innerHTML=THREE.map(x=>`<a class="qa row" href="${x.href}" style="--c:${x.c}"><span class="fc"><i>${IC(x.ic,28)}</i></span><div><p class="q">${x.h}</p><p class="r">${x.q}</p><div class="mini">${x.m}</div><ol class="s3">${x.st.map(t=>'<li>'+t+'</li>').join('')}</ol><p class="ideal">${x.f}</p></div></a>`).join('');
-(function(){var T=[['/mapa','pin','Un lugar','Parque, tienda, aula','#1f9d6b'],['/v?t=web','globe','Una web','Servicio, empresa, perfil','#2a7de1'],['/mapa?k=project','spark','Un proyecto','Opinión y bienestar','#ef7d1a']];$('tri').innerHTML=T.map(function(x){return '<a href="'+x[0]+'"><i class="tic" style="background:'+x[4]+'">'+IC(x[1],28)+'</i><b>'+x[2]+'</b><span>'+x[3]+'</span></a>'}).join('')})();
+(function(){var T=[['/mapa','pin','Un lugar','Parque, tienda, aula','#1f9d6b'],['/v?t=web','globe','Una web','Servicio, empresa, perfil','#2a7de1'],['/mapa?k=project','spark','Un proyecto','Opinión y bienestar','#ef7d1a']];if($('tri'))$('tri').innerHTML=T.map(function(x){return '<a href="'+x[0]+'"><i class="tic" style="background:'+x[4]+'">'+IC(x[1],28)+'</i><b>'+x[2]+'</b><span>'+x[3]+'</span></a>'}).join('')})();
 
 /* ===== Conversación de ejemplo en vivo ===== */
 const dB=document.querySelector('.dbody'),badge=document.querySelector('.dbadge'),sleep=ms=>new Promise(r=>setTimeout(r,ms)),RM=matchMedia('(prefers-reduced-motion: reduce)').matches,T=ms=>RM?0:ms;
@@ -346,7 +431,8 @@ function detect(v){let x;try{x=new URL(/^https?:\/\//i.test(v)?v:'https://'+v)}c
 $('ur').oninput=()=>{const d=detect($('ur').value.trim());if(!d){$('det').textContent='Detectamos el nombre y el tipo solos.';return}
  if(d.t)$('ty').value=d.t;if(d.n&&(auto||!$('nm').value)){$('nm').value=d.n.slice(0,80);auto=true}$('det').textContent=d.n?'Detectado: '+d.n+(d.t?'':'. Revisa el tipo.'):'Revisa el nombre y el tipo.'};
 $('nm').oninput=()=>{auto=false};
-const mk=(n,t,u,s)=>{const l=$('loc').value.trim();return location.origin+'/v?t='+t+'&n='+encodeURIComponent(n)+(l?'&l='+encodeURIComponent(l):'')+(u?'&u='+encodeURIComponent(u):'')+'&s='+s};
+let GEO='';const mk=(n,t,u,s)=>{const l=$('loc').value.trim();return location.origin+'/v?t='+t+'&n='+encodeURIComponent(n)+(l?'&l='+encodeURIComponent(l):'')+(u?'&u='+encodeURIComponent(u):'')+(GEO?'&g='+GEO:'')+'&s='+s};
+$('gl').onchange=()=>{const m=$('glm');if(!$('gl').checked){GEO='';m.textContent='';return}if(!navigator.geolocation){m.textContent='Tu navegador no da la ubicación.';$('gl').checked=false;return}m.textContent='Buscando tu posición…';navigator.geolocation.getCurrentPosition(p=>{GEO=p.coords.latitude.toFixed(5)+','+p.coords.longitude.toFixed(5);m.textContent='Ubicación añadida. Crea el enlace desde el sitio donde quieres que se valore.'},()=>{m.textContent='No he podido ver tu ubicación.';$('gl').checked=false},{enableHighAccuracy:true,timeout:15000,maximumAge:30000})};
 $('gen').onclick=()=>{const n=$('nm').value.trim();if(!n){$('nm').focus();return}let u='';try{const raw=$('ur').value.trim(),x=new URL(/^https?:\/\//i.test(raw)?raw:'https://'+raw);if(raw&&/^https?:$/.test(x.protocol))u=x.href}catch(e){}
  const t=$('ty').value,link=mk(n,t,u,'link'),qlink=mk(n,t,u,'qr');
  $('lk').value=link;$('tryit').href=link;$('em').value='<script src="'+location.origin+'/avatar.js" data-name="'+esc(n)+'" data-type="'+t+'"><\/script>';$('out').hidden=false;
@@ -384,7 +470,7 @@ $('lead').onsubmit=async e=>{e.preventDefault();const b={name:$('ln').value,org:
  if('IntersectionObserver'in window&&!RMO)new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){void h1.offsetWidth;h1.classList.add('play')}else h1.classList.remove('play')}),{threshold:.35}).observe(h1);
  /* carita junto al logo: va cambiando */
  const mf=$('mf');mf.innerHTML=[0,1,2,3,4].map(i=>face(i)).join('');const ms=[...mf.querySelectorAll('svg')],bf=$('bwf'),ord=[0,1,2,3,4,3,2,1];let k=0;
- const tick=()=>{const i=ord[k++%ord.length];ms.forEach((m,j)=>m.classList.toggle('on',j===i));bf.innerHTML=face(i)};tick();if(!RMO)setInterval(tick,1100);
+ const tick=()=>{const i=ord[k++%ord.length];ms.forEach((m,j)=>m.classList.toggle('on',j===i));if(bf)bf.innerHTML=face(i)};tick();if(!RMO)setInterval(tick,1100);
  /* tira de caritas en portada */
  const st=$('strip');st.innerHTML=[0,1,2,3,4].map(i=>`<button type="button" data-i="${i}" aria-label="${NAMES[i]}">${face(i)}</button>`).join('')+'<span class="cap" id="scap" aria-live="off"></span>';
  let cur=-1,hov=false;const set=i=>{cur=i;[...st.querySelectorAll('button')].forEach((b,j)=>b.classList.toggle('on',j===i));$('scap').textContent=NAMES[i]};set(3);
@@ -416,4 +502,21 @@ f.addEventListener('submit',function(e){e.preventDefault();var v=document.getEle
 })})();
 </script>
 <script src="/card.js"></script>
+
+<script>(function(){
+var RM=matchMedia('(prefers-reduced-motion:reduce)').matches,ph=document.getElementById('hph');if(!ph)return;
+var sc=[].slice.call(ph.querySelectorAll('.hscr')),st=[].slice.call(document.querySelectorAll('#hst li')),D=[4200,3600,6200,4200],cur=-1,tm=null,on=false;
+var f=document.getElementById('hfc');if(f&&window.ROI_FACE)f.innerHTML=[0,1,2,3,4].map(function(i){return '<span>'+ROI_FACE(i,30)+'</span>'}).join('');
+function show(i){cur=i;sc.forEach(function(s,j){s.classList.remove('on');if(j===i){void s.offsetWidth;s.classList.add('on')}});var m=i<2?0:i-1;st.forEach(function(l,j){l.classList.toggle('on',j===m)})}
+function nxt(){show((cur+1)%sc.length);tm=setTimeout(nxt,D[cur])}
+function go(i){clearTimeout(tm);show(i);if(!RM&&on)tm=setTimeout(nxt,D[i])}
+st.forEach(function(l){l.onclick=function(){go(+l.dataset.s)}});
+if(RM){show(2);return}
+if('IntersectionObserver' in window){new IntersectionObserver(function(e){var v=e[0].isIntersecting;if(v&&!on){on=true;if(cur<0)show(0);else{clearTimeout(tm);}tm=setTimeout(nxt,D[Math.max(cur,0)])}else if(!v){on=false;clearTimeout(tm)}},{threshold:.35}).observe(ph)}else{on=true;show(0);tm=setTimeout(nxt,D[0])}
+/* para quién: tocar abre/cierra */
+document.querySelectorAll('.aud article').forEach(function(a){a.addEventListener('click',function(){var o=!a.classList.contains('open');document.querySelectorAll('.aud article.open').forEach(function(x){x.classList.remove('open');x.setAttribute('aria-expanded','false')});if(o){a.classList.add('open');a.setAttribute('aria-expanded','true')}});a.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();a.click()}})})})();</script>
+<script>(function(){var RM=matchMedia('(prefers-reduced-motion:reduce)').matches,el=[].slice.call(document.querySelectorAll('.fd'));if(!el.length||!window.ROI_FACE)return;
+function put(e,i){e.dataset.i=i;e.innerHTML=ROI_FACE(i,64)}el.forEach(function(e){put(e,+e.dataset.i)});if(RM)return;
+function tick(e){e.classList.add('sw');setTimeout(function(){var i;do{i=Math.floor(Math.random()*5)}while(i===+e.dataset.i);put(e,i);e.classList.remove('sw')},420)}
+el.forEach(function(e,j){setTimeout(function(){tick(e);setInterval(function(){tick(e)},2800)},1400+j*1400)})})();</script>
 </body></html>

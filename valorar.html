@@ -62,6 +62,8 @@ input[type=text],input[type=url],textarea{width:100%;padding:13px 15px;border:1p
 .log>*{scroll-margin-bottom:34px}.wl a .ri{color:var(--c-web)}.btn.ac{background:var(--ac)}
 body.wh{background:var(--paper)}@media(min-width:700px){body.wh .app{margin:0 auto;padding:0 16px 28px;background:none;box-shadow:none;border-radius:0;min-height:100dvh}}
 .wh .btn.g{background:#fff;color:var(--ink);border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;border-radius:99px;text-decoration:none;font-weight:600}
+
+.done .row .btn{min-height:40px;padding:8px 18px;font-size:14.5px;font-weight:600}.done .row .btn.g{border-width:1.5px;border-color:#cfd6c4}.done .row #shr{min-height:46px;font-size:16px;background:var(--ink)}.shm{margin:0!important;font-size:13px;min-height:1em}
 </style></head><body>
 <div class="app">
 <header class="top"><a class="brand" href="/"><img src="logo.png" alt=""><span>Avatar <b>ROI</b></span></a><button class="ic" id="vb" aria-pressed="true" aria-label="Voz de Roi" title="Voz de Roi">🔊</button></header>
@@ -83,7 +85,7 @@ body.wh{background:var(--paper)}@media(min-width:700px){body.wh .app{margin:0 au
 </section>
 <section class="done" id="done" hidden>
   <div class="f" id="df"></div><h1>¡Gracias!</h1><p id="ds">Tu valoración ya cuenta 💚</p><p id="tdy" class="tdy" hidden></p><div id="upd" class="upd" hidden></div><div id="hit" class="upd" hidden></div>
-  <div class="row"><a class="btn" id="room">💬 Hablar con quien valora esto</a><a class="btn" id="cta" hidden target="_blank" rel="noopener"></a><a class="btn g" id="again" href="/v">✍️ Valorar otra cosa</a><a class="btn g" href="/#instalar">📲 Tener a Roi en el móvil</a><a class="btn g" href="/#pide">🔳 Pedir que me valoren (QR)</a><a class="btn g" id="visit" hidden>Ir a la web</a></div>
+  <div class="row"><button class="btn" id="shr" type="button">📣 Compartir mi opinión</button><p class="shm" id="shm" aria-live="polite"></p><a class="btn" id="room">💬 Hablar con quien valora esto</a><a class="btn" id="cta" hidden target="_blank" rel="noopener"></a><a class="btn g" id="again" href="/mapa?near=1">✍️ Valorar otra cosa</a><a class="btn g" href="/#instalar">📲 Tener a Roi en el móvil</a><a class="btn g" href="/#pide">🔳 Pedir que me valoren (QR)</a><a class="btn g" id="visit" hidden>Ir a la web</a></div>
 </section>
 </main></div>
 <script src="/ic.js"></script><script src="/ac.js"></script>
@@ -174,6 +176,26 @@ function comment(){
   const ta=d.querySelector('textarea'),mb=d.querySelector('.mb');let rec=null;
   if(!SR)mb.remove();else mb.onclick=()=>{if(rec){rec.stop();return}rec=new SR();rec.lang='es-ES';rec.interimResults=false;rec.onresult=e=>{ta.value=(ta.value+' '+e.results[0][0].transcript).trim()};rec.onend=()=>{rec=null;mb.setAttribute('aria-pressed','false')};rec.onerror=()=>bot('No he podido usar el micrófono. Puedes escribirlo.');mb.setAttribute('aria-pressed','true');rec.start()};
   d.querySelector('.send').onclick=()=>{if(rec)rec.stop();S.comment=clean(ta.value);lock(d);if(S.comment)me(S.comment);send()}}
+
+
+/* Tarjeta para compartir: imagen vertical con la carita, el sitio y el estado */
+function cardBlob(){return new Promise(res=>{const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),col=COL[S.mood];
+ const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#fbf8ee');g.addColorStop(1,'#eef3e2');x.fillStyle=g;x.fillRect(0,0,W,H);
+ x.fillStyle=col+'33';x.beginPath();x.arc(W/2,500,430,0,7);x.fill();x.fillStyle=col+'22';x.beginPath();x.arc(W/2,500,540,0,7);x.fill();
+ const wrap=(t,mx,ln,fs)=>{const w=t.split(/\s+/),L=[];let cur='';w.forEach(s=>{const z=cur?cur+' '+s:s;if(x.measureText(z).width>mx&&cur){L.push(cur);cur=s}else cur=z});if(cur)L.push(cur);return L.slice(0,ln)};
+ const done=()=>{x.textAlign='center';x.fillStyle='#26331f';x.font='600 46px system-ui,sans-serif';x.fillText('Acabo de valorar',W/2,860);
+  x.font='800 78px system-ui,sans-serif';const nm=wrap(n||'este sitio',900,2);nm.forEach((l,i)=>x.fillText(l,W/2,950+i*88));
+  x.font='700 54px system-ui,sans-serif';x.fillStyle=col==='#f2d05c'?'#7a6200':col;x.fillText(S.feel+' · '+NAMES[S.mood],W/2,950+nm.length*88+34);
+  x.fillStyle='#26331f';x.font='600 40px system-ui,sans-serif';x.fillText('¿Y tú qué opinas?',W/2,1250);x.fillStyle='#4f6b43';x.font='700 36px system-ui,sans-serif';x.fillText('citizenvoice.es',W/2,1305);
+  c.toBlob(b=>res(b),'image/png')};
+ const im=new Image();im.onload=()=>{x.drawImage(im,W/2-230,270,460,460);done()};im.onerror=done;
+ im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(face(S.mood).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" width="460" height="460" '))})}
+function shareLink(){const p=new URLSearchParams();if(t)p.set('t',t);if(n)p.set('n',n);if(u)p.set('u',u);p.set('s','link');return location.origin+'/v?'+p.toString()}
+$('shr').onclick=async()=>{const m=$('shm'),txt='Acabo de valorar «'+n+'»: '+S.feel+'. ¿Y tú qué opinas? ',lk=shareLink();m.textContent='Preparando…';let b=null;try{b=await cardBlob()}catch(e){}
+ try{if(b&&navigator.canShare){const f=new File([b],'mi-opinion.png',{type:'image/png'});if(navigator.canShare({files:[f]})){await navigator.share({files:[f],text:txt+lk});m.textContent='';return}}
+  if(navigator.share){await navigator.share({text:txt,url:lk});m.textContent='';return}}catch(e){if(e&&e.name==='AbortError'){m.textContent='';return}}
+ try{await navigator.clipboard.writeText(txt+lk);m.textContent='Texto y enlace copiados.'}catch(e){m.textContent=txt+lk}
+ if(b){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='mi-opinion.png';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}};
 
 /* ---- envío ---- */
 let anon='';try{anon=localStorage.getItem('roi_anon')||'';if(!anon){anon=crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);localStorage.setItem('roi_anon',anon)}}catch(e){anon=anon||'anon-'+Date.now().toString(36)}
