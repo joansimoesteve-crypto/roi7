@@ -63,6 +63,10 @@ module.exports = async (req, res) => {
     res.setHeader('Content-Type', 'text/html; charset=utf-8'); return res.status(200).send('<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><body style="font:18px system-ui;max-width:480px;margin:12vh auto;padding:0 20px;text-align:center;color:#26331f"><h1>Listo</h1><p>Hemos quitado tu correo. No recibirás más avisos.</p><p><a href="/">Volver a Avatar ROI</a></p>');
   }
   if (db.cors(req, res)) return;
+  if (req.method === 'GET' && req.query && req.query.ip) { // posición aproximada por IP (cabeceras de Vercel), solo para centrar el mapa sin pedir permiso
+    const h = req.headers || {}, la = parseFloat(h['x-vercel-ip-latitude']), lo = parseFloat(h['x-vercel-ip-longitude']); let city = ''; try { city = decodeURIComponent(h['x-vercel-ip-city'] || ''); } catch (e) {}
+    res.setHeader('Cache-Control', 'private, max-age=600'); return res.status(200).json({ ok: true, lat: isFinite(la) ? la : null, lng: isFinite(lo) ? lo : null, city: city.slice(0, 60), country: String(h['x-vercel-ip-country'] || '').slice(0, 2) });
+  }
   if (db.limited(req, 60)) return res.status(429).json({ ok: false });
   if (!db.ok()) return res.status(200).json({ ok: true, people: [] });
   try {
