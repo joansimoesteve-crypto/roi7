@@ -241,8 +241,8 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 </head><body>
 <script src="/ic.js"></script>
 <script>document.documentElement.classList.add('js')</script>
-<div class="bar" id="bar"><div class="wrap"><nav aria-label="Principal"><a class="brand" href="#"><img src="logo.png" alt="" width="52" height="52"><span class="bt"><span>Avatar <b>ROI</b></span><span class="mf5" id="mf" aria-hidden="true"></span></span></a>
-<div class="links"><a href="/mapa?near=1">Cerca de ti</a><a href="#pide">Pide valoraciones</a><a href="#empresas">Contacto</a><a class="cta" href="#instalar">Instalar</a></div></nav></div></div>
+<div class="bar" id="bar"><div class="wrap"><nav aria-label="Principal"><a class="brand" href="#"><img src="logo.png" alt="" width="52" height="52"><span class="bt"><span>Citizen<b>Voice</b></span><span class="mf5" id="mf" aria-hidden="true"></span></span></a>
+<div class="links"><a href="/mapa?near=1">Cerca de ti</a><a href="/empresas">Contacto</a><a class="cta" href="#instalar">Instalar</a></div></nav></div></div>
 
 <div class="wrap">
 <div class="pg" id="pg" aria-hidden="true"></div>
@@ -266,7 +266,7 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
  <div class="hscr hs2"><div class="hch"><div class="hbb hb1">¿Cómo te sientes en <b>Parque de Cabecera</b>?</div><div class="hfcs" id="hfc"></div><div class="hbb hb2">¿Qué mejorarías?</div><div class="hbb hu hb3"><span>Más sombra, por favor</span></div><div class="hbb hb4"><b>Hecho</b> 💚 Tu opinión cuenta.</div></div></div>
  <div class="hscr hs3"><div class="hch"><div class="hgr"><div class="hti ht1">💬<b>Hablar con otros</b></div><div class="hti ht2">💡<b>Proyectos</b></div><div class="hti ht3">🌐<b>Una web</b></div><div class="hti ht4">🧭<b>Rutas</b></div></div><div class="hsum"><small>Resumen de la semana</small><b>Lo más repetido: «más sombra»</b><span class="hbar"><i></i></span></div></div></div>
 </div>
-<ol class="hst" id="hst"><li data-s="0"><b>1</b><div><h3>Acércate o elige el lugar</h3><p>Roi detecta dónde estás. O marcas un sitio, un proyecto o una web.</p></div></li><li data-s="2"><b>2</b><div><h3>Cuéntaselo a Roi</h3><p>Una carita y, si quieres, una idea o un comentario. Sin cuentas.</p></div></li><li data-s="3"><b>3</b><div><h3>Llega a quien decide</h3><p>Resumen semanal para tu ayuntamiento, empresa o universidad. Y puedes charlar con quien está cerca.</p></div></li></ol></div>
+<ol class="hst" id="hst"><li data-s="0"><b>1</b><div><h3>Abre el mapa o llega a una Zona Roi</h3><p>Roi detecta dónde estás y te avisa al entrar en una Zona Roi. O marcas tú un sitio, un proyecto o una web.</p></div></li><li data-s="2"><b>2</b><div><h3>Una carita y sigues</h3><p>Toca un sitio, elige tu carita y, si quieres, una etiqueta o un comentario. Sin cuentas. Y pasa al siguiente: las rutas suman puntos solas.</p></div></li><li data-s="3"><b>3</b><div><h3>Llega a quien decide</h3><p>Resumen semanal para tu ayuntamiento, empresa o universidad. Y puedes charlar con quien está cerca.</p></div></li></ol></div>
 <div id="three" style="display:none!important"></div></section>
 
 <section id="para" class="rv"><h2>¿Para quién es?</h2><p class="sub">Pasa el cursor o toca para ver qué resolvemos.</p>
@@ -275,23 +275,7 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 <article tabindex="0" aria-expanded="false"><div class="ic" style="background:#fbf0c5">🏢</div><h3>Empresas y comercios</h3><p>Sabe qué sienten tus clientes y tu equipo, e incentiva el comercio local con rutas, valoraciones y checkpoints. Resumen cada lunes.</p><ul class="bl"><li>Bienestar del equipo</li><li>Clientes y comercio local, con rutas y checkpoints</li><li>Resumen cada lunes</li></ul></article>
 <article tabindex="0" aria-expanded="false"><div class="ic" style="background:#e3f1d8">🎤</div><h3>Creadores e influencers</h3><p>Pide a tu comunidad que te valore con un enlace o un QR en tu perfil.</p><ul class="bl"><li>Tu comunidad te valora con un enlace o QR</li><li>Ideas y comentarios de tu gente</li><li>Todo en un panel sencillo</li></ul></article></div></section>
 
-<section id="rankings" class="rv"><h2>Lo que opina la gente</h2><p class="sub">Elige qué mirar y desliza entre la carita triste, la neutra y la feliz.</p>
-<div class="tabs" id="tabs" role="group" aria-label="Qué mirar"><button data-t="places" aria-pressed="true">Lugares</button><button data-t="webs" aria-pressed="false">Webs</button><button data-t="projects" aria-pressed="false">Proyectos</button></div>
-<div class="slide"><div class="mood" aria-live="polite"><span id="big"></span><b id="lab"></b></div><input type="range" id="mood" min="1" max="5" step="0.1" value="5" aria-label="Filtrar por valoración, de peor a mejor"><div class="ends" aria-hidden="true"><span>Peor valorado</span><span>Mejor valorado</span></div></div>
-<div class="rk"><ol class="r" id="list"></ol><div id="map" aria-label="Mapa de valoraciones"></div></div>
-<p class="note" id="note"></p></section>
 
-<section id="pide" class="rv"><div class="card gen"><div><h2>Pide que te valoren</h2><p class="sub">Crea un enlace y un QR para tu perfil de LinkedIn o Facebook, tu restaurante, tu proyecto, tu empresa o tu web. Quien lo abra valora desde el móvil, sin instalar nada.</p>
-<label for="ur">Pega un enlace (opcional)</label><input id="ur" type="url" inputmode="url" placeholder="linkedin.com/in/tu-nombre, facebook.com/…, Google Maps, tu web…" autocomplete="off"><p class="hint" id="det">Detectamos el nombre y el tipo solos.</p>
-<label for="nm">Nombre</label><input id="nm" placeholder="Ej. Ana García, Café Central, Peatonalización calle Mayor…" maxlength="80">
-<input id="loc" type="hidden"><select id="ty" hidden><option value="place">Espacio físico</option><option value="web">Espacio digital</option><option value="project">Proyecto o iniciativa</option><option value="person">Mi perfil</option></select>
-<label class="gl"><input type="checkbox" id="gl"><span>Añadir mi ubicación actual (para que se valore en este sitio)</span></label><p class="hint" id="glm"></p>
-<button class="btn" id="gen">Crear enlace y QR</button>
-<div id="out" hidden><label for="lk">Enlace para compartir</label><input id="lk" readonly>
-<div class="gbtns"><button class="btn s g" id="cp">Copiar enlace</button><button class="btn s g" id="sh">Compartir</button><button class="btn s g" id="dl">Descargar QR</button><button class="btn s g" id="dc">Descargar tarjeta</button><a class="btn s g" id="tryit" target="_blank" rel="noopener">Probarlo</a></div><label for="av">Avatar de la tarjeta de colección</label><select id="av"><option value="">Automático según el nombre</option><option value="parque">🌳 Parque</option><option value="pista">🎾 Pista deportiva</option><option value="biblio">📚 Biblioteca</option><option value="comida">🍽️ Restaurante o café</option><option value="campus">🎓 Campus</option><option value="publico">🏛️ Servicio público</option><option value="tienda">🛍️ Tienda</option><option value="web">🌐 Web</option><option value="proyecto">💡 Iniciativa</option><option value="persona">🙋 Persona</option></select>
-<div class="share" id="soc" aria-label="Compartir en"></div>
-<label for="em">Para tu web: pega este código</label><textarea id="em" readonly></textarea><button class="btn s" id="cp2">Copiar código</button></div></div>
-<div class="qrbox"><div id="qr"><div class="qrph">Aquí aparecerá tu QR</div></div><p>Escanea y cuéntame cómo te sientes</p></div></div></section>
 
 <section class="rv" id="instalar"><h2>Roi, donde tú estés</h2><p class="sub">En el móvil, en dos toques. Sin tiendas de aplicaciones.</p>
 <div class="how">
@@ -301,37 +285,32 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 </div>
 <p class="appq" hidden><button class="btn s g" id="appb">Me interesa</button></p></section>
 
-<section id="empresas" class="rv"><h2>Hablemos de tu organización</h2><p class="sub">Panel de resultados, Roi en tu web, QR para tus locales y proyectos ciudadanos. Déjanos tu teléfono y te contactamos.</p><p class="ebtn"><a class="btn s g" href="/panel?demo">Ver panel de muestra</a><a class="btn s g" href="/panel">Acceso organizaciones</a></p>
-<form class="card" id="lead"><div class="two"><div><label for="ln">Tu nombre</label><input id="ln" required maxlength="100" autocomplete="name"></div><div><label for="lo">Organización</label><input id="lo" required maxlength="120" autocomplete="organization"></div>
-<div><label for="lp">Teléfono</label><input id="lp" type="tel" inputmode="tel" required maxlength="30" autocomplete="tel" placeholder="+34 600 000 000"></div><div><label for="le">Email (opcional)</label><input id="le" type="email" maxlength="120" autocomplete="email"></div>
-<div><label for="lk2">Somos</label><select id="lk2"><option>Ayuntamiento o institución</option><option>Empresa</option><option>Otro</option></select></div><div><label for="li">Me interesa</label><select id="li"><option>Panel de resultados</option><option>Roi en mi web</option><option>QR para mis locales</option><option>Proyectos ciudadanos</option><option>Todo lo anterior</option></select></div></div>
-<label for="lm">Mensaje (opcional)</label><textarea id="lm" maxlength="1000"></textarea>
-<label class="chk"><input type="checkbox" id="lc" required><span>Acepto que Avatar ROI use estos datos para contactarme. Más información en la <a href="privacy.html">política de privacidad</a>.</span></label>
-<button class="btn" type="submit">Quiero que me llamen</button> <span id="lr" role="status"></span></form></section>
 
-<footer><img src="logo.png" alt=""><span>Avatar ROI · Valora. Comparte. TU bienestar importa. · <a href="privacy.html">Privacidad</a> · <a href="/panel">Panel de organizaciones</a></span></footer>
+
+<footer><img src="logo.png" alt=""><span>CitizenVoice · Valora. Comparte. TU bienestar importa. · <a href="privacy.html">Privacidad</a> · <a href="/panel">Panel de organizaciones</a></span></footer>
 </div>
 
-<nav class="dock" id="dock" aria-label="Atajos"><button class="p" id="dTry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5q3.5 3 7 0M9 9.5v.5M15 9.5v.5"/></svg>Probar</button>
-<a href="#rankings" data-s="rankings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Rankings</a>
-<a href="#pide" data-s="pide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.5M14 21h.5M18 18h3v3"/></svg>Mi QR</a>
+<nav class="dock" id="dock" aria-label="Atajos"><button class="p" id="dTry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5q3.5 3 7 0M9 9.5v.5M15 9.5v.5"/></svg>Opinar</button>
+
+
 <a href="#instalar" data-s="instalar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Móvil</a></nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
-<script src="avatar.js"></script>
 <script>
 /* ===== Ajustes ===== */
 const SHORTCUT_URL='';                     // ← enlace de iCloud del atajo «Valorar con Roi»
 const CHROME_URL='https://chromewebstore.google.com/detail/ojkncdfomenebpcfbkomechinciffbco';                       // ← pega aquí el enlace de Chrome Web Store cuando esté publicado
 const CE=['urnovai','outlook.es'].join('@'); // email de reserva si falla el formulario (no aparece en el HTML)
 
-const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+if(window.IntersectionObserver){const _o=IntersectionObserver.prototype.observe;IntersectionObserver.prototype.observe=function(e){if(e instanceof Element)_o.call(this,e)}}
+const NUL=()=>new Proxy(function(){},{get:(t,k)=>k===Symbol.iterator?function*(){}:k===Symbol.toPrimitive?()=>'':k==='value'||k==='textContent'||k==='innerHTML'?'':typeof k==='string'?NUL():undefined,set:()=>true,apply:()=>NUL()});
+const $=id=>document.getElementById(id)||NUL(),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const COL=['#e8605a','#f0913a','#f2d05c','#8cc35e','#5fb760'],MOU=['M33 68Q50 56 67 68','M33 66Q50 58 67 66','M34 64H66','M32 60Q50 76 68 60','M30 58Q50 82 70 58'];
 const NAMES=['Muy insatisfecho','Insatisfecho','Neutral','Satisfecho','Muy satisfecho'];
 const face=i=>`<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="${COL[i]}"/><circle cx="36" cy="40" r="5" fill="#3a2a1a"/><circle cx="64" cy="40" r="5" fill="#3a2a1a"/>${i==0?'<path d="M26 28L44 34M74 28L56 34" stroke="#3a2a1a" stroke-width="5" stroke-linecap="round"/>':''}<path d="${MOU[i]}" stroke="#3a2a1a" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`;
 const ci=a=>Math.min(4,Math.max(0,Math.round(a)-1));
-$('dimg').src='roi.png';
+if($('dimg'))$('dimg').src='roi.png';
 const openRoi=()=>{window.AvatarRoi?AvatarRoi.open():location.href='/v'};
 $('dTry').onclick=function(){location.href='/mapa?near=1'};
 
@@ -340,7 +319,7 @@ const bar=$('bar');addEventListener('scroll',()=>bar.classList.toggle('s',scroll
 const io='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12}):null;
 document.querySelectorAll('.rv').forEach(el=>io?io.observe(el):el.classList.add('in'));
 const sp='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll('#dock a').forEach(a=>a.classList.toggle('on',a.dataset.s===e.target.id))}),{rootMargin:'-45% 0px -50% 0px'}):null;
-['rankings','pide','instalar'].forEach(id=>sp&&sp.observe($(id)));
+['rankings','pide','instalar'].forEach(id=>sp&&$(id)&&sp.observe($(id)));
 
 /* ===== Las tres opciones, con pregunta y respuesta ===== */
 const THREE=[
