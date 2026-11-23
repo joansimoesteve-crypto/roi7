@@ -5,7 +5,7 @@
   "lang": "es",
   "start_url": "/mapa?near=1",
   "scope": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#fbf7ec",
   "theme_color": "#3f5a3a",
@@ -31,5 +31,9 @@
       "text": "text",
       "url": "url"
     }
-  }
+  },
+  "display_override": [
+    "fullscreen",
+    "standalone"
+  ]
 }

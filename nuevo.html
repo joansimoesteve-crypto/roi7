@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta name="robots" content="noindex">
+<html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Avatar ROI — Participación ciudadana sencilla para ciudades, universidades y empresas</title>
 <meta name="description" content="Participación ciudadana sencilla y smart city: la gente valora trámites, servicios, propuestas y espacios con una carita, un QR o al acercarse a una zona. Panel para ayuntamientos, universidades y empresas.">
@@ -92,7 +92,7 @@ footer{padding:70px 0 120px;color:var(--mut);font-size:14px;display:flex;gap:14p
  body{font-size:16.5px}.wrap{padding:0 18px}.tabs{margin:0 0 18px;padding:2px 0 6px}
  .hero{grid-template-columns:1fr;gap:28px;padding:14px 0 28px}.demo{margin:0 auto;transform:none}.dbody{height:360px}
  .three,.rk,.gen,.two{grid-template-columns:1fr}.three{gap:12px}.card{padding:22px 18px;border-radius:24px}.gen .qrbox{margin:0 auto}
- nav .links a:not(.cta){display:none}.brand{font-size:26px}.brand img{width:44px;height:44px}nav{padding:8px 0}
+ nav .links a:not(.cta):not(.ct){display:none}nav .links{gap:14px}.brand{font-size:26px}.brand img{width:44px;height:44px}nav{padding:8px 0}
  section{margin-top:64px}#map{height:300px}.lead{font-size:18px}.acts .btn{flex:1 1 150px}
  .live{border-radius:22px;flex-wrap:wrap;padding:12px 14px;gap:8px 14px}.live .tick{order:3;flex:1 1 100%}
  .dock{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:40;background:#26331fee;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:26px;padding:6px;box-shadow:0 14px 34px #0004}
@@ -227,22 +227,32 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 .aud .bl li{transform:translateY(8px);opacity:0;transition:transform .35s,opacity .35s;font-size:15.5px}
 .aud article:hover .bl li,.aud article.open .bl li,.aud article:focus-within .bl li{transform:none;opacity:1}.aud article:hover .bl li:nth-child(2),.aud article.open .bl li:nth-child(2){transition-delay:.08s}.aud article:hover .bl li:nth-child(3),.aud article.open .bl li:nth-child(3){transition-delay:.16s}
 :root{--sun:#f7dc6f}
-</style>
-</head><body>
+
+/* v13 · producción */
+.fd{display:inline-block;width:.24em;height:.24em;margin-left:.05em;position:relative;top:.01em;line-height:0;vertical-align:baseline;transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .3s}.fd svg{width:100%;height:100%;display:block}.fd.sw{transform:scale(.2) rotate(-90deg);opacity:0}
+.stage{position:relative;display:inline-block;padding:6px clamp(10px,6vw,70px) 4px;margin-top:6px}.stage::before{content:"";position:absolute;inset:-6px -2px -14px;border-radius:50%;background:conic-gradient(from var(--a),#f6c04a,#3f8f45,#4f9ad6,#e0605a,#f6c04a);filter:blur(46px);opacity:.5;animation:aura 7s linear infinite;pointer-events:none}
+.stage>*{position:relative;z-index:1}.pro{color:rgba(38,51,31,.66)!important;text-shadow:0 0 22px rgba(255,255,255,.75);margin:0!important;font-weight:600}.pro b{color:rgba(38,51,31,.82)!important}
+.auraw{margin:20px auto 14px!important}.auraw::before{opacity:.42!important}.auraw::after{opacity:.2!important}
+.trust.tf li{font-weight:600;letter-spacing:.06em;font-size:14px;color:var(--mut)}.trust.tf li+li::before{content:"·"!important;display:inline!important;margin-right:14px;opacity:.55;color:var(--mut)}.trust.tf{gap:0 14px;margin-top:6px}
+#instalar .how{grid-template-columns:repeat(2,minmax(0,1fr))!important}@media(max-width:700px){#instalar .how{grid-template-columns:1fr!important}}
+.gl{display:flex;gap:10px;align-items:flex-start;margin:12px 0 4px;font-weight:600;font-size:15px;cursor:pointer}.gl input{margin-top:3px;width:18px;height:18px}
+@media(prefers-reduced-motion:reduce){.stage::before{animation:none}}
+.demo2{text-align:center;margin:26px 0 0}.demo2 .btn{min-height:50px;padding:12px 30px;font-size:17px}@media(max-width:600px){nav .links a.ct span{display:none}nav .links a.ct svg{margin:0!important;width:22px;height:22px}}</style>
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CitizenVoice"></head><body>
 <script src="/ic.js"></script>
 <script>document.documentElement.classList.add('js')</script>
-<div class="bar" id="bar"><div class="wrap"><nav aria-label="Principal"><a class="brand" href="#"><img src="logo.png" alt="" width="52" height="52"><span class="bt"><span>Avatar <b>ROI</b></span><span class="mf5" id="mf" aria-hidden="true"></span></span></a>
-<div class="links"><a href="/mapa2?near=1">Cerca de ti</a><a href="#pide">Pide valoraciones</a><a href="#empresas">Empresas</a><a class="cta" href="#instalar">Instalar</a></div></nav></div></div>
+<div class="bar" id="bar"><div class="wrap"><nav aria-label="Principal"><a class="brand" href="#"><img src="logo.png" alt="" width="52" height="52"><span class="bt"><span>Citizen<b>Voice</b></span><span class="mf5" id="mf" aria-hidden="true"></span></span></a>
+<div class="links"><a href="/mapa?near=1">Cerca de ti</a><a class="ct" href="/empresas.html#empresas" aria-label="Contacto"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="vertical-align:-3px;margin-right:6px"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.25 1z"/></svg><span>Contacto</span></a><a class="cta" href="#instalar">Instalar</a></div></nav></div></div>
 
 <div class="wrap">
 <div class="pg" id="pg" aria-hidden="true"></div>
 <header class="hero"><div class="fl" id="fl" aria-hidden="true"></div><div>
-<h1><span class="l"><span class="d" style="--i:0">Participa.</span> <span class="d" style="--i:1">Comparte.</span></span></h1>
-<p class="lead" id="lead"><span class="hl">Valora tu experiencia</span> en la ciudad, en una empresa o una universidad, sigue sus proyectos, aporta ideas y <span class="hl">participa de forma activa</span>.</p>
-<p class="pro"><span>Te escuchamos.</span> <b>Actuamos.</b> <span class="bw">Tu bienestar importa.</span></p>
+<h1><span class="l"><span class="d" style="--i:0">Participa<span class="fd" data-i="3" aria-hidden="true"></span></span> <span class="d" style="--i:1">Comparte<span class="fd" data-i="4" aria-hidden="true"></span></span></span></h1>
+<p class="lead" id="lead"><span class="hl">Valora tu experiencia</span> en la ciudad, en una empresa o una universidad, sigue sus proyectos y <span class="hl">aporta ideas</span>.</p>
 <div class="strip" id="strip" role="group" aria-label="Elige tu carita para probar Roi" hidden></div>
-<div class="auraw"><a class="opn" href="/mapa2?near=1" id="gh">Opinar aquí</a></div>
-<ul class="trust tf"><li>Gratis</li><li><i class="tfa" data-k="1"></i></li><li>Sin cuentas</li><li><i class="tfa" data-k="3"></i></li><li>20 segundos</li></ul></div>
+<div class="stage"><p class="pro"><span>Te escuchamos.</span> <b>Actuamos.</b> <span>Tu bienestar importa.</span></p>
+<div class="auraw"><a class="opn" href="/mapa?near=1" id="gh">Opinar aquí</a></div></div>
+<ul class="trust tf"><li>Gratis</li><li>Sin cuentas</li><li>20 segundos</li></ul></div>
 <div class="demo" id="demo" aria-label="Ejemplo de conversación con Roi"><div class="dh"><img id="dimg" alt="">Roi<span class="dbadge"></span></div><div class="dbody" aria-hidden="true"></div></div></header>
 
 <div class="live rv" id="live" aria-label="Valoraciones en directo"><span class="pulse">En vivo</span><span class="stat" id="lvs"></span><div class="tick"><div class="track" id="trk"></div></div></div>
@@ -256,7 +266,7 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
  <div class="hscr hs2"><div class="hch"><div class="hbb hb1">¿Cómo te sientes en <b>Parque de Cabecera</b>?</div><div class="hfcs" id="hfc"></div><div class="hbb hb2">¿Qué mejorarías?</div><div class="hbb hu hb3"><span>Más sombra, por favor</span></div><div class="hbb hb4"><b>Hecho</b> 💚 Tu opinión cuenta.</div></div></div>
  <div class="hscr hs3"><div class="hch"><div class="hgr"><div class="hti ht1">💬<b>Hablar con otros</b></div><div class="hti ht2">💡<b>Proyectos</b></div><div class="hti ht3">🌐<b>Una web</b></div><div class="hti ht4">🧭<b>Rutas</b></div></div><div class="hsum"><small>Resumen de la semana</small><b>Lo más repetido: «más sombra»</b><span class="hbar"><i></i></span></div></div></div>
 </div>
-<ol class="hst" id="hst"><li data-s="0"><b>1</b><div><h3>Acércate o elige el lugar</h3><p>Roi detecta dónde estás. O marcas un sitio, un proyecto o una web.</p></div></li><li data-s="2"><b>2</b><div><h3>Cuéntaselo a Roi</h3><p>Una carita y, si quieres, una idea o un comentario. Sin cuentas.</p></div></li><li data-s="3"><b>3</b><div><h3>Llega a quien decide</h3><p>Resumen semanal para tu ayuntamiento, empresa o universidad. Y puedes charlar con quien está cerca.</p></div></li></ol></div>
+<ol class="hst" id="hst"><li data-s="0"><b>1</b><div><h3>Abre el mapa o llega a una Zona Roi</h3><p>Roi detecta dónde estás y te avisa al entrar en una Zona Roi. O marcas tú un sitio, un proyecto o una web.</p></div></li><li data-s="2"><b>2</b><div><h3>Una carita y sigues</h3><p>Toca un sitio, elige tu carita y, si quieres, una etiqueta o un comentario. Sin cuentas. Y pasa al siguiente: las rutas suman puntos solas.</p></div></li><li data-s="3"><b>3</b><div><h3>Llega a quien decide</h3><p>Resumen semanal para tu ayuntamiento, empresa o universidad. Y puedes charlar con quien está cerca.</p></div></li></ol></div>
 <div id="three" style="display:none!important"></div></section>
 
 <section id="para" class="rv"><h2>¿Para quién es?</h2><p class="sub">Pasa el cursor o toca para ver qué resolvemos.</p>
@@ -264,72 +274,53 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 <article tabindex="0" aria-expanded="false"><div class="ic" style="background:#fde9d6">🏛️</div><h3>Ciudades y administraciones</h3><p>Participación ciudadana sencilla: la gente opina sobre trámites, servicios, propuestas y espacios públicos con un QR o con acceso automático al acercarse a la zona.</p><ul class="bl"><li>Participación ciudadana sencilla</li><li>Bienestar de la gente por zona y servicio</li><li>Resumen semanal y «Tú dijiste, nosotros hicimos»</li></ul></article><article tabindex="0" aria-expanded="false"><div class="ic" style="background:#e9efdc">🎓</div><h3>Universidades</h3><p>Mide cómo se sienten estudiantes y profesorado con el campus virtual, la secretaría o la biblioteca.</p><ul class="bl"><li>Bienestar del campus</li><li>Opinión sobre secretaría, biblioteca y campus virtual</li><li>Proyectos y mejoras con respuesta</li></ul></article>
 <article tabindex="0" aria-expanded="false"><div class="ic" style="background:#fbf0c5">🏢</div><h3>Empresas y comercios</h3><p>Sabe qué sienten tus clientes y tu equipo, e incentiva el comercio local con rutas, valoraciones y checkpoints. Resumen cada lunes.</p><ul class="bl"><li>Bienestar del equipo</li><li>Clientes y comercio local, con rutas y checkpoints</li><li>Resumen cada lunes</li></ul></article>
 <article tabindex="0" aria-expanded="false"><div class="ic" style="background:#e3f1d8">🎤</div><h3>Creadores e influencers</h3><p>Pide a tu comunidad que te valore con un enlace o un QR en tu perfil.</p><ul class="bl"><li>Tu comunidad te valora con un enlace o QR</li><li>Ideas y comentarios de tu gente</li><li>Todo en un panel sencillo</li></ul></article></div></section>
+<p class="demo2"><a class="btn" href="/empresas.html#empresas">Pide una demo</a></p>
 
-<section id="rankings" class="rv"><h2>Lo que opina la gente</h2><p class="sub">Elige qué mirar y desliza entre la carita triste, la neutra y la feliz.</p>
-<div class="tabs" id="tabs" role="group" aria-label="Qué mirar"><button data-t="places" aria-pressed="true">Lugares</button><button data-t="webs" aria-pressed="false">Webs</button><button data-t="projects" aria-pressed="false">Proyectos</button></div>
-<div class="slide"><div class="mood" aria-live="polite"><span id="big"></span><b id="lab"></b></div><input type="range" id="mood" min="1" max="5" step="0.1" value="5" aria-label="Filtrar por valoración, de peor a mejor"><div class="ends" aria-hidden="true"><span>Peor valorado</span><span>Mejor valorado</span></div></div>
-<div class="rk"><ol class="r" id="list"></ol><div id="map" aria-label="Mapa de valoraciones"></div></div>
-<p class="note" id="note"></p></section>
 
-<section id="pide" class="rv"><div class="card gen"><div><h2>Pide que te valoren</h2><p class="sub">Crea un enlace y un QR para tu perfil de LinkedIn o Facebook, tu restaurante, tu proyecto, tu empresa o tu web. Quien lo abra valora desde el móvil, sin instalar nada.</p>
-<label for="ur">Pega un enlace (opcional)</label><input id="ur" type="url" inputmode="url" placeholder="linkedin.com/in/tu-nombre, facebook.com/…, Google Maps, tu web…" autocomplete="off"><p class="hint" id="det">Detectamos el nombre y el tipo solos.</p>
-<label for="nm">Nombre</label><input id="nm" placeholder="Ej. Ana García, Café Central, Peatonalización calle Mayor…" maxlength="80">
-<label for="loc">Ubicación dentro del sitio (opcional)</label><input id="loc" placeholder="Ej. Planta 2, Aula 3.04, Recepción" maxlength="80"><p class="hint">Si tienes varios espacios, crea un QR para cada uno y compara cuál va mejor.</p><label for="ty">Qué es</label><select id="ty"><option value="place">Espacio físico (local, parque, oficina…)</option><option value="web">Espacio digital (web, servicio online)</option><option value="project">Proyecto o iniciativa</option><option value="person">Mi perfil (LinkedIn, redes)</option></select>
-<button class="btn" id="gen">Crear enlace y QR</button>
-<div id="out" hidden><label for="lk">Enlace para compartir</label><input id="lk" readonly>
-<div class="gbtns"><button class="btn s g" id="cp">Copiar enlace</button><button class="btn s g" id="sh">Compartir</button><button class="btn s g" id="dl">Descargar QR</button><button class="btn s g" id="dc">Descargar tarjeta</button><a class="btn s g" id="tryit" target="_blank" rel="noopener">Probarlo</a></div><label for="av">Avatar de la tarjeta de colección</label><select id="av"><option value="">Automático según el nombre</option><option value="parque">🌳 Parque</option><option value="pista">🎾 Pista deportiva</option><option value="biblio">📚 Biblioteca</option><option value="comida">🍽️ Restaurante o café</option><option value="campus">🎓 Campus</option><option value="publico">🏛️ Servicio público</option><option value="tienda">🛍️ Tienda</option><option value="web">🌐 Web</option><option value="proyecto">💡 Iniciativa</option><option value="persona">🙋 Persona</option></select>
-<div class="share" id="soc" aria-label="Compartir en"></div>
-<label for="em">Para tu web: pega este código</label><textarea id="em" readonly></textarea><button class="btn s" id="cp2">Copiar código</button></div></div>
-<div class="qrbox"><div id="qr"><div class="qrph">Aquí aparecerá tu QR</div></div><p>Escanea y cuéntame cómo te sientes</p></div></div></section>
 
-<section class="rv" id="instalar"><h2>Roi, donde tú estés</h2><p class="sub">Para votar no hace falta instalar nada. Elige cómo quieres usarlo.</p>
+<section class="rv" id="instalar"><h2>Roi, donde tú estés</h2><p class="sub">En el móvil, en dos toques. Sin tiendas de aplicaciones.</p>
 <div class="how">
-<article class="hc"><span class="hi" aria-hidden="true">💻</span><h3>En el ordenador</h3><p>Extensión para Chrome, Edge y Brave: valoras sin salir de la página.</p><div class="act"><a class="btn" id="extb" href="#" aria-disabled="true">Próximamente en Chrome</a></div></article>
-<article class="hc"><span class="hi" aria-hidden="true">📱</span><h3>En el móvil</h3><ol><li>Abre <b>citizenvoice.es/v</b> en tu navegador.</li><li><b>Android:</b> menú ⋮ → <em>Instalar app</em>. <b>iPhone:</b> Compartir → <em>Añadir a pantalla de inicio</em>.</li><li>Para valorar: abre Roi, pega la dirección y toca la carita.</li></ol><p class="note">En Android también: <b>Compartir → Avatar ROI</b> desde cualquier web.</p><div class="act"><a class="btn" href="/v">Abrir Roi ahora</a></div><button class="btn g" id="pwa" hidden>Instalar app</button></article>
-<article class="hc"><span class="hi" aria-hidden="true">🔗</span><h3>Sin instalar nada</h3><p>Pega una dirección y valora. Si te comparten un QR o enlace de Roi, ábrelo y vota.</p><form class="try act" id="tryf"><input id="tu" type="text" inputmode="url" aria-label="Dirección de la web" placeholder="ejemplo.com" autocomplete="off"><button class="btn">Valorar</button></form></article>
+<article class="hc"><span class="hi" aria-hidden="true">📱</span><h3>En el móvil</h3><ol><li><b>iPhone</b>: Compartir → <em>Añadir a pantalla de inicio</em>.</li><li><b>Android</b>: menú ⋮ → <em>Instalar app</em>.</li><li>Abre Roi y toca <b>Opinar aquí</b>.</li></ol><div class="act"><a class="btn" href="/mapa?near=1">Opinar aquí</a></div><button class="btn g" id="pwa" hidden>Instalar app</button></article>
+<article class="hc"><span class="hi" aria-hidden="true">💻</span><h3>En el ordenador</h3><p>Extensión para Chrome, Edge y Brave: valoras sin salir de la página.</p><div class="act"><a class="btn" id="extb" href="https://chromewebstore.google.com/detail/ojkncdfomenebpcfbkomechinciffbco" target="_blank" rel="noopener">Instalar extensión</a></div></article>
+<article class="hc" hidden><form class="try act" id="tryf"><input id="tu" type="text" aria-label="Dirección de la web"><button class="btn">Valorar</button></form></article>
 </div>
-<p class="appq">¿Te gustaría una app para iPhone y Android? Si hay interés, la creamos. <button class="btn s g" id="appb">Me interesa</button></p></section>
+<p class="appq" hidden><button class="btn s g" id="appb">Me interesa</button></p></section>
 
-<section id="empresas" class="rv"><h2>Hablemos de tu organización</h2><p class="sub">Panel de resultados, Roi en tu web, QR para tus locales y proyectos ciudadanos. Déjanos tu teléfono y te contactamos.</p><p class="ebtn"><a class="btn s g" href="/panel?demo">Ver panel de muestra</a><a class="btn s g" href="/panel">Acceso organizaciones</a></p>
-<form class="card" id="lead"><div class="two"><div><label for="ln">Tu nombre</label><input id="ln" required maxlength="100" autocomplete="name"></div><div><label for="lo">Organización</label><input id="lo" required maxlength="120" autocomplete="organization"></div>
-<div><label for="lp">Teléfono</label><input id="lp" type="tel" inputmode="tel" required maxlength="30" autocomplete="tel" placeholder="+34 600 000 000"></div><div><label for="le">Email (opcional)</label><input id="le" type="email" maxlength="120" autocomplete="email"></div>
-<div><label for="lk2">Somos</label><select id="lk2"><option>Ayuntamiento o institución</option><option>Empresa</option><option>Otro</option></select></div><div><label for="li">Me interesa</label><select id="li"><option>Panel de resultados</option><option>Roi en mi web</option><option>QR para mis locales</option><option>Proyectos ciudadanos</option><option>Todo lo anterior</option></select></div></div>
-<label for="lm">Mensaje (opcional)</label><textarea id="lm" maxlength="1000"></textarea>
-<label class="chk"><input type="checkbox" id="lc" required><span>Acepto que Avatar ROI use estos datos para contactarme. Más información en la <a href="privacy.html">política de privacidad</a>.</span></label>
-<button class="btn" type="submit">Quiero que me llamen</button> <span id="lr" role="status"></span></form></section>
 
-<footer><img src="logo.png" alt=""><span>Avatar ROI · Valora. Comparte. TU bienestar importa. · <a href="privacy.html">Privacidad</a> · <a href="/panel">Panel de organizaciones</a></span></footer>
+
+<footer><img src="logo.png" alt=""><span>CitizenVoice · Valora. Comparte. TU bienestar importa. · <a href="/empresas.html">Contacto</a> · <a href="privacy.html">Privacidad</a> · <a href="/panel">Panel de organizaciones</a></span></footer>
 </div>
 
-<nav class="dock" id="dock" aria-label="Atajos"><button class="p" id="dTry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5q3.5 3 7 0M9 9.5v.5M15 9.5v.5"/></svg>Probar</button>
-<a href="#rankings" data-s="rankings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Rankings</a>
-<a href="#pide" data-s="pide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.5M14 21h.5M18 18h3v3"/></svg>Mi QR</a>
+<nav class="dock" id="dock" aria-label="Atajos"><button class="p" id="dTry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5q3.5 3 7 0M9 9.5v.5M15 9.5v.5"/></svg>Opinar</button>
+
+
 <a href="#instalar" data-s="instalar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>Móvil</a></nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
-<script src="avatar.js"></script>
 <script>
 /* ===== Ajustes ===== */
 const SHORTCUT_URL='';                     // ← enlace de iCloud del atajo «Valorar con Roi»
 const CHROME_URL='https://chromewebstore.google.com/detail/ojkncdfomenebpcfbkomechinciffbco';                       // ← pega aquí el enlace de Chrome Web Store cuando esté publicado
 const CE=['urnovai','outlook.es'].join('@'); // email de reserva si falla el formulario (no aparece en el HTML)
 
-const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+if(window.IntersectionObserver){const _o=IntersectionObserver.prototype.observe;IntersectionObserver.prototype.observe=function(e){if(e instanceof Element)_o.call(this,e)}}
+const NUL=()=>new Proxy(function(){},{get:(t,k)=>k===Symbol.iterator?function*(){}:k===Symbol.toPrimitive?()=>'':k==='value'||k==='textContent'||k==='innerHTML'?'':typeof k==='string'?NUL():undefined,set:()=>true,apply:()=>NUL()});
+const $=id=>document.getElementById(id)||NUL(),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const COL=['#e8605a','#f0913a','#f2d05c','#8cc35e','#5fb760'],MOU=['M33 68Q50 56 67 68','M33 66Q50 58 67 66','M34 64H66','M32 60Q50 76 68 60','M30 58Q50 82 70 58'];
 const NAMES=['Muy insatisfecho','Insatisfecho','Neutral','Satisfecho','Muy satisfecho'];
 const face=i=>`<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="${COL[i]}"/><circle cx="36" cy="40" r="5" fill="#3a2a1a"/><circle cx="64" cy="40" r="5" fill="#3a2a1a"/>${i==0?'<path d="M26 28L44 34M74 28L56 34" stroke="#3a2a1a" stroke-width="5" stroke-linecap="round"/>':''}<path d="${MOU[i]}" stroke="#3a2a1a" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`;
 const ci=a=>Math.min(4,Math.max(0,Math.round(a)-1));
-$('dimg').src='roi.png';
+if($('dimg'))$('dimg').src='roi.png';
 const openRoi=()=>{window.AvatarRoi?AvatarRoi.open():location.href='/v'};
-$('dTry').onclick=function(){location.href='/mapa2?near=1'};
+$('dTry').onclick=function(){location.href='/mapa?near=1'};
 
 /* barra y revelado al hacer scroll */
 const bar=$('bar');addEventListener('scroll',()=>bar.classList.toggle('s',scrollY>8),{passive:true});
 const io='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12}):null;
 document.querySelectorAll('.rv').forEach(el=>io?io.observe(el):el.classList.add('in'));
 const sp='IntersectionObserver'in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)document.querySelectorAll('#dock a').forEach(a=>a.classList.toggle('on',a.dataset.s===e.target.id))}),{rootMargin:'-45% 0px -50% 0px'}):null;
-['rankings','pide','instalar'].forEach(id=>sp&&sp.observe($(id)));
+['rankings','pide','instalar'].forEach(id=>sp&&$(id)&&sp.observe($(id)));
 
 /* ===== Las tres opciones, con pregunta y respuesta ===== */
 const THREE=[
@@ -390,7 +381,7 @@ orgs:[['Cafetería La Plaza',4.7,90],['Universidad Ejemplo',4,220],['Ayuntamient
 totals:{n:2480,day:86,dayAvg:3.9},
 recent:[{rating:5,name:'Parque Central',feeling:'Inspiración'},{rating:2,name:'sede-electronica-ejemplo.gob',feeling:'Estrés'},{rating:4,name:'Biblioteca Municipal',feeling:'Tranquilidad'},{rating:1,name:'Estación Intermodal',feeling:'Agobio'},{rating:5,name:'Reforma Plaza del Barrio',feeling:'Entusiasmo'},{rating:3,name:'Ayuntamiento de Ejemplo',feeling:'Calma'}]};
 let DATA={webs:[],places:[],projects:[],orgs:[],totals:{},recent:[]},tab='places',fitted=false,isSample=false;
-const HAS=typeof L!=='undefined',map=HAS?L.map('map',{scrollWheelZoom:false}).setView([39.4699,-0.3763],12):null,layer=HAS?L.layerGroup().addTo(map):null;
+const HAS=typeof L!=='undefined'&&!!document.getElementById('map'),map=HAS?L.map('map',{scrollWheelZoom:false}).setView([39.4699,-0.3763],12):null,layer=HAS?L.layerGroup().addTo(map):null;
 if(HAS)L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
 const lab=v=>v<1.8?'Lo peor valorado':v<2.6?'Mal valorado':v<3.4?'En el medio':v<4.2?'Bien valorado':'Lo mejor valorado';
 function render(){const v=+$('mood').value;$('big').innerHTML=face(ci(v));$('lab').textContent=lab(v);
@@ -420,7 +411,8 @@ function detect(v){let x;try{x=new URL(/^https?:\/\//i.test(v)?v:'https://'+v)}c
 $('ur').oninput=()=>{const d=detect($('ur').value.trim());if(!d){$('det').textContent='Detectamos el nombre y el tipo solos.';return}
  if(d.t)$('ty').value=d.t;if(d.n&&(auto||!$('nm').value)){$('nm').value=d.n.slice(0,80);auto=true}$('det').textContent=d.n?'Detectado: '+d.n+(d.t?'':'. Revisa el tipo.'):'Revisa el nombre y el tipo.'};
 $('nm').oninput=()=>{auto=false};
-const mk=(n,t,u,s)=>{const l=$('loc').value.trim();return location.origin+'/v?t='+t+'&n='+encodeURIComponent(n)+(l?'&l='+encodeURIComponent(l):'')+(u?'&u='+encodeURIComponent(u):'')+'&s='+s};
+let GEO='';const mk=(n,t,u,s)=>{const l=$('loc').value.trim();return location.origin+'/v?t='+t+'&n='+encodeURIComponent(n)+(l?'&l='+encodeURIComponent(l):'')+(u?'&u='+encodeURIComponent(u):'')+(GEO?'&g='+GEO:'')+'&s='+s};
+$('gl').onchange=()=>{const m=$('glm');if(!$('gl').checked){GEO='';m.textContent='';return}if(!navigator.geolocation){m.textContent='Tu navegador no da la ubicación.';$('gl').checked=false;return}m.textContent='Buscando tu posición…';navigator.geolocation.getCurrentPosition(p=>{GEO=p.coords.latitude.toFixed(5)+','+p.coords.longitude.toFixed(5);m.textContent='Ubicación añadida. Crea el enlace desde el sitio donde quieres que se valore.'},()=>{m.textContent='No he podido ver tu ubicación.';$('gl').checked=false},{enableHighAccuracy:true,timeout:15000,maximumAge:30000})};
 $('gen').onclick=()=>{const n=$('nm').value.trim();if(!n){$('nm').focus();return}let u='';try{const raw=$('ur').value.trim(),x=new URL(/^https?:\/\//i.test(raw)?raw:'https://'+raw);if(raw&&/^https?:$/.test(x.protocol))u=x.href}catch(e){}
  const t=$('ty').value,link=mk(n,t,u,'link'),qlink=mk(n,t,u,'qr');
  $('lk').value=link;$('tryit').href=link;$('em').value='<script src="'+location.origin+'/avatar.js" data-name="'+esc(n)+'" data-type="'+t+'"><\/script>';$('out').hidden=false;
@@ -503,7 +495,8 @@ if(RM){show(2);return}
 if('IntersectionObserver' in window){new IntersectionObserver(function(e){var v=e[0].isIntersecting;if(v&&!on){on=true;if(cur<0)show(0);else{clearTimeout(tm);}tm=setTimeout(nxt,D[Math.max(cur,0)])}else if(!v){on=false;clearTimeout(tm)}},{threshold:.35}).observe(ph)}else{on=true;show(0);tm=setTimeout(nxt,D[0])}
 /* para quién: tocar abre/cierra */
 document.querySelectorAll('.aud article').forEach(function(a){a.addEventListener('click',function(){var o=!a.classList.contains('open');document.querySelectorAll('.aud article.open').forEach(function(x){x.classList.remove('open');x.setAttribute('aria-expanded','false')});if(o){a.classList.add('open');a.setAttribute('aria-expanded','true')}});a.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();a.click()}})})})();</script>
-<script>(function(){var RM=matchMedia('(prefers-reduced-motion:reduce)').matches,el=[].slice.call(document.querySelectorAll('.tfa'));if(!el.length||!window.ROI_FACE)return;
-var seq=[0,1,2,3,4],k=[2,4];function put(e,i){e.innerHTML=ROI_FACE(i,22)}el.forEach(function(e,j){put(e,j?4:3)});
-if(RM)return;setInterval(function(){el.forEach(function(e,j){setTimeout(function(){e.classList.add('sw');setTimeout(function(){put(e,Math.floor(Math.random()*5));e.classList.remove('sw')},300)},j*350)})},2600)})();</script>
+<script>(function(){var RM=matchMedia('(prefers-reduced-motion:reduce)').matches,el=[].slice.call(document.querySelectorAll('.fd'));if(!el.length||!window.ROI_FACE)return;
+function put(e,i){e.dataset.i=i;e.innerHTML=ROI_FACE(i,64)}el.forEach(function(e){put(e,+e.dataset.i)});if(RM)return;
+function tick(e){e.classList.add('sw');setTimeout(function(){var i;do{i=Math.floor(Math.random()*5)}while(i===+e.dataset.i);put(e,i);e.classList.remove('sw')},420)}
+el.forEach(function(e,j){setTimeout(function(){tick(e);setInterval(function(){tick(e)},2800)},1400+j*1400)})})();</script>
 </body></html>
