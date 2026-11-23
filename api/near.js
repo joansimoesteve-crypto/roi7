@@ -67,6 +67,19 @@ module.exports = async (req, res) => {
     const h = req.headers || {}, la = parseFloat(h['x-vercel-ip-latitude']), lo = parseFloat(h['x-vercel-ip-longitude']); let city = ''; try { city = decodeURIComponent(h['x-vercel-ip-city'] || ''); } catch (e) {}
     res.setHeader('Cache-Control', 'private, max-age=600'); return res.status(200).json({ ok: true, lat: isFinite(la) ? la : null, lng: isFinite(lo) ? lo : null, city: city.slice(0, 60), country: String(h['x-vercel-ip-country'] || '').slice(0, 2) });
   }
+  if (req.method === 'GET' && req.query && req.query.webs) { // webs oficiales cerca de un punto (Wikipedia + Wikidata: sitio web oficial P856); sin claves
+    const [la, lo] = String(req.query.webs).split(',').map(parseFloat); if (!isFinite(la) || !isFinite(lo)) return res.status(400).json({ ok: false });
+    const get = async u => { const c = new AbortController(), t = setTimeout(() => c.abort(), 3500); try { return await (await fetch(u, { signal: c.signal, headers: { 'User-Agent': 'CitizenVoice/1.0 (https://www.citizenvoice.es)' } })).json(); } catch (e) { return null; } finally { clearTimeout(t); } };
+    const g = await get(`https://es.wikipedia.org/w/api.php?action=query&format=json&generator=geosearch&ggscoord=${la}%7C${lo}&ggsradius=6000&ggslimit=10&prop=pageprops&ppprop=wikibase_item&origin=*`);
+    const pg = g && g.query && g.query.pages ? Object.values(g.query.pages).filter(p => p.pageprops && p.pageprops.wikibase_item).sort((a, b) => (a.index || 0) - (b.index || 0)) : [];
+    const ids = pg.map(p => p.pageprops.wikibase_item).slice(0, 10), out = [], seen = new Set();
+    if (ids.length) {
+      const w = await get(`https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&props=claims&ids=${ids.join('%7C')}&origin=*`), E = (w && w.entities) || {};
+      for (const p of pg) { const cl = (E[p.pageprops.wikibase_item] || {}).claims || {}, v = cl.P856 && cl.P856[0] && cl.P856[0].mainsnak && cl.P856[0].mainsnak.datavalue && cl.P856[0].mainsnak.datavalue.value; if (!v) continue;
+        let h = ''; try { h = new URL(v).hostname.replace(/^www\./, ''); } catch (e) { continue; } if (seen.has(h)) continue; seen.add(h); out.push({ n: String(p.title).slice(0, 40), d: h }); if (out.length >= 3) break; }
+    }
+    res.setHeader('Cache-Control', 'public, s-maxage=86400'); return res.status(200).json({ ok: true, webs: out });
+  }
   if (req.method === 'GET' && req.query && req.query.vapid) { res.setHeader('Cache-Control', 'public, max-age=3600'); return res.status(200).json({ ok: !!process.env.VAPID_PUBLIC_KEY, key: process.env.VAPID_PUBLIC_KEY || '' }); } // clave pública para suscribirse a avisos
   if (db.limited(req, 60)) return res.status(429).json({ ok: false });
   if (!db.ok()) return res.status(200).json({ ok: true, people: [] });

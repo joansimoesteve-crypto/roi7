@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     if (places) { // lugares, iniciativas y rutas de las organizaciones (para /mapa)
       const base = 'id,org_id,name,kind,description,lat,lng,radius_m';
       let pl = null;
-      for (const cols of [`${base},shape,info,cta_label,cta_url,hitos,organizations(name)`, `${base},shape,info,cta_label,cta_url,hitos`, `${base},shape,info,cta_label,cta_url`, `${base},shape,info`, base]) {
+      for (const cols of [`${base},shape,info,cta_label,cta_url,hitos,starts_on,ends_on,organizations(name)`, `${base},shape,info,cta_label,cta_url,hitos,organizations(name)`, `${base},shape,info,cta_label,cta_url,hitos`, `${base},shape,info,cta_label,cta_url`, `${base},shape,info`, base]) {
         pl = await db.select(`places?select=${cols}&active=eq.true&limit=500`); if (Array.isArray(pl)) break;
       }
       pl = (Array.isArray(pl) ? pl : []).map(p => { const o = p.organizations; delete p.organizations; delete p.org_id; if (o && o.name) p.org = o.name; return p });
