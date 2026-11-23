@@ -31,6 +31,18 @@
     {
       "source": "/empresas",
       "destination": "/empresas.html"
+    },
+    {
+      "source": "/sitemap-dinamico.xml",
+      "destination": "/api/public?sitemap=1"
+    },
+    {
+      "source": "/mapa/:c/:l",
+      "destination": "/api/public?c=:c&l=:l"
+    },
+    {
+      "source": "/mapa/:c",
+      "destination": "/api/public?c=:c"
     }
   ],
   "headers": [
