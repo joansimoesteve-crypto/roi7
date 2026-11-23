@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Sala — Avatar ROI</title><meta name="robots" content="noindex"><meta name="theme-color" content="#3f5a3a">
+<title>Sala — CitizenVoice</title><meta name="robots" content="noindex"><meta name="theme-color" content="#3f5a3a">
 <link rel="icon" href="favicon.png" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
 <style>
@@ -23,13 +23,15 @@ input{font:inherit;border:1px solid var(--line);border-radius:99px;padding:12px 
 .btn{border:0;border-radius:99px;background:var(--moss);color:#fff;font:inherit;font-weight:600;padding:0 20px;min-height:48px;cursor:pointer}.btn:disabled{opacity:.6}
 #er{color:#a33;font-size:14px;margin:0 0 4px}
 :focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-</style></head><body><div class="app">
+.qb{position:fixed;right:14px;top:74px;z-index:50;width:54px;height:54px;border-radius:50%;border:0;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.28);cursor:pointer;display:grid;place-items:center;animation:qbp 2.4s ease-in-out infinite}@keyframes qbp{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}.qb svg{width:34px;height:34px}.qp{position:fixed;right:10px;top:74px;z-index:51;background:#fff;border-radius:22px;padding:10px 12px;box-shadow:0 12px 34px rgba(0,0,0,.32)}.qp small{display:block;font-weight:700;margin-bottom:6px}#qf{display:flex;gap:6px}#qf button{border:2px solid #e3e8d8;background:#fff;border-radius:16px;padding:5px;cursor:pointer;line-height:0}#qf button.sel{border-color:#1f9d6b;background:#effaf3}@media(prefers-reduced-motion:reduce){.qb{animation:none}}</style></head><body><div class="app">
 <div class="top"><a href="javascript:history.length>1?history.back():location.href='/'" aria-label="Volver">←</a><h1 id="ti">Sala</h1><span class="here"><i></i><span id="hn">1</span> aquí</span></div>
 <div class="log" id="log" aria-live="polite"></div>
 <p class="note">Mensajes públicos en esta sala, visibles 30 días. Sin enlaces ni datos personales; la IA oculta spam y ofensas.</p>
 <p id="er" hidden></p>
-<form id="f"><input id="nk" maxlength="24" placeholder="Tu apodo" aria-label="Tu apodo" autocomplete="nickname"><input id="b" maxlength="280" placeholder="Escribe algo…" aria-label="Mensaje" autocomplete="off"><button class="btn" id="s">Enviar</button></form>
+<form id="f"><input id="nk" type="hidden"><input id="b" maxlength="280" placeholder="Escribe algo…" aria-label="Mensaje" autocomplete="off"><button class="btn" id="s">Enviar</button></form>
+<button class="qb" id="qb" type="button" aria-expanded="false" aria-label="Valorar rápido"><span id="qbf"></span></button><div class="qp" id="qp" hidden><small>¿Cómo lo ves? <span id="qm"></span></small><div id="qf"></div></div>
 </div>
+<script src="/ic.js"></script>
 <script>
 const $=id=>document.getElementById(id),q=new URLSearchParams(location.search);
 const clean=s=>(s||'').replace(/\s+/g,' ').trim();
@@ -40,13 +42,14 @@ if(!room)room=n;room=room.toLowerCase();
 $('ti').textContent=n||room||'Sala';document.title='Sala de '+(n||room)+' — Avatar ROI';
 let anon='';try{anon=localStorage.getItem('roi_anon')||'';if(!anon){anon=crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);localStorage.setItem('roi_anon',anon)}}catch(e){anon='a'+Math.random().toString(36).slice(2)}
 try{$('nk').value=localStorage.getItem('roi_nick')||''}catch(e){}
+let RM='';
 const mine=new Set();let timer=null,last=null;
 function render(a,here){$('hn').textContent=Math.max(1,here||1);const log=$('log'),atEnd=log.scrollHeight-log.scrollTop-log.clientHeight<80;log.textContent='';
  if(!a.length){const e=document.createElement('p');e.className='empty';e.textContent='Aún no ha escrito nadie. Sé la primera persona en decir algo sobre '+(n||room)+'.';log.append(e);return}
  a.forEach(m=>{const d=document.createElement('div');d.className='m'+(mine.has(m.nick+'|'+m.body)?' me':'');const s=document.createElement('small');s.textContent=m.nick+' · '+new Date(m.ts).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});const p=document.createElement('span');p.textContent=m.body;d.append(s,p);log.append(d)});
  if(atEnd||!last)log.scrollTop=log.scrollHeight;last=a}
 async function poll(){if(document.hidden||!room)return;try{const r=await fetch('/api/chat?room='+encodeURIComponent(room)+'&a='+encodeURIComponent(anon));if(r.ok){const j=await r.json();render(j.messages,j.here)}}catch(e){}}
-$('f').onsubmit=async e=>{e.preventDefault();const body=$('b').value.trim();if(!body)return;const nick=$('nk').value.trim();try{localStorage.setItem('roi_nick',nick)}catch(x){}
+$('f').onsubmit=async e=>{e.preventDefault();const body=$('b').value.trim();if(!body)return;const nick=$('nk').value.trim();
  $('s').disabled=true;$('er').hidden=true;
  try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({room,anon_id:anon,nick,body})});const j=await r.json().catch(()=>({}));
   if(r.ok){mine.add((nick||'Anónimo')+'|'+body);$('b').value='';if(j.hidden){$('er').textContent='Tu mensaje no se ha publicado porque parece spam u ofensivo.';$('er').hidden=false}}
@@ -55,4 +58,13 @@ $('f').onsubmit=async e=>{e.preventDefault();const body=$('b').value.trim();if(!
  $('s').disabled=false;await poll();$('b').focus()};
 poll();timer=setInterval(poll,4000);document.addEventListener('visibilitychange',poll);
 if(!room){$('log').innerHTML='<p class="empty">Abre una sala desde «Hablar con quien valora esto».</p>';$('f').hidden=true}
+
+/* valoración rápida flotante, sin salir del chat */
+(function(){const FEEL=['Enfado','Decepción','Indiferencia','Bienestar','Entusiasmo'],web=t==='web',cid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);let sel=-1;
+ if(!window.ROI_FACE){$('qb').hidden=true;return}
+ $('qbf').innerHTML=ROI_FACE(3,34);
+ $('qb').onclick=()=>{const o=$('qp').hidden;$('qp').hidden=!o;$('qb').hidden=o;$('qb').setAttribute('aria-expanded',o)};
+ FEEL.forEach((nm,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',nm);b.innerHTML=ROI_FACE(i,40);b.onclick=async()=>{sel=i;[...$('qf').children].forEach((z,j)=>z.classList.toggle('sel',j===i));$('qm').textContent='…';
+   try{const r=await fetch('/api/ratings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:cid,anon_id:anon,source:'chat',type:web?'web':'place',subject:web?room:(n||room),site:web?room:null,url:web?(u?(/^https?:\/\//i.test(u)?u:'https://'+u):'https://'+room):null,rating:i+1,feeling:nm,comment:null,place_name:web?null:(n||room),location:null,lat:null,lng:null,place_verified:false,lang:'es',created_at:new Date().toISOString(),website:''})});
+     if(!r.ok)throw 0;$('qm').textContent='✔ Voto sumado';try{localStorage.setItem('roi_mood',String(i))}catch(e){}$('qbf').innerHTML=ROI_FACE(i,34);setTimeout(()=>{$('qp').hidden=true;$('qb').hidden=false},900)}catch(e){$('qm').textContent='No se pudo enviar'}};$('qf').append(b)});$('qp').hidden=true})();
 </script></body></html>

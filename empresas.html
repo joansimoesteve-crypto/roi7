@@ -245,12 +245,12 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 <div class="links"><a href="/mapa?near=1">Cerca de ti</a><a href="#pide">Pide valoraciones</a><a href="#empresas">Contacto</a><a class="cta" href="#instalar">Instalar</a></div></nav></div></div>
 
 <div class="wrap" style="padding-top:26px">
-<section id="empresas" class="rv"><h2>Para empresas, ayuntamientos y creadores</h2><p class="sub">Panel de resultados, Roi en tu web, QR para tus locales y proyectos ciudadanos. Déjanos tu teléfono y te contactamos.</p><p class="ebtn"><a class="btn s g" href="/panel?demo">Ver panel de muestra</a><a class="btn s g" href="/panel">Acceso organizaciones</a></p>
-<form class="card" id="lead"><div class="two"><div><label for="ln">Tu nombre</label><input id="ln" required maxlength="100" autocomplete="name"></div><div><label for="lo">Organización</label><input id="lo" required maxlength="120" autocomplete="organization"></div>
-<div><label for="lp">Teléfono</label><input id="lp" type="tel" inputmode="tel" required maxlength="30" autocomplete="tel" placeholder="+34 600 000 000"></div><div><label for="le">Email (opcional)</label><input id="le" type="email" maxlength="120" autocomplete="email"></div>
-<div><label for="lk2">Somos</label><select id="lk2"><option>Ayuntamiento o institución</option><option>Empresa</option><option>Otro</option></select></div><div><label for="li">Me interesa</label><select id="li"><option>Panel de resultados</option><option>Roi en mi web</option><option>QR para mis locales</option><option>Proyectos ciudadanos</option><option>Todo lo anterior</option></select></div></div>
-<label for="lm">Mensaje (opcional)</label><textarea id="lm" maxlength="1000"></textarea>
-<label class="chk"><input type="checkbox" id="lc" required><span>Acepto que Avatar ROI use estos datos para contactarme. Más información en la <a href="privacy.html">política de privacidad</a>.</span></label>
+<section id="empresas" class="rv"><h2>Hablemos</h2><p class="sub">Déjanos tu teléfono y te llamamos. Sin compromiso.</p><p class="ebtn"><a class="btn s" href="/panel?demo">Ver un panel de ejemplo →</a><a class="btn s g" href="/panel">Acceso organizaciones</a></p>
+<form class="card" id="lead"><div class="two"><div><label for="ln">Tu nombre</label><input id="ln" required maxlength="100" autocomplete="name"></div><div><label for="lo">Lugar u organización</label><input id="lo" required maxlength="120" autocomplete="organization"></div>
+<div><label for="lp">Teléfono</label><input id="lp" type="tel" inputmode="tel" required maxlength="30" autocomplete="tel" placeholder="+34 600 000 000"></div><div><label for="le">Correo</label><input id="le" type="email" maxlength="120" autocomplete="email"></div>
+<div hidden><select id="lk2"><option>Ayuntamiento o institución</option><option>Empresa</option><option>Otro</option></select><select id="li"><option>Todo lo anterior</option></select></div></div>
+<textarea id="lm" hidden></textarea>
+<label class="chk"><input type="checkbox" id="lc" required><span>Acepto que CitizenVoice use estos datos para contactarme. Más información en la <a href="privacy.html">política de privacidad</a>.</span></label>
 <button class="btn" type="submit">Quiero que me llamen</button> <span id="lr" role="status"></span></form></section>
 <section id="pide" class="rv"><div class="card gen"><div><h2>Pide que te valoren</h2><p class="sub">Crea un enlace y un QR para tu perfil de LinkedIn o Facebook, tu restaurante, tu proyecto, tu empresa o tu web. Quien lo abra valora desde el móvil, sin instalar nada.</p>
 <label for="ur">Pega un enlace (opcional)</label><input id="ur" type="url" inputmode="url" placeholder="linkedin.com/in/tu-nombre, facebook.com/…, Google Maps, tu web…" autocomplete="off"><p class="hint" id="det">Detectamos el nombre y el tipo solos.</p>
@@ -271,7 +271,6 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
-<script src="avatar.js"></script>
 <script>
 /* ===== Ajustes ===== */
 const SHORTCUT_URL='';                     // ← enlace de iCloud del atajo «Valorar con Roi»
@@ -355,7 +354,7 @@ orgs:[['Cafetería La Plaza',4.7,90],['Universidad Ejemplo',4,220],['Ayuntamient
 totals:{n:2480,day:86,dayAvg:3.9},
 recent:[{rating:5,name:'Parque Central',feeling:'Inspiración'},{rating:2,name:'sede-electronica-ejemplo.gob',feeling:'Estrés'},{rating:4,name:'Biblioteca Municipal',feeling:'Tranquilidad'},{rating:1,name:'Estación Intermodal',feeling:'Agobio'},{rating:5,name:'Reforma Plaza del Barrio',feeling:'Entusiasmo'},{rating:3,name:'Ayuntamiento de Ejemplo',feeling:'Calma'}]};
 let DATA={webs:[],places:[],projects:[],orgs:[],totals:{},recent:[]},tab='places',fitted=false,isSample=false;
-const HAS=typeof L!=='undefined',map=HAS?L.map('map',{scrollWheelZoom:false}).setView([39.4699,-0.3763],12):null,layer=HAS?L.layerGroup().addTo(map):null;
+const HAS=typeof L!=='undefined'&&!!document.getElementById('map'),map=HAS?L.map('map',{scrollWheelZoom:false}).setView([39.4699,-0.3763],12):null,layer=HAS?L.layerGroup().addTo(map):null;
 if(HAS)L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
 const lab=v=>v<1.8?'Lo peor valorado':v<2.6?'Mal valorado':v<3.4?'En el medio':v<4.2?'Bien valorado':'Lo mejor valorado';
 function render(){const v=+$('mood').value;$('big').innerHTML=face(ci(v));$('lab').textContent=lab(v);

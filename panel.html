@@ -152,7 +152,7 @@ const recCard=(D.org.all&&D.recent)?`<div class="card fcard modc" id="reccard" s
  <div class="card kpi" style="animation-delay:.08s"><div class="l">Insatisfechos</div><div class="v down">${T.neg}%</div><div class="d">caritas 1 y 2</div></div></div>
  <h2 class="blk"><span>1</span>Lo que dicen tus usuarios</h2><p class="sub" style="margin:0 0 12px">Se va generando solo con cada voto.</p>
  ${digCard}${wb}<div class="grid two">${trend}${dist}</div><div class="grid two2">${emo}${topics}</div>${insights}${tgt}${locCard}${cms}<h2 class="blk" id="b2"><span>2</span>Lo que puedes poner en marcha</h2><p class="sub" style="margin:0 0 12px">Activa solo lo que te interese. Lo que añadas lo ve tu gente al votar o al pasar por tus zonas.</p>${modCard}${placesCard}${qrCard}${pulseCard}${updCard}${chatCard}${shCard}${recCard}
- <p class="sub" style="margin-top:20px">¿Quieres un QR o un botón de Roi para tu web? <a href="/empresas#pide">Créalo aquí</a> o escríbenos a través del <a href="/#empresas">formulario</a>.</p>`;
+ <p class="sub" style="margin-top:20px">¿Quieres un QR o un botón de Roi para tu web? <a href="/empresas.html#pide">Créalo aquí</a> o escríbenos a través del <a href="/#empresas">formulario</a>.</p>`;
  requestAnimationFrame(()=>document.querySelectorAll('.t i[data-w]').forEach(i=>i.style.width=Math.max(+i.dataset.w,1.5)+'%'));
 
  $('qt').value=tl.kind==='site'?'web':'place';qrInit();wireOrg();

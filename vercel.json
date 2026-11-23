@@ -27,6 +27,10 @@
     {
       "source": "/mapa2",
       "destination": "/mapa2.html"
+    },
+    {
+      "source": "/empresas",
+      "destination": "/empresas.html"
     }
   ],
   "headers": [

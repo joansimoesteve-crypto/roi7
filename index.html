@@ -92,7 +92,7 @@ footer{padding:70px 0 120px;color:var(--mut);font-size:14px;display:flex;gap:14p
  body{font-size:16.5px}.wrap{padding:0 18px}.tabs{margin:0 0 18px;padding:2px 0 6px}
  .hero{grid-template-columns:1fr;gap:28px;padding:14px 0 28px}.demo{margin:0 auto;transform:none}.dbody{height:360px}
  .three,.rk,.gen,.two{grid-template-columns:1fr}.three{gap:12px}.card{padding:22px 18px;border-radius:24px}.gen .qrbox{margin:0 auto}
- nav .links a:not(.cta){display:none}.brand{font-size:26px}.brand img{width:44px;height:44px}nav{padding:8px 0}
+ nav .links a:not(.cta):not(.ct){display:none}nav .links{gap:14px}.brand{font-size:26px}.brand img{width:44px;height:44px}nav{padding:8px 0}
  section{margin-top:64px}#map{height:300px}.lead{font-size:18px}.acts .btn{flex:1 1 150px}
  .live{border-radius:22px;flex-wrap:wrap;padding:12px 14px;gap:8px 14px}.live .tick{order:3;flex:1 1 100%}
  .dock{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:40;background:#26331fee;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:26px;padding:6px;box-shadow:0 14px 34px #0004}
@@ -242,7 +242,7 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 <script src="/ic.js"></script>
 <script>document.documentElement.classList.add('js')</script>
 <div class="bar" id="bar"><div class="wrap"><nav aria-label="Principal"><a class="brand" href="#"><img src="logo.png" alt="" width="52" height="52"><span class="bt"><span>Citizen<b>Voice</b></span><span class="mf5" id="mf" aria-hidden="true"></span></span></a>
-<div class="links"><a href="/mapa?near=1">Cerca de ti</a><a href="/empresas">Contacto</a><a class="cta" href="#instalar">Instalar</a></div></nav></div></div>
+<div class="links"><a href="/mapa?near=1">Cerca de ti</a><a class="ct" href="/empresas.html">Contacto</a><a class="cta" href="#instalar">Instalar</a></div></nav></div></div>
 
 <div class="wrap">
 <div class="pg" id="pg" aria-hidden="true"></div>
@@ -279,15 +279,15 @@ h1{font-size:clamp(44px,12vw,100px)!important;line-height:1!important}h1 .l:last
 
 <section class="rv" id="instalar"><h2>Roi, donde tú estés</h2><p class="sub">En el móvil, en dos toques. Sin tiendas de aplicaciones.</p>
 <div class="how">
-<article class="hc"><span class="hi" aria-hidden="true">📱</span><h3>En el móvil</h3><ol><li><b>iPhone</b> (Safari): Compartir → <em>Añadir a pantalla de inicio</em>.</li><li><b>Android</b> (Chrome): menú ⋮ → <em>Instalar app</em>.</li><li>Abre Roi y toca <b>Opinar aquí</b>.</li></ol><div class="act"><a class="btn" href="/mapa?near=1">Opinar aquí</a></div><button class="btn g" id="pwa" hidden>Instalar app</button></article>
-<article class="hc"><span class="hi" aria-hidden="true">💻</span><h3>En el ordenador</h3><p>Extensión para Chrome, Edge y Brave: valoras sin salir de la página.</p><div class="act"><a class="btn" id="extb" href="#" aria-disabled="true">Próximamente en Chrome</a></div></article>
+<article class="hc"><span class="hi" aria-hidden="true">📱</span><h3>En el móvil</h3><ol><li><b>iPhone</b>: Compartir → <em>Añadir a pantalla de inicio</em>.</li><li><b>Android</b>: menú ⋮ → <em>Instalar app</em>.</li><li>Abre Roi y toca <b>Opinar aquí</b>.</li></ol><div class="act"><a class="btn" href="/mapa?near=1">Opinar aquí</a></div><button class="btn g" id="pwa" hidden>Instalar app</button></article>
+<article class="hc"><span class="hi" aria-hidden="true">💻</span><h3>En el ordenador</h3><p>Extensión para Chrome, Edge y Brave: valoras sin salir de la página.</p><div class="act"><a class="btn" id="extb" href="https://chromewebstore.google.com/detail/ojkncdfomenebpcfbkomechinciffbco" target="_blank" rel="noopener">Instalar extensión</a></div></article>
 <article class="hc" hidden><form class="try act" id="tryf"><input id="tu" type="text" aria-label="Dirección de la web"><button class="btn">Valorar</button></form></article>
 </div>
 <p class="appq" hidden><button class="btn s g" id="appb">Me interesa</button></p></section>
 
 
 
-<footer><img src="logo.png" alt=""><span>CitizenVoice · Valora. Comparte. TU bienestar importa. · <a href="privacy.html">Privacidad</a> · <a href="/panel">Panel de organizaciones</a></span></footer>
+<footer><img src="logo.png" alt=""><span>CitizenVoice · Valora. Comparte. TU bienestar importa. · <a href="/empresas.html">Contacto</a> · <a href="privacy.html">Privacidad</a> · <a href="/panel">Panel de organizaciones</a></span></footer>
 </div>
 
 <nav class="dock" id="dock" aria-label="Atajos"><button class="p" id="dTry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5q3.5 3 7 0M9 9.5v.5M15 9.5v.5"/></svg>Opinar</button>
@@ -380,7 +380,7 @@ orgs:[['Cafetería La Plaza',4.7,90],['Universidad Ejemplo',4,220],['Ayuntamient
 totals:{n:2480,day:86,dayAvg:3.9},
 recent:[{rating:5,name:'Parque Central',feeling:'Inspiración'},{rating:2,name:'sede-electronica-ejemplo.gob',feeling:'Estrés'},{rating:4,name:'Biblioteca Municipal',feeling:'Tranquilidad'},{rating:1,name:'Estación Intermodal',feeling:'Agobio'},{rating:5,name:'Reforma Plaza del Barrio',feeling:'Entusiasmo'},{rating:3,name:'Ayuntamiento de Ejemplo',feeling:'Calma'}]};
 let DATA={webs:[],places:[],projects:[],orgs:[],totals:{},recent:[]},tab='places',fitted=false,isSample=false;
-const HAS=typeof L!=='undefined',map=HAS?L.map('map',{scrollWheelZoom:false}).setView([39.4699,-0.3763],12):null,layer=HAS?L.layerGroup().addTo(map):null;
+const HAS=typeof L!=='undefined'&&!!document.getElementById('map'),map=HAS?L.map('map',{scrollWheelZoom:false}).setView([39.4699,-0.3763],12):null,layer=HAS?L.layerGroup().addTo(map):null;
 if(HAS)L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
 const lab=v=>v<1.8?'Lo peor valorado':v<2.6?'Mal valorado':v<3.4?'En el medio':v<4.2?'Bien valorado':'Lo mejor valorado';
 function render(){const v=+$('mood').value;$('big').innerHTML=face(ci(v));$('lab').textContent=lab(v);
