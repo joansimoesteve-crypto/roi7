@@ -67,12 +67,21 @@ module.exports = async (req, res) => {
     const h = req.headers || {}, la = parseFloat(h['x-vercel-ip-latitude']), lo = parseFloat(h['x-vercel-ip-longitude']); let city = ''; try { city = decodeURIComponent(h['x-vercel-ip-city'] || ''); } catch (e) {}
     res.setHeader('Cache-Control', 'private, max-age=600'); return res.status(200).json({ ok: true, lat: isFinite(la) ? la : null, lng: isFinite(lo) ? lo : null, city: city.slice(0, 60), country: String(h['x-vercel-ip-country'] || '').slice(0, 2) });
   }
+  if (req.method === 'GET' && req.query && req.query.vapid) { res.setHeader('Cache-Control', 'public, max-age=3600'); return res.status(200).json({ ok: !!process.env.VAPID_PUBLIC_KEY, key: process.env.VAPID_PUBLIC_KEY || '' }); } // clave pública para suscribirse a avisos
   if (db.limited(req, 60)) return res.status(429).json({ ok: false });
   if (!db.ok()) return res.status(200).json({ ok: true, people: [] });
   try {
     if (req.method === 'POST') {
       const b = db.body(req) || {}, id = db.clip(b.anon_id, 64);
       if (!id) return res.status(400).json({ ok: false });
+      if (b.push) { // suscripción a avisos push de una zona (posición aproximada al suscribirse)
+        const p = b.push;
+        if (p.off && p.endpoint) { const r = await db.del(`push_subs?endpoint=eq.${encodeURIComponent(String(p.endpoint).slice(0, 600))}`); return res.status(200).json({ ok: r.ok }); }
+        const sb = p.sub || {}, k = sb.keys || {}, ep = String(sb.endpoint || '').slice(0, 600);
+        if (!/^https:\/\//.test(ep) || !k.p256dh || !k.auth) return res.status(400).json({ ok: false });
+        const r = await db.upsert('push_subs', { endpoint: ep, p256dh: String(k.p256dh).slice(0, 200), auth: String(k.auth).slice(0, 100), lat: db.num(p.lat, -90, 90), lng: db.num(p.lng, -180, 180), radius_km: 10, zone: db.clip(p.zone, 80) }, 'endpoint');
+        return res.status(200).json({ ok: r.ok });
+      }
       if (b.follow) { // seguimiento por correo: solo para avisar de respuestas del ayuntamiento a lo que esta persona valoró
         if (b.follow.off) { const r = await db.del(`followups?anon_id=eq.${encodeURIComponent(id)}`); return res.status(200).json({ ok: r.ok }); }
         const em = String(b.follow.email || '').trim().toLowerCase().slice(0, 120);

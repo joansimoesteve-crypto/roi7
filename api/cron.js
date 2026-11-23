@@ -25,7 +25,25 @@ module.exports = async (req, res) => {
   if (!secret) return res.status(503).json({ ok: false, error: 'falta CRON_SECRET' });
   if (req.headers.authorization !== 'Bearer ' + secret) return res.status(401).json({ ok: false });
   if (db.ok()) { const old = encodeURIComponent(new Date(Date.now() - 30 * 864e5).toISOString()); await db.del('chat_messages?created_at=lt.' + old).catch(() => {}); await db.del('chat_presence?seen_at=lt.' + old).catch(() => {}); } // la charla se borra a los 30 días
-  if (!db.ok() || !process.env.RESEND_API_KEY) return res.status(503).json({ ok: false, error: 'sin configurar' });
+  let pushed = 0; // avisos push: una vez al día, solo si hubo opiniones cerca de la zona de cada suscripción
+  if (db.ok() && process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+    try {
+      const wp = require('web-push'); wp.setVapidDetails(process.env.VAPID_SUBJECT || 'mailto:urnovai@outlook.es', process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY);
+      const subs = await db.select('push_subs?select=id,endpoint,p256dh,auth,lat,lng,radius_km,zone&limit=1000');
+      const since = encodeURIComponent(new Date(Date.now() - 864e5).toISOString());
+      for (const s of Array.isArray(subs) ? subs : []) {
+        if (s.lat == null || s.lng == null) continue;
+        const dl = (s.radius_km || 10) / 111, dn = dl / Math.max(0.2, Math.cos(s.lat * Math.PI / 180));
+        const rs = await db.select(`ratings?select=rating,place_name&type=neq.person&created_at=gte.${since}&lat=gte.${s.lat - dl}&lat=lte.${s.lat + dl}&lng=gte.${s.lng - dn}&lng=lte.${s.lng + dn}&limit=500`);
+        if (!Array.isArray(rs) || rs.length < 3) continue; // pocas opiniones: no molestamos
+        const avg = rs.reduce((a, r) => a + r.rating, 0) / rs.length;
+        const payload = JSON.stringify({ title: 'CitizenVoice', body: `Hoy ${rs.length} personas han opinado cerca de ti${s.zone ? ' (' + s.zone + ')' : ''}. Ánimo medio ${avg.toFixed(1).replace('.', ',')}/5. ¿Y tú?`, url: '/mapa?near=1' });
+        try { await wp.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload); pushed++; await db.patch('push_subs?id=eq.' + s.id, { last_sent_at: new Date().toISOString() }); }
+        catch (e) { if (e && (e.statusCode === 404 || e.statusCode === 410)) await db.del('push_subs?id=eq.' + s.id); }
+      }
+    } catch (e) { console.error('push', String(e)); }
+  }
+  if (!db.ok() || !process.env.RESEND_API_KEY) return res.status(pushed ? 200 : 503).json({ ok: !!pushed, pushed, error: pushed ? undefined : 'sin configurar' });
   const force = (req.query && req.query.force) || '', weekly = force === 'weekly' || new Date().getUTCDay() === 1, sent = [];
   try {
     const orgs = await db.select('organizations?select=id,name,plan,report_weekly,alerts,last_alert_at');
@@ -55,6 +73,6 @@ module.exports = async (req, res) => {
         if (await mail(to, `Tu resumen semanal · ${o.name}`, wrap('Resumen de la semana', body))) sent.push(['informe', o.name]);
       }
     }
-    res.status(200).json({ ok: true, sent });
+    res.status(200).json({ ok: true, sent, pushed });
   } catch (e) { console.error('cron', String(e)); res.status(500).json({ ok: false }) }
 };
