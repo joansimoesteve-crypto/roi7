@@ -37,6 +37,10 @@
       "destination": "/api/public?sitemap=1"
     },
     {
+      "source": "/municipios",
+      "destination": "/api/public?hub=1"
+    },
+    {
       "source": "/mapa/:c/:l",
       "destination": "/api/public?c=:c&l=:l"
     },
