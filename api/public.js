@@ -5,9 +5,9 @@ module.exports = async (req, res) => {
   if (db.cors(req, res)) return;
   if (!db.ok()) return res.status(503).json({ ok: false });
   if (db.limited(req, 60)) return res.status(429).json({ ok: false });
-  const { pulse, n, places, sitemap, c, l } = req.query || {};
+  const { pulse, n, places, sitemap, c, l, hub } = req.query || {};
   try {
-    if (sitemap || c) return seo(req, res, { sitemap, c, l }); // SEO: /sitemap-dinamico.xml y /mapa/<municipio>[/<lugar>]
+    if (sitemap || c || hub) return seo(req, res, { sitemap, c, l, hub }); // SEO: /sitemap-dinamico.xml y /mapa/<municipio>[/<lugar>]
     if (places) { // lugares, iniciativas y rutas de las organizaciones (para /mapa)
       const base = 'id,org_id,name,kind,description,lat,lng,radius_m';
       let pl = null;
@@ -43,19 +43,27 @@ module.exports = async (req, res) => {
 
 // ---- SEO hiperlocal: páginas indexables por municipio y lugar (datos reales; sin valoraciones inventadas) ----
 const SITE = 'https://www.citizenvoice.es';
-const CITIES = [['valencia', 'València', 39.4699, -0.3763, 9], ['el-real-de-gandia', 'El Real de Gandia', 38.9472, -0.1906, 3], ['gandia', 'Gandia', 38.9680, -0.1850, 6], ['picassent', 'Picassent', 39.3625, -0.4619, 4], ['ayora', 'Ayora', 39.0592, -1.0589, 5], ['cofrentes', 'Cofrentes', 39.2306, -1.0642, 4]];
+const CITIES = [['valencia', 'València', 39.4699, -0.3763, 9], ['el-real-de-gandia', 'El Real de Gandia', 38.9472, -0.1906, 3], ['gandia', 'Gandia', 38.9680, -0.1850, 6], ['picassent', 'Picassent', 39.3625, -0.4619, 4], ['ayora', 'Ayora', 39.0592, -1.0589, 5], ['cofrentes', 'Cofrentes', 39.2306, -1.0642, 4], ['torrent', 'Torrent', 39.4370, -0.4650, 4], ['paterna', 'Paterna', 39.5028, -0.4403, 4], ['sagunto', 'Sagunt', 39.6800, -0.2780, 5], ['alzira', 'Alzira', 39.1510, -0.4350, 4], ['xativa', 'Xàtiva', 38.9904, -0.5200, 4], ['sueca', 'Sueca', 39.2020, -0.3100, 4], ['cullera', 'Cullera', 39.1650, -0.2510, 4], ['oliva', 'Oliva', 38.9190, -0.1210, 4], ['mislata', 'Mislata', 39.4750, -0.4180, 2], ['burjassot', 'Burjassot', 39.5090, -0.4120, 2], ['manises', 'Manises', 39.4900, -0.4590, 3], ['castello-de-la-plana', 'Castelló de la Plana', 39.9864, -0.0513, 6], ['alicante', 'Alicante', 38.3452, -0.4810, 7], ['elche', 'Elche', 38.2669, -0.6983, 7], ['benidorm', 'Benidorm', 38.5390, -0.1310, 4]];
+const NAMES = Object.fromEntries(CITIES.map(x => [x[0], x[1]]));
 const slug = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70);
 const esc = t => String(t == null ? '' : t).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 const km = (a, b, c, d) => { const R = 6371, r = Math.PI / 180, x = (c - a) * r, y = (d - b) * r, h = Math.sin(x / 2) ** 2 + Math.cos(a * r) * Math.cos(c * r) * Math.sin(y / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); };
-async function seo(req, res, { sitemap, c, l }) {
+async function seo(req, res, { sitemap, c, l, hub }) {
   const pl0 = await db.select('places?select=name,description,lat,lng,kind,org_id&active=eq.true&limit=500'), pl = (Array.isArray(pl0) ? pl0 : []).filter(p => p.lat != null && p.lng != null);
   const cityOf = p => CITIES.map(x => ({ x, d: km(x[2], x[3], p.lat, p.lng) })).filter(z => z.d <= z.x[4]).sort((a, b) => a.d - b.d)[0];
   if (sitemap) {
-    const u = [SITE + '/', SITE + '/mapa', SITE + '/participacion-ciudadana', SITE + '/empresas'];
-    CITIES.forEach(x => u.push(SITE + '/mapa/' + x[0]));
+    const u = [SITE + '/', SITE + '/mapa', SITE + '/municipios', SITE + '/participacion-ciudadana', SITE + '/empresas'];
+    CITIES.forEach(x => { if (pl.some(p => km(x[2], x[3], p.lat, p.lng) <= x[4])) u.push(SITE + '/mapa/' + x[0]); });
     pl.forEach(p => { const z = cityOf(p); if (z) u.push(SITE + '/mapa/' + z.x[0] + '/' + slug(p.name)); });
     res.setHeader('Content-Type', 'application/xml; charset=utf-8'); res.setHeader('Cache-Control', 's-maxage=3600');
-    return res.status(200).send('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + [...new Set(u)].map(x => '<url><loc>' + esc(x) + '</loc></url>').join('\n') + '\n</urlset>');
+    return res.status(200).send('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + [...new Set(u)].map(x => '<url><loc>' + esc(x) + '</loc><lastmod>' + new Date().toISOString().slice(0, 10) + '</lastmod></url>').join('\n') + '\n</urlset>');
+  }
+  if (hub) {
+    const act = CITIES.filter(x => pl.some(p => km(x[2], x[3], p.lat, p.lng) <= x[4]));
+    const t = 'Opiniones por municipio: servicios, lugares y proyectos | CitizenVoice', d = 'Elige tu municipio y mira qué opina la gente de sus lugares, rutas y proyectos. Vota en 10 segundos, sin registro.';
+    const ld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: t, url: SITE + '/municipios', hasPart: act.map(x => ({ '@type': 'WebPage', name: x[1], url: SITE + '/mapa/' + x[0] })) };
+    res.setHeader('Content-Type', 'text/html; charset=utf-8'); res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
+    return res.status(200).send(`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(t)}</title><meta name="description" content="${esc(d)}"><link rel="canonical" href="${SITE}/municipios"><meta property="og:title" content="${esc(t)}"><meta property="og:description" content="${esc(d)}"><meta property="og:image" content="${SITE}/og.png"><link rel="icon" href="/favicon.png"><script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script><style>body{margin:0;background:#faf6ea;color:#26331f;font:17px/1.5 system-ui,sans-serif}main{max-width:640px;margin:0 auto;padding:20px 16px 60px}a{color:#0b6e44}h1{font-size:28px;line-height:1.2}ul{padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px}li a{display:block;background:#fff;border-radius:14px;padding:12px 14px;text-decoration:none;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.06)}.b{display:block;text-align:center;background:#139556;color:#fff;border-radius:16px;padding:15px;font-weight:800;text-decoration:none;margin:18px 0}</style></head><body><main><p><a href="/">CitizenVoice</a> › Municipios</p><h1>Qué opina la gente en tu municipio</h1><p>Elige un municipio para ver sus lugares, rutas y proyectos, y cuéntanos cómo te sientes en 10 segundos, sin registro.</p><ul>${act.map(x => `<li><a href="/mapa/${x[0]}">${esc(x[1])}</a></li>`).join('')}</ul><a class="b" href="/mapa?near=1">Abrir el mapa cerca de mí</a></main></body></html>`);
   }
   const city = CITIES.find(x => x[0] === slug(c));
   if (!city) { res.setHeader('Content-Type', 'text/html; charset=utf-8'); return res.status(404).send('<!doctype html><meta charset="utf-8"><title>No encontrado</title><p style="font:18px system-ui;padding:40px">No tenemos ese municipio todavía. <a href="/mapa">Abrir el mapa</a></p>'); }
@@ -69,11 +77,12 @@ async function seo(req, res, { sitemap, c, l }) {
   const fe = {}; rs.forEach(r => { if (r.feeling) fe[r.feeling] = (fe[r.feeling] || 0) + 1; }); const top = rs.length >= 3 ? Object.entries(fe).sort((a, b) => b[1] - a[1]).slice(0, 3).map(x => x[0]) : [];
   const name = place ? place.name : city[1], title = place ? `Opiniones sobre ${place.name}${slug(place.name).includes(city[0]) ? '' : ' en ' + city[1]} | CitizenVoice` : `Opiniones y estado de servicios, obras y lugares en ${city[1]} | CitizenVoice`;
   const desc = place ? `Qué opina la gente de ${place.name} (${city[1]}). Vota en 10 segundos, sin registro.` : `Qué opina la gente en ${city[1]}: lugares, rutas, trámites y proyectos. Vota en 10 segundos, sin registro.`;
-  const canon = SITE + '/mapa/' + city[0] + (place ? '/' + slug(place.name) : '');
+  const canon = SITE + '/mapa/' + city[0] + (place ? '/' + slug(place.name) : ''), thin = !place && !inCity.length && rs.length < 3;
+  const rel = CITIES.filter(x => x !== city && pl.some(p => km(x[2], x[3], p.lat, p.lng) <= x[4])).map(x => ({ x, d: km(city[2], city[3], x[2], x[3]) })).sort((a, b) => a.d - b.d).slice(0, 6).map(z => z.x);
   const list = place ? [] : inCity.slice(0, 40);
   const mapUrl = '/mapa?lat=' + cen[0].toFixed(4) + '&lng=' + cen[1].toFixed(4) + '&near=1', vUrl = place ? '/v?t=place&n=' + encodeURIComponent(place.name) + '&s=seo' : mapUrl;
   const ld = place ? { '@context': 'https://schema.org', '@type': 'Place', name: place.name, description: place.description || undefined, geo: { '@type': 'GeoCoordinates', latitude: place.lat, longitude: place.lng }, url: canon } : { '@context': 'https://schema.org', '@type': 'WebPage', name: title, url: canon, about: { '@type': 'City', name: city[1] } };
-  const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}"><link rel="canonical" href="${esc(canon)}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:image" content="${SITE}/og.png"><meta property="og:type" content="website"><link rel="icon" href="/favicon.png"><script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>
+  const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}"><link rel="canonical" href="${esc(canon)}">${thin ? '<meta name="robots" content="noindex,follow">' : '<meta name="robots" content="index,follow,max-image-preview:large">'}<meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:image" content="${SITE}/og.png"><meta property="og:type" content="website"><link rel="icon" href="/favicon.png"><script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>
 <style>body{margin:0;background:#faf6ea;color:#26331f;font:17px/1.5 system-ui,sans-serif}main{max-width:640px;margin:0 auto;padding:20px 16px 60px}a{color:#0b6e44}h1{font-size:28px;line-height:1.2;margin:.4em 0}.b{display:block;text-align:center;background:#139556;color:#fff;border-radius:16px;padding:15px;font-weight:800;text-decoration:none;margin:18px 0}.c{background:#fff;border-radius:18px;padding:14px 16px;margin:12px 0;box-shadow:0 2px 10px rgba(0,0,0,.06)}ul{padding:0;list-style:none}li{padding:9px 0;border-bottom:1px solid #eee}small{color:#667}</style></head><body><main>
 <p><a href="/">CitizenVoice</a> › <a href="/mapa/${city[0]}">${esc(city[1])}</a>${place ? ' › ' + esc(place.name) : ''}</p>
 <h1>${place ? 'Opiniones sobre ' + esc(place.name) : 'Qué opina la gente en ' + esc(city[1])}</h1>
@@ -81,6 +90,7 @@ ${place && place.description ? '<p>' + esc(place.description) + '</p>' : ''}
 <div class="c">${avg ? `<b>Ánimo medio ${avg} de 5</b> · ${rs.length} valoraciones en los últimos 90 días${top.length ? '<br>Lo que más se siente: ' + top.map(esc).join(', ') : ''}` : `<b>Aún hay pocas valoraciones.</b><br>Se muestra el resultado a partir de 3 opiniones, para proteger a quien opina. Sé de las primeras personas.`}</div>
 <a class="b" href="${esc(vUrl)}">Opinar en 10 segundos</a><p><a href="${esc(mapUrl)}">Ver el mapa de ${esc(name)} →</a></p>
 ${list.length ? '<h2>Lugares y proyectos</h2><ul>' + list.map(p => `<li><a href="/mapa/${city[0]}/${slug(p.name)}">${esc(p.name)}</a>${p.description ? '<br><small>' + esc(String(p.description).slice(0, 110)) + '</small>' : ''}</li>`).join('') + '</ul>' : ''}
+${rel.length ? '<h2>Otros municipios</h2><p>' + rel.map(x => `<a href="/mapa/${x[0]}">${esc(x[1])}</a>`).join(' · ') + ' · <a href="/municipios">Todos</a></p>' : '<p><a href="/municipios">Todos los municipios</a></p>'}
 <p><small>Opiniones anónimas de personas que han estado allí. CitizenVoice no es un canal oficial del ayuntamiento.</small></p></main></body></html>`;
   res.setHeader('Content-Type', 'text/html; charset=utf-8'); res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate=86400');
   return res.status(200).send(html);
