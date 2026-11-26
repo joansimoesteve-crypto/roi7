@@ -43,6 +43,7 @@ module.exports = async (req, res) => {
         out.pulses.forEach(p => { const s = S[p.id]; p.n = s ? s.n : 0; p.avg = s ? Math.round(s.s / s.n * 100) / 100 : null });
       }
     }
+    if (a.orgs) out.orgs = a.orgs;
     res.status(200).json(out);
   } catch (e) { console.error('panel', String(e)); res.status(500).json({ error: 'server' }); }
 };

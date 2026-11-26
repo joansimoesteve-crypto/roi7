@@ -82,8 +82,21 @@ exports.auth = async req => {
   if (!ur.ok) return { status: 401, error: 'auth' };
   const email = String((await ur.json()).email || '').toLowerCase();
   if (!email) return { status: 401, error: 'auth' };
-  const mem = await db.select('org_members?select=org_id&email=eq.' + encodeURIComponent(email) + '&limit=1');
-  if (!Array.isArray(mem) || !mem.length) return { status: 403, error: 'sin organización', email };
-  const o = (await db.select('organizations?select=id,name,plan,all_data&id=eq.' + mem[0].org_id))[0] || (await db.select('organizations?select=id,name,plan&id=eq.' + mem[0].org_id))[0];
-  return o ? { email, org: o } : { status: 500, error: 'org' };
+  // Super-administración (Joan): puede ver cualquier organización con la cabecera X-Org (id).
+  const sup = String(process.env.SUPER_ADMIN_EMAILS || 'joansimoesteve@gmail.com').toLowerCase().split(',').map(x => x.trim()).includes(email);
+  let orgs, oid = null;
+  if (sup) {
+    const all = await db.select('organizations?select=id,name&order=name.asc&limit=500');
+    orgs = Array.isArray(all) ? all : [];
+    const want = String(req.headers['x-org'] || '');
+    if (orgs.some(x => String(x.id) === want)) oid = want;
+  }
+  if (!oid) {
+    const mem = await db.select('org_members?select=org_id&email=eq.' + encodeURIComponent(email) + '&limit=1');
+    if (Array.isArray(mem) && mem.length) oid = mem[0].org_id;
+    else if (sup && orgs && orgs.length) oid = orgs[0].id;
+  }
+  if (!oid) return { status: 403, error: 'sin organización', email };
+  const o = (await db.select('organizations?select=id,name,plan,all_data&id=eq.' + oid))[0] || (await db.select('organizations?select=id,name,plan&id=eq.' + oid))[0];
+  return o ? { email, org: o, orgs } : { status: 500, error: 'org' };
 };
