@@ -64,6 +64,7 @@ details.tbl{margin-top:8px;font-size:14px}details.tbl summary{cursor:pointer;col
 const UPGRADE_URL='';   // ← enlace de pago (Stripe Payment Link). Si está vacío, lleva al formulario de contacto
 const $=id=>document.getElementById(id),esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const COL=['#e8605a','#f0913a','#f2d05c','#8cc35e','#5fb760'],MOU=['M33 68Q50 56 67 68','M33 66Q50 58 67 66','M34 64H66','M32 60Q50 76 68 60','M30 58Q50 82 70 58'],NAMES=['Muy insatisfecho','Insatisfecho','Neutral','Satisfecho','Muy satisfecho'];
+const AH=()=>{const h={Authorization:'Bearer '+tok},o=store.get('roi_asorg');if(o)h['X-Org']=o;return h};
 const face=i=>`<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="${COL[i]}"/><circle cx="36" cy="40" r="5" fill="#3a2a1a"/><circle cx="64" cy="40" r="5" fill="#3a2a1a"/>${i==0?'<path d="M26 28L44 34M74 28L56 34" stroke="#3a2a1a" stroke-width="5" stroke-linecap="round"/>':''}<path d="${MOU[i]}" stroke="#3a2a1a" stroke-width="6" fill="none" stroke-linecap="round"/></svg>`;
 const ci=a=>Math.min(4,Math.max(0,Math.round(a)-1)),f1=v=>v==null?'–':v.toFixed(1).replace('.',','),pct=(n,t)=>t?Math.round(n*100/t):0;
 const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],fd=s=>{const d=new Date(s);return d.getDate()+' '+MES[d.getMonth()]},fdt=s=>fd(s)+', '+String(new Date(s).getHours()).padStart(2,'0')+':'+String(new Date(s).getMinutes()).padStart(2,'0');
@@ -84,7 +85,7 @@ async function boot(){
  if(h.get('error_description')){history.replaceState(null,'',location.pathname);return loginView('<span class="err">El enlace ha caducado o ya se usó. Pide uno nuevo.</span>')}
  tok=store.get('roi_tok');if(!tok)return loginView();
  $('app').innerHTML='<div class="card empty">Cargando…</div>';
- try{const r=await fetch('/api/panel',{headers:{Authorization:'Bearer '+tok}});
+ try{const r=await fetch('/api/panel',{headers:AH()});
   if(r.status===401){const rt=store.get('roi_rt');let ok=false;if(rt&&!window.__rf){window.__rf=1;try{const q=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh:rt})});if(q.ok){const j=await q.json();store.set('roi_tok',j.access_token);store.set('roi_rt',j.refresh_token);tok=j.access_token;ok=true}}catch(e){}}
    if(ok)return boot();store.del('roi_tok');store.del('roi_rt');return loginView('<span class="err">La sesión ha caducado. Pide un enlace nuevo.</span>')}
   if(r.status===403){const j=await r.json();store.del('roi_tok');return loginView(`<span class="err">${esc(j.email||'Ese correo')} no tiene una organización asociada. Escríbenos y la damos de alta.</span>`)}
@@ -94,7 +95,7 @@ async function boot(){
 /* ===== Panel ===== */
 const lockBox=(inner,txt,n)=>`<div class="lock"><div class="blur" aria-hidden="true">${inner}</div><div class="cta"><b>Incluido en el plan completo</b><span>${txt}</span><a class="btn s" href="${UPGRADE_URL||'/#empresas'}">Desbloquear</a></div></div>`;
 function show(){const T=D.totals,pro=D.org.plan==='completo'||!!D.org.all,days=D.days;
- $('org').hidden=false;$('org').innerHTML=(D.org.crest?'<img class="crest" src="'+esc(D.org.crest)+'" alt="" onerror="this.replaceWith(shield(\''+esc((D.org.muni||'R').charAt(0))+'\'))">':'')+esc(D.org.name)+' <span class="badge'+(pro?' pro':'')+'">'+(pro?(D.org.all?'Todo Roi':'Completo'):'Muestra')+'</span>'+(DEMO?' <span class="demo">DEMO</span>':'')+(D.email?'<small>'+esc(D.email)+'</small>':'');
+ $('org').hidden=false;$('org').innerHTML=(D.org.crest?'<img class="crest" src="'+esc(D.org.crest)+'" alt="" onerror="this.replaceWith(shield(\''+esc((D.org.muni||'R').charAt(0))+'\'))">':'')+esc(D.org.name)+' <span class="badge'+(pro?' pro':'')+'">'+(pro?(D.org.all?'Todo Roi':'Completo'):'Muestra')+'</span>'+(DEMO?' <span class="demo">DEMO</span>':'')+(D.email?'<small>'+esc(D.email)+'</small>':'');if(D.orgs&&D.orgs.length>1){const sl=document.createElement('select');sl.setAttribute('aria-label','Ayuntamiento');sl.style.cssText='margin-left:10px;padding:6px 10px;border-radius:99px;border:1px solid var(--line);font:600 14px system-ui;max-width:220px';D.orgs.forEach(x=>{const op=document.createElement('option');op.value=x.id;op.textContent=x.name;if(String(x.id)===String(D.org.id))op.selected=true;sl.append(op)});sl.onchange=()=>{store.set('roi_asorg',sl.value);refresh()};$('org').append(sl)}
  $('out').hidden=false;$('out').textContent=DEMO?'Salir':'Salir';$('out').onclick=DEMO?()=>location.href='/':logout;
  const dl=T.avg7!=null&&T.prevAvg7!=null?+(T.avg7-T.prevAvg7).toFixed(1):null,
   dtxt=dl==null?'Sin semana anterior':(dl>0?'<span class="up">▲ +'+f1(dl)+'</span>':dl<0?'<span class="down">▼ '+f1(dl)+'</span>':'= igual')+' vs. semana anterior';
@@ -164,10 +165,10 @@ const recCard=(D.org.all&&D.recent)?`<div class="card fcard modc" id="reccard" s
  $('qt').value=tl.kind==='site'?'web':'place';qrInit();wireOrg();ptabsWire();
  draw();if($('csv'))$('csv').onclick=csv}
 
-async function refresh(){try{const r=await fetch('/api/panel',{headers:{Authorization:'Bearer '+tok}});if(r.ok){D=await r.json();const y=scrollY;show();scrollTo(0,y)}}catch(e){}}
+async function refresh(){try{const r=await fetch('/api/panel',{headers:AH()});if(r.ok){D=await r.json();const y=scrollY;show();scrollTo(0,y)}}catch(e){}}
 
 function tgAll(){const m=new Map();(D.targetList||[]).forEach(t=>m.set(t.value,t.kind||'place'));(D.places||[]).forEach(z=>{if(z.name&&!m.has(z.name))m.set(z.name,z.kind==='project'?'project':'place')});(D.targets||[]).forEach(t=>{if(t.name&&!m.has(t.name))m.set(t.name,t.kind==='web'?'site':(t.kind||'place'))});return [...m].map(([value,kind])=>({value,kind}))}
-async function apiOrg(body){const call=()=>fetch('/api/org',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:JSON.stringify(body)});let r=await call();
+async function apiOrg(body){const call=()=>fetch('/api/org',{method:'POST',headers:{'Content-Type':'application/json',...AH()},body:JSON.stringify(body)});let r=await call();
  if(r.status===401){const rt=store.get('roi_rt');if(rt){try{const q=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh:rt})});if(q.ok){const j=await q.json();store.set('roi_tok',j.access_token);store.set('roi_rt',j.refresh_token);tok=j.access_token;r=await call()}}catch(e){}}}
  return r}
 let LASTDIG=null;function digShow(r){LASTDIG=r;const o=$('digo');if(!o)return;o.textContent='';const mk=(t,tx,st)=>{const e=document.createElement(t);if(tx!=null)e.textContent=tx;if(st)e.style.cssText=st;return e};
